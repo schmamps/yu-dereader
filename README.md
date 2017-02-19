@@ -12,10 +12,12 @@ Until then:
 1. Click 'Load Unpacked Extension'
 1. Select the `build` subdirectory of this project
 
-## Build
+## Roll Your Own
 
-There are two gulp tasks configured:
-* js
-* manifest
+You can figure out where the source code is.
+There are two [gulp](http://gulpjs.com/) build tasks:
+
+* `js`: optimize and place the content script
+* `manifest`: merge the source and package data
 
 The default task runs both.
