@@ -19,7 +19,7 @@ function layEgg(name) {
 
 function buildNest(comic) {
     var clutch = document.createElement("ul");
-    clutch.className = "clutch", clutch.style.width = comic.clientWidth + "px", clutch.style.margin = "0 auto",
+    clutch.className = "clutch", clutch.style.width = comic.clientWidth + "px", clutch.style.margin = "0 auto", 
     [ "Title", "Contact", "RSS" ].map(function(name) {
         clutch.appendChild(layEgg(name));
     });
@@ -47,7 +47,7 @@ document.addEventListener("readystatechange", function() {
             return getQueryParameter(mailto.getAttribute("href"), "subject");
         }), hatchEgg("RSS", function() {
             var item, body = document.querySelector("body"), itemData = !1, i = 0;
-            do item = body.childNodes[i], 8 === item.nodeType && item.data.includes("rss-title") && (itemData = item.data),
+            do item = body.childNodes[i], 8 === item.nodeType && item.data.includes("rss-title") && (itemData = item.data), 
             ++i; while (itemData === !1);
             var re = /rss\-title[^>]+>([^<]*)/;
             return itemData.match(re)[1];
