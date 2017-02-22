@@ -45,7 +45,7 @@ function packageFiles() {
 	else {
 		Object.keys(pkgTasks).map(function(key) {
 			pkgTasks[key]();
-		})
+		});
 	}
 }
 
