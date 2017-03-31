@@ -1,56 +1,52 @@
-function getQueryParameter(uri, parameter) {
-    var re = new RegExp("^(.+" + parameter + "=)(.+?)($|&).*"), enc = uri.replace(re, "$2");
-    if (enc === uri) return "";
-    try {
-        return decodeURIComponent(enc);
-    } catch (e) {
-        return enc.replace("%20", " ");
+!function() {
+    "use strict";
+    function Field(name) {
+        this.name = name, this.then = hatch(this.name);
     }
-}
-
-function layEgg(name) {
-    var yolk = document.createElement("strong");
-    yolk.className = "head " + name, yolk.style.paddingRight = ".5em", yolk.innerText = name + ":";
-    var zygote = document.createElement("span");
-    zygote.className = "var " + name, zygote.style.paddingBottom = ".5em", zygote.innerHTML = "<em>loading&hellip;</em>";
-    var egg = document.createElement("li");
-    return egg.appendChild(yolk), egg.appendChild(zygote), egg;
-}
-
-function buildNest(comic) {
-    var clutch = document.createElement("ul");
-    clutch.className = "clutch", clutch.style.width = comic.clientWidth + "px", clutch.style.margin = "0 auto", 
-    [ "Title", "Contact", "RSS" ].map(function(name) {
-        clutch.appendChild(layEgg(name));
-    });
-    var nest = document.createElement("td");
-    nest.setAttribute("colspan", 3), nest.appendChild(clutch), document.querySelector("center table tbody").appendChild(nest);
-}
-
-function hatchEgg(name, getter) {
-    var notFound = "<em>not found</em>", elm = document.querySelector(".clutch span.var." + name);
-    try {
-        var egg = getter();
-        elm.innerHTML = egg ? egg : notFound;
-    } catch (e) {
-        elm.innerHTML = notFound;
-    }
-}
-
-document.addEventListener("readystatechange", function() {
-    if ("complete" === document.readyState) {
-        var comic = document.querySelector("img.comic");
-        buildNest(comic), hatchEgg("Title", function() {
-            return comic.getAttribute("title");
-        }), hatchEgg("Contact", function() {
-            var mailto = document.querySelector(".topnav a[href^=mailto]");
-            return getQueryParameter(mailto.getAttribute("href"), "subject");
-        }), hatchEgg("RSS", function() {
-            var item, body = document.querySelector("body"), itemData = !1, i = 0;
-            do item = body.childNodes[i], 8 === item.nodeType && item.data.includes("rss-title") && (itemData = item.data), 
-            ++i; while (itemData === !1);
-            var re = /rss\-title[^>]+>([^<]*)/;
-            return itemData.match(re)[1];
-        });
-    }
-});
+    const elm = {
+        get: selector => document.querySelector(selector),
+        new: tagName => document.createElement(tagName)
+    }, yolk = name => {
+        let strong = elm.new("strong");
+        return strong.style.paddingRight = ".5em", strong.textContent = name, strong;
+    }, zygote = value => {
+        let span = elm.new("span");
+        return span.style.paddingBottom = ".5em", span.innerHTML = value.toString(), span;
+    }, egg = (name, value) => {
+        let li = elm.new("li");
+        return li.appendChild(yolk(name)), li.appendChild(zygote(value)), li;
+    }, hatch = name => (function(value) {
+        elm.get("ul.clutch").appendChild(egg(name, value));
+    }), clutch = width => {
+        let ul = elm.new("ul");
+        ul.className = "clutch", ul.style.width = width + "px", ul.style.margin = "auto", 
+        ul.style.padding = 0;
+        let td = elm.new("td");
+        return td.appendChild(ul), td;
+    }, nest = width => {
+        let tr = elm.new("tr");
+        tr.appendChild(elm.new("td")), tr.appendChild(clutch(width)), tr.appendChild(elm.new("td")), 
+        elm.get("center tbody").appendChild(tr);
+    }, title = comic => {
+        let field = new Field("Title");
+        return field.resolve = (() => comic.getAttribute("title")), field;
+    }, contact = () => {
+        const field = new Field("Contact");
+        return field.resolve = (() => {
+            let href = elm.get(".topnav a[href^=mailto]").getAttribute("href"), subject = href.replace(/^.+subject=/, "");
+            return decodeURIComponent(subject);
+        }), field;
+    }, rss = () => {
+        let field = new Field("RSS"), xPath = "/html/body//comment()[contains(., 'rss-title')]", xType = XPathResult.ANY_TYPE;
+        return field.resolve = (() => document.evaluate(xPath, document, null, xType).iterateNext().data.replace(/<(\!\-{2}.+?|\/.+?\-{2})>/g, "")), 
+        field;
+    }, onReady = () => {
+        if ("complete" === document.readyState) {
+            let comic = elm.get("img.comic");
+            nest(comic.clientWidth), [ title(comic), contact(), rss() ].map(function(field) {
+                Promise.resolve(field.resolve()).then(field.then);
+            });
+        }
+    };
+    document.addEventListener("readystatechange", onReady);
+}();

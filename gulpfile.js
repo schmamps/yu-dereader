@@ -1,6 +1,6 @@
 var
 	gulp = require('gulp'),
-	ugly = require('gulp-uglify'),
+	ugly = require('gulp-uglify-harmony'),
 	file = require('fs'),
 	plst = require('gulp-plist'),
 	pkgData = require('./package.json'),
