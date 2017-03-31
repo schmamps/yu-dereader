@@ -1,50 +1,29 @@
 !function() {
     "use strict";
-    function Field(name) {
-        this.name = name, this.then = hatch(this.name);
-    }
-    const elm = {
-        get: selector => document.querySelector(selector),
-        new: tagName => document.createElement(tagName)
-    }, yolk = name => {
-        let strong = elm.new("strong");
-        return strong.style.paddingRight = ".5em", strong.textContent = name, strong;
-    }, zygote = value => {
-        let span = elm.new("span");
-        return span.style.paddingBottom = ".5em", span.innerHTML = value.toString(), span;
-    }, egg = (name, value) => {
-        let li = elm.new("li");
-        return li.appendChild(yolk(name)), li.appendChild(zygote(value)), li;
-    }, hatch = name => (function(value) {
-        elm.get("ul.clutch").appendChild(egg(name, value));
-    }), clutch = width => {
-        let ul = elm.new("ul");
-        ul.className = "clutch", ul.style.width = width + "px", ul.style.margin = "auto", 
-        ul.style.padding = 0;
-        let td = elm.new("td");
-        return td.appendChild(ul), td;
+    const stub = (tagName, content) => {
+        let elm = document.createElement(tagName), prop = "span" === tagName ? "innerHTML" : "textContent";
+        return elm[prop] = content.toString(), elm.outerHTML;
+    }, hatch = name => value => {
+        let html = [ "<li>", stub("strong", name), stub("span", value), "</li>" ];
+        document.querySelector("ul.clutch").innerHTML += html.join("\n");
     }, nest = width => {
-        let tr = elm.new("tr");
-        tr.appendChild(elm.new("td")), tr.appendChild(clutch(width)), tr.appendChild(elm.new("td")), 
-        elm.get("center tbody").appendChild(tr);
-    }, title = comic => {
-        let field = new Field("Title");
-        return field.resolve = (() => comic.getAttribute("title")), field;
-    }, contact = () => {
-        const field = new Field("Contact");
-        return field.resolve = (() => {
-            let href = elm.get(".topnav a[href^=mailto]").getAttribute("href"), subject = href.replace(/^.+subject=/, "");
-            return decodeURIComponent(subject);
-        }), field;
-    }, rss = () => {
-        let field = new Field("RSS"), xPath = "/html/body//comment()[contains(., 'rss-title')]", xType = XPathResult.ANY_TYPE;
-        return field.resolve = (() => document.evaluate(xPath, document, null, xType).iterateNext().data.replace(/<(\!\-{2}.+?|\/.+?\-{2})>/g, "")), 
-        field;
-    }, onReady = () => {
-        let comic = elm.get("img.comic");
-        nest(comic.clientWidth), [ title(comic), contact(), rss() ].map(function(field) {
-            Promise.resolve(field.resolve()).then(field.then);
-        });
-    };
-    onReady();
+        let template = document.createElement("template");
+        template.innerHTML = `<tr><td colspan="3"><ul class="clutch"
+style="margin:0 auto;width:${width}px"/></td></tr>
+<style type="text/css">ul.clutch strong { padding-right: .5em; }
+ul.clutch span { padding-bottom: .5em; }</style>`, document.querySelector("center tbody").appendChild(template.content.children[0]);
+    }, deposit = (name, getter) => {
+        Promise.resolve(getter()).then(hatch(name));
+    }, subj = {};
+    subj.develop = (str => decodeURIComponent(str.replace(/^.+subject=/, ""))), subj.seed = (() => document.querySelector(".topnav a[href^=mailto]").getAttribute("href"));
+    let rss = {};
+    rss.develop = (str => str.replace(/<(\!\-{2}.+?|\/.+?\-{2})>/g, "")), rss.seed = (() => {
+        let xPath = "/html/body//comment()[contains(., 'rss-title')]";
+        return document.evaluate(xPath, document, null, XPathResult.ANY_TYPE).iterateNext().data;
+    });
+    const roost = comic => {
+        nest(comic.clientWidth), deposit("Title", () => comic.getAttribute("title")), deposit("Contact", () => subj.develop(subj.seed())), 
+        deposit("RSS", () => rss.develop(rss.seed()));
+    }, comic = document.querySelector("img.comic");
+    comic && roost(comic);
 }();

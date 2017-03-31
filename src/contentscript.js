@@ -1,98 +1,58 @@
 (function() {
 	'use strict';
-	const elm = {
-		get: (selector) => document.querySelector(selector),
-		new: (tagName) => document.createElement(tagName),
+
+	const stub = (tagName, content) => {
+		let elm = document.createElement(tagName);
+		let prop = (tagName === 'span') ? 'innerHTML' : 'textContent';
+		elm[prop] = content.toString();
+		return elm.outerHTML;
 	};
 
-	const yolk = name => {
-		let strong = elm.new('strong');
-		strong.style.paddingRight = '.5em';
-		strong.textContent = name;
-		return strong;
-	};
-
-	const zygote = value => {
-		let span = elm.new('span');
-		span.style.paddingBottom = '.5em';
-		span.innerHTML = value.toString();
-		return span;
-	};
-
-	const egg = (name, value) => {
-		let li = elm.new('li');
-		li.appendChild(yolk(name));
-		li.appendChild(zygote(value));
-		return li;
-	};
-
-	const hatch = (name) => function(value) {
-		elm.get('ul.clutch').appendChild(egg(name, value));
-	};
-
-	const clutch = (width) => {
-		let ul = elm.new('ul');
-		ul.className = 'clutch';
-		ul.style.width = width + 'px';
-		ul.style.margin = 'auto';
-		ul.style.padding = 0;
-
-		let td = elm.new('td');
-		td.appendChild(ul);
-		return td;
+	const hatch = (name) => (value) => {
+		let html = ['<li>', stub('strong', name), stub('span', value), '</li>'];
+		document.querySelector('ul.clutch').innerHTML += html.join('\n');
 	};
 
 	const nest = (width) => {
-		let tr = elm.new('tr');
-		tr.appendChild(elm.new('td'));
-		tr.appendChild(clutch(width));
-		tr.appendChild(elm.new('td'));
-		elm.get('center tbody').appendChild(tr);
+		let template = document.createElement('template');
+		template.innerHTML =
+`<tr><td colspan="3"><ul class="clutch"
+style="margin:0 auto;width:${width}px"/></td></tr>
+<style type="text/css">ul.clutch strong { padding-right: .5em; }
+ul.clutch span { padding-bottom: .5em; }</style>`;
+
+		document.
+			querySelector('center tbody').
+			appendChild(template.content.children[0]);
 	};
 
-	function Field(name) {
-		this.name = name;
-		this.then = hatch(this.name);
-	}
-
-	const title = (comic) => {
-		let field = new Field('Title');
-		field.resolve = () => comic.getAttribute('title');
-		return field;
+	const deposit = (name, getter) => {
+		Promise.resolve(getter()).then(hatch(name));
 	};
 
-	const contact = () => {
-		const field = new Field('Contact');
-		field.resolve = () => {
-			let href = elm.get('.topnav a[href^=mailto]').getAttribute('href');
-			let subject = href.replace(/^.+subject=/, '');
-			return decodeURIComponent(subject);
-		};
+	const subj = {};
+	subj.develop = (str) => decodeURIComponent(str.replace(/^.+subject=/, ''));
+	subj.seed = () => document.
+		querySelector('.topnav a[href^=mailto]').
+		getAttribute('href');
 
-		return field;
-	};
-
-	const rss = () => {
-		let field = new Field('RSS');
+	let rss = {};
+	rss.develop = (str) => str.replace(/<(\!\-{2}.+?|\/.+?\-{2})>/g, '');
+	rss.seed = () => {
 		let xPath = '/html/body//comment()[contains(., \'rss-title\')]';
-		let xType = XPathResult.ANY_TYPE;
-		field.resolve = () => document.
-			evaluate(xPath, document, null, xType).
+		return document.
+			evaluate(xPath, document, null, XPathResult.ANY_TYPE).
 			iterateNext().
-			data.
-			replace(/<(\!\-{2}.+?|\/.+?\-{2})>/g, '');
-
-		return field;
+			data;
 	};
 
-	const onReady = () => {
-		let comic = elm.get('img.comic');
-
+	const roost = (comic) => {
 		nest(comic.clientWidth);
-		[title(comic), contact(), rss()].map(function(field) {
-			Promise.resolve(field.resolve()).then(field.then);
-		});
+		deposit('Title', () => comic.getAttribute('title'));
+		deposit('Contact', () => subj.develop(subj.seed()));
+		deposit('RSS', () => rss.develop(rss.seed()));
 	};
 
-	onReady();
+	const comic = document.querySelector('img.comic');
+	if (comic) { roost(comic); }
 })();
