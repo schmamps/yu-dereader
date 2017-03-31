@@ -41,12 +41,10 @@
         return field.resolve = (() => document.evaluate(xPath, document, null, xType).iterateNext().data.replace(/<(\!\-{2}.+?|\/.+?\-{2})>/g, "")), 
         field;
     }, onReady = () => {
-        if ("complete" === document.readyState) {
-            let comic = elm.get("img.comic");
-            nest(comic.clientWidth), [ title(comic), contact(), rss() ].map(function(field) {
-                Promise.resolve(field.resolve()).then(field.then);
-            });
-        }
+        let comic = elm.get("img.comic");
+        nest(comic.clientWidth), [ title(comic), contact(), rss() ].map(function(field) {
+            Promise.resolve(field.resolve()).then(field.then);
+        });
     };
-    document.addEventListener("readystatechange", onReady);
+    onReady();
 }();

@@ -86,8 +86,6 @@
 	};
 
 	const onReady = () => {
-		if (document.readyState !== 'complete') { return; }
-
 		let comic = elm.get('img.comic');
 
 		nest(comic.clientWidth);
@@ -96,5 +94,5 @@
 		});
 	};
 
-	document.addEventListener('readystatechange', onReady);
+	onReady();
 })();

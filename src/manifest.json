@@ -8,8 +8,7 @@
   "content_scripts": [ {
       "all_frames": false,
       "js": ["contentscript.js"],
-      "matches": [ "http://*.qwantz.com/*" ],
-      "run_at": "document_end"
+      "matches": [ "http://*.qwantz.com/*" ]
   } ],
   "icons": {
     "128": "icon.png"
