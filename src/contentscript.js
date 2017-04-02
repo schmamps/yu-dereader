@@ -17,8 +17,7 @@
 		let template = document.createElement('template');
 		template.innerHTML =
 `<tr><td colspan="3"><ul class="clutch"
-style="margin:0 auto;width:${width}px"/></td></tr>
-<style type="text/css">ul.clutch strong { padding-right: .5em; }
+style="margin:0 auto;max-width:735px"/></td></tr><style type="text/css">ul.clutch strong { padding-right: .5em; }
 ul.clutch span { padding-bottom: .5em; }</style>`;
 
 		document.
@@ -47,7 +46,7 @@ ul.clutch span { padding-bottom: .5em; }</style>`;
 	};
 
 	const roost = (comic) => {
-		nest(comic.clientWidth);
+		nest();
 		deposit('Title', () => comic.getAttribute('title'));
 		deposit('Contact', () => subj.develop(subj.seed()));
 		deposit('RSS', () => rss.develop(rss.seed()));
