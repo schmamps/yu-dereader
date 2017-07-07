@@ -1,57 +1,124 @@
 (function() {
 	'use strict';
 
-	const stub = (tagName, content) => {
-		let elm = document.createElement(tagName);
-		let prop = (tagName === 'span') ? 'innerHTML' : 'textContent';
-		elm[prop] = content.toString();
-		return elm.outerHTML;
+	const select = {
+		Title: (comic) => {
+			return comic;
+		},
+
+		Contact: () => {
+			return document.querySelector('.topnav a[href^=mailto]');
+		},
+
+		RSS: () => {
+			const xPath = '//body//comment()[contains(., \'rss-title\')]';
+
+			return document.evaluate(xPath, document, null, 0).iterateNext();
+		},
+
+		Message: () => {
+			return Array.
+				from(document.querySelectorAll('#blogpost .rss-content')).
+				filter((elem) => elem.textContent.length > 0).
+				pop();
+		},
 	};
 
-	const hatch = (name) => (value) => {
-		let html = ['<li>', stub('strong', name), stub('span', value), '</li>'];
-		document.querySelector('ul.clutch').innerHTML += html.join('\n');
+	const filter = {
+		Title: (elem) => {
+			return elem.getAttribute('title');
+		},
+
+		Contact: (elem) => {
+			const re = /^.*subject=/;
+			const subject = elem.getAttribute('href').replace(re, '');
+
+			try {
+				return decodeURIComponent(subject);
+			}
+			catch (e) {
+				return subject;
+			}
+		},
+
+		RSS: (elem) => {
+			return elem.data;
+		},
+
+		Message: (elem) => {
+			return elem.innerHTML;
+		},
 	};
 
-	const nest = (width) => {
-		let template = document.createElement('template');
-		template.innerHTML =
-`<tr><td colspan="3"><ul class="clutch"
-style="margin:0 auto;max-width:735px"/></td></tr><style type="text/css">ul.clutch strong { padding-right: .5em; }
-ul.clutch span { padding-bottom: .5em; }</style>`;
+	const render = {
+		nest: (width) => {  // eslint-disable-line no-unused-vars
+			const template = document.createElement('template');
+			const tbody = document.querySelector('center tbody');
 
-		document.
-			querySelector('center tbody').
-			appendChild(template.content.children[0]);
+			template.innerHTML = `
+<tr>
+	<td colspan="3">
+		<ul class="clutch"/>
+	</td>
+</tr>
+<style>
+ul.clutch { margin:0 auto; max-width:735px; }
+ul.clutch li { padding-bottom: .25em; }
+ul.clutch strong { display:block; }
+ul.clutch div { margin-left: 2em; }
+</style>
+`;
+			// tbody.appendChild(template.content.children[0]);
+			Array.from(template.content.children).map((child) => {
+				tbody.appendChild(child);
+			});
+		},
+
+		stub: (tagSet) => {
+			const [tagName, value] = tagSet;
+			const elem = document.createElement(tagName);
+			const prop = (tagName === 'div') ? 'innerHTML' : 'textContent';
+
+			elem[prop] = value.toString();
+
+			return elem;
+		},
+
+		egg: (name) => (value) => {
+			const tagSets = [['strong', name], ['div', value]];
+			const li = document.createElement('li');
+			const clutch = document.querySelector('ul.clutch');
+
+			tagSets.map(render.stub).map((elem) => li.appendChild(elem));
+			clutch.appendChild(li);
+		},
+
+		field: (comic) => (name) => {
+			const seed = select[name];
+			const develop = filter[name];
+			const hatch = render.egg(name);
+
+			Promise.
+				resolve(seed(comic)).
+				then(develop).
+				then(hatch).
+				catch(() => hatch('<em>dud!</em>'));
+		},
+
+		eggs: (comic) => {
+			const fields = ['Title', 'Contact', 'RSS', 'Message'];
+			const mapFields = render.field(comic);
+
+			render.nest();
+			fields.map(mapFields);
+		}
 	};
 
-	const deposit = (name, getter) => {
-		Promise.resolve(getter()).then(hatch(name));
+	const init = () => {
+		const comic = document.querySelector('img.comic');
+
+		return (comic) ? render.eggs(comic) : false;
 	};
 
-	const subj = {};
-	subj.develop = (str) => decodeURIComponent(str.replace(/^.+subject=/, ''));
-	subj.seed = () => document.
-		querySelector('.topnav a[href^=mailto]').
-		getAttribute('href');
-
-	let rss = {};
-	rss.develop = (str) => str.replace(/<(\!\-{2}.+?|\/.+?\-{2})>/g, '');
-	rss.seed = () => {
-		let xPath = '/html/body//comment()[contains(., \'rss-title\')]';
-		return document.
-			evaluate(xPath, document, null, XPathResult.ANY_TYPE).
-			iterateNext().
-			data;
-	};
-
-	const roost = (comic) => {
-		nest();
-		deposit('Title', () => comic.getAttribute('title'));
-		deposit('Contact', () => subj.develop(subj.seed()));
-		deposit('RSS', () => rss.develop(rss.seed()));
-	};
-
-	const comic = document.querySelector('img.comic');
-	if (comic) { roost(comic); }
+	init();
 })();
