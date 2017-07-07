@@ -8,7 +8,7 @@
   "content_scripts": [ {
       "all_frames": false,
       "js": ["contentscript.js"],
-      "matches": [ "http://*.qwantz.com/*" ]
+      "matches": [ "http://*.qwantz.com/*", "http://localhost/*" ]
   } ],
   "icons": {
     "128": "icon.png"
