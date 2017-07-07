@@ -1,0 +1,16 @@
+#header, .headertext {
+    margin: 0 auto;
+}
+
+#header ul {
+    list-style: none;
+}
+
+#header li {
+    float: left;
+}
+
+img.comic {
+    width: 735px;
+    height: 500px;
+}
