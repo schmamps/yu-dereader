@@ -34,12 +34,6 @@ you must reinstall it every time you restart Safari.
 ## Roll Your Own
 
 You can figure out where the source code is.
-There are a few [gulp](http://gulpjs.com/) build tasks:
-
-* `js`: optimize and place the content script
-* `manifest`: merge the source and package data
-* `plist`: update the Safari extension plist
-* `package`: run all of the previously-listed tasks
-
-The default task watches `src/contentscript.js` for changes,
-then runs `js`.
+The extensions are built with [gulp](http://gulpjs.com/),
+and specific tasks are listed in the default task,
+i.e. invoking `gulp` with no arguments.
