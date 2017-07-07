@@ -1,28 +1,52 @@
 !function() {
     "use strict";
-    const stub = (tagName, content) => {
-        let elm = document.createElement(tagName), prop = "span" === tagName ? "innerHTML" : "textContent";
-        return elm[prop] = content.toString(), elm.outerHTML;
-    }, hatch = name => value => {
-        let html = [ "<li>", stub("strong", name), stub("span", value), "</li>" ];
-        document.querySelector("ul.clutch").innerHTML += html.join("\n");
-    }, nest = width => {
-        let template = document.createElement("template");
-        template.innerHTML = `<tr><td colspan="3"><ul class="clutch"
-style="margin:0 auto;max-width:735px"/></td></tr><style type="text/css">ul.clutch strong { padding-right: .5em; }
-ul.clutch span { padding-bottom: .5em; }</style>`, document.querySelector("center tbody").appendChild(template.content.children[0]);
-    }, deposit = (name, getter) => {
-        Promise.resolve(getter()).then(hatch(name));
-    }, subj = {};
-    subj.develop = (str => decodeURIComponent(str.replace(/^.+subject=/, ""))), subj.seed = (() => document.querySelector(".topnav a[href^=mailto]").getAttribute("href"));
-    let rss = {};
-    rss.develop = (str => str.replace(/<(\!\-{2}.+?|\/.+?\-{2})>/g, "")), rss.seed = (() => {
-        let xPath = "/html/body//comment()[contains(., 'rss-title')]";
-        return document.evaluate(xPath, document, null, XPathResult.ANY_TYPE).iterateNext().data;
-    });
-    const roost = comic => {
-        nest(), deposit("Title", () => comic.getAttribute("title")), deposit("Contact", () => subj.develop(subj.seed())), 
-        deposit("RSS", () => rss.develop(rss.seed()));
-    }, comic = document.querySelector("img.comic");
-    comic && roost(comic);
+    const select = {
+        Title: comic => comic,
+        Contact: () => document.querySelector(".topnav a[href^=mailto]"),
+        RSS: () => {
+            return document.evaluate("//body//comment()[contains(., 'rss-title')]", document, null, 0).iterateNext();
+        },
+        Message: () => Array.from(document.querySelectorAll("#blogpost .rss-content")).filter(elem => elem.textContent.length > 0).pop()
+    }, filter = {
+        Title: elem => elem.getAttribute("title"),
+        Contact: elem => {
+            const re = /^.*subject=/, subject = elem.getAttribute("href").replace(re, "");
+            try {
+                return decodeURIComponent(subject);
+            } catch (e) {
+                return subject;
+            }
+        },
+        RSS: elem => elem.data,
+        Message: elem => elem.innerHTML
+    }, render = {
+        nest: width => {
+            const template = document.createElement("template"), tbody = document.querySelector("center tbody");
+            template.innerHTML = `\n<tr>\n\t<td colspan="3">\n\t\t<ul class="clutch"/>\n\t</td>\n</tr>\n<style>\nul.clutch { margin:0 auto; max-width:735px; }\nul.clutch li { padding-bottom: .25em; }\nul.clutch strong { display:block; }\nul.clutch div { margin-left: 2em; }\n</style>\n`, 
+            Array.from(template.content.children).map(child => {
+                tbody.appendChild(child);
+            });
+        },
+        stub: tagSet => {
+            const [tagName, value] = tagSet, elem = document.createElement(tagName);
+            return elem["div" === tagName ? "innerHTML" : "textContent"] = value.toString(), 
+            elem;
+        },
+        egg: name => value => {
+            const tagSets = [ [ "strong", name ], [ "div", value ] ], li = document.createElement("li"), clutch = document.querySelector("ul.clutch");
+            tagSets.map(render.stub).map(elem => li.appendChild(elem)), clutch.appendChild(li);
+        },
+        field: comic => name => {
+            const seed = select[name], develop = filter[name], hatch = render.egg(name);
+            Promise.resolve(seed(comic)).then(develop).then(hatch).catch(() => hatch("<em>dud!</em>"));
+        },
+        eggs: comic => {
+            const fields = [ "Title", "Contact", "RSS", "Message" ], mapFields = render.field(comic);
+            render.nest(), fields.map(mapFields);
+        }
+    };
+    (() => {
+        const comic = document.querySelector("img.comic");
+        !!comic && render.eggs(comic);
+    })();
 }();
