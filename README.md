@@ -37,3 +37,8 @@ You can figure out where the source code is.
 The extensions are built with [gulp](http://gulpjs.com/),
 and specific tasks are listed in the default task,
 i.e. invoking `gulp` with no arguments.
+
+
+## Testing
+
+In the project directory, execute `./test/run.sh`
