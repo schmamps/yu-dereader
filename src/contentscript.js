@@ -1,5 +1,32 @@
-(function() {
+(() => {
 	'use strict';
+
+	const last = {
+		setBG: (comic, url) => {
+			comic.style.backgroundImage = `url('${url}')`;
+		},
+
+		getBG: (comic) => {
+			const decl = comic.style.backgroundImage;
+			const url = decl.replace(/^.+(['"])(.+)\1.+$/, '$2');
+
+			return url;
+		},
+
+		toggle: (comic) => () => {
+			const src = last.getBG(comic);
+
+			last.setBG(comic, comic.getAttribute('src'));
+			comic.setAttribute('src', src);
+		},
+
+		init: (comic) => {
+			comic.style.backgroundRepeat = 'no-repeat';
+			comic.style.backgroundPosition = '0 0';
+			comic.addEventListener('dblclick', last.toggle(comic));
+			last.setBG(comic, '/lastever.png');
+		},
+	};
 
 	const select = {
 		Title: (comic) => {
@@ -111,6 +138,7 @@ ul.clutch div { margin-left: 2em; }
 
 			render.nest();
 			fields.map(mapFields);
+			last.init(comic);
 		}
 	};
 

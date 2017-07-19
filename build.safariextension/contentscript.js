@@ -1,6 +1,19 @@
-!function() {
+(() => {
     "use strict";
-    const select = {
+    const last = {
+        setBG: (comic, url) => {
+            comic.style.backgroundImage = `url('${url}')`;
+        },
+        getBG: comic => comic.style.backgroundImage.replace(/^.+(['"])(.+)\1.+$/, "$2"),
+        toggle: comic => () => {
+            const src = last.getBG(comic);
+            last.setBG(comic, comic.getAttribute("src")), comic.setAttribute("src", src);
+        },
+        init: comic => {
+            comic.style.backgroundRepeat = "no-repeat", comic.style.backgroundPosition = "0 0", 
+            comic.addEventListener("dblclick", last.toggle(comic)), last.setBG(comic, "/lastever.png");
+        }
+    }, select = {
         Title: comic => comic,
         Contact: () => document.querySelector(".topnav a[href^=mailto]"),
         RSS: () => {
@@ -42,11 +55,11 @@
         },
         eggs: comic => {
             const fields = [ "Title", "Contact", "RSS", "Message" ], mapFields = render.field(comic);
-            render.nest(), fields.map(mapFields);
+            render.nest(), fields.map(mapFields), last.init(comic);
         }
     };
     (() => {
         const comic = document.querySelector("img.comic");
         !!comic && render.eggs(comic);
     })();
-}();
+})();
