@@ -2,7 +2,7 @@
 
 // Stolen and modified from https://github.com/walmartlabs/eslint-config-defaults
 module.exports = {
-  "env": {"browser": true},
+  "env": {"browser": true, "es6": true},
   "parserOptions": {
     "ecmaVersion": 6,
   },
@@ -329,8 +329,5 @@ module.exports = {
     // disable strict mode
     "strict": 0,
   },
-  "parserOptions": {
-    "ecmaVersion": 6,
-  }
 };
 
