@@ -7,7 +7,8 @@
   "permissions": [],
   "content_scripts": [ {
       "all_frames": false,
-      "js": ["contentscript.js"],
+      "js": ["angola.js"],
+      "css": ["maldives.css"],
       "matches": [ "http://*.qwantz.com/*", "http://localhost/*" ]
   } ],
   "icons": {

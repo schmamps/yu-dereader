@@ -1,0 +1,14 @@
+.comic {
+  transition: transform 1000ms ease;
+  transform: rotateY(0deg); }
+
+.comic.lastEver {
+  transform: rotateY(360deg); }
+
+.clutch {
+  margin: 0 auto;
+  max-width: 735px; }
+  .clutch li {
+    padding-bottom: .25em; }
+  .clutch div {
+    margin-left: 2em; }

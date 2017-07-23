@@ -1,6 +1,6 @@
 {
   "name": "angola-maldives",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Angola Maldives - Dinosaur Comics Fun Times!",
   "main": ".",
   "directories": {},
@@ -10,12 +10,16 @@
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-plist": "^0.1.0",
+    "gulp-sass": "^3.1.0",
     "gulp-uglify": "^3.0.0",
     "gulp-util": "^3.0.8",
-    "uglify-es": "^3.0.23"
+    "uglify-es": "^3.0.25"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/schmamps/angola-maldives.git"
+  },
+  "stylelint": {
+
   }
 }
