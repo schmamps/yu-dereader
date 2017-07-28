@@ -20,9 +20,13 @@
 		<dict>
 			<key>End</key>
 			<array>
-				<string>contentscript.js</string>
+				<string>angola.js</string>
 			</array>
 		</dict>
+		<key>Stylesheets</key>
+		<array>
+			<string>maldives.css</string>
+		</array>
 	</dict>
 	<key>DeveloperIdentifier</key>
 	<string>0000000000</string>
