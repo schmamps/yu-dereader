@@ -1,20 +1,47 @@
-$comic-width: 735px
+$comic-width: 750px
+$comic-height: 508px;
 
-.comic
-    transition: transform 1000ms ease
-    transform: rotateY(0deg)
+center > table tr:nth-child(1) > td:nth-child(2)
+    width: $comic-width
+    height: $comic-height
 
-.comic.lastEver
-    transform: rotateY(360deg)
+center > table tr > td:nth-child(2) > img
+    background-repeat: no-repeat
+    transition: all 0ms ease
+    width: auto
 
 .clutch
+    a, a:hover
+        display: block
+        text-decoration: none
+        background: transparent
+        color: #00689d
+
+    a:hover
+        text-decoration: underline
+
+.clutch ul
     margin: 0 auto
-    max-width: $comic-width
+    max-width: $comic-width - 50
 
     li
         padding-bottom: .25em
 
     strong
 
-    div
+    div, a
         margin-left: 2em
+        color: #000
+        font-size: 1em
+        font-weight: normal
+
+.clutch > a
+    font-size: .75em
+    text-align: center
+    font-style: italic
+
+#blogpost
+    transition: background 1s ease-out
+
+#blogpost.angola
+    background: #ffc
