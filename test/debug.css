@@ -10,7 +10,7 @@
     float: left;
 }
 
-img.comic {
+center > table tr:nth-child(1) > td:nth-child(2) img {
     width: 735px;
     height: 500px;
 }
