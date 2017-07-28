@@ -3,7 +3,7 @@
 Angola Maldives is a Chrome extension to reveal Dinosaur Comics' easter eggs.
 
 Double click the comic to toggle between standard view and
-`&butiwouldratherbereading=thelastdinosaurcomicever`.
+`&butiwouldratherbereading=thelastdinosaurcomicever` and other variations.
 
 ## Installation
 
