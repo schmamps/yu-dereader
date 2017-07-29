@@ -129,7 +129,7 @@
             }
             return chars;
         },
-        initChars: (current, original) => compose(flip.rebase(current), flip.shuffle)([ [ original, "" ], [ "lastever.png", "thelastdinosaurcomicever" ], [ "assimilated.png", "onewheretrexgotassimilated" ], [ "frig.png", "onewheretrexswearsmore" ], [ "clothes.png", "onewheretrexwearsmore" ], [ "feathers.png", "somethingmorehistoricallyaccurate" ], [ "xkcd.png", "xkcd" ], [ "penny.png", "pennyarcade", "7px 8px" ], [ "problemsleuth.png", "problemsleuth" ] ]),
+        initChars: (current, original) => compose(flip.rebase(current), flip.shuffle)([ [ original, "" ], [ "assimilated.png", "onewheretrexgotassimilated" ], [ "clothes.png", "onewheretrexwearsmore" ], [ "feathers.png", "somethingmorehistoricallyaccurate" ], [ "frig.png", "onewheretrexswearsmore" ], [ "lastever.png", "thelastdinosaurcomicever" ], [ "penny.png", "pennyarcade", "7px 8px" ], [ "problemsleuth.png", "problemsleuth" ], [ "xkcd.png", "xkcd" ] ]),
         initComic: (elem, original) => {
             elem.classList.remove("comic"), elem.style.transform = "rotateY(0deg)", elem.style.transitionDuration = `${flip.duration}ms`, 
             elem.style.backgroundImage = `url(${original})`, elem.addEventListener("dblclick", flip.flop);

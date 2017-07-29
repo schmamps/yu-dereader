@@ -33,8 +33,8 @@
 		splitItems: (items) => items.map(params.splitItem),
 
 		shim: (location) => {
-			const chain = compose(params.splitSearch, params.splitItems);
-			const pairs = chain(location.search);
+			const parse = compose(params.splitSearch, params.splitItems);
+			const pairs = parse(location.search);
 
 			return pairs;
 		},
@@ -274,19 +274,18 @@
 		},
 
 		initChars: (current, original) => {
-			const chain = compose(flip.rebase(current), flip.shuffle);
-			const base = [
+			const reorder = compose(flip.rebase(current), flip.shuffle);
+			const chars = reorder([
 				[original, ''],
-				['lastever.png', 'thelastdinosaurcomicever',],
 				['assimilated.png', 'onewheretrexgotassimilated',],
-				['frig.png', 'onewheretrexswearsmore',],
 				['clothes.png', 'onewheretrexwearsmore',],
 				['feathers.png', 'somethingmorehistoricallyaccurate',],
-				['xkcd.png', 'xkcd',],
+				['frig.png', 'onewheretrexswearsmore',],
+				['lastever.png', 'thelastdinosaurcomicever',],
 				['penny.png', 'pennyarcade', '7px 8px',],
 				['problemsleuth.png', 'problemsleuth',],
-			];
-			const chars = chain(base);
+				['xkcd.png', 'xkcd',],
+			]);
 
 			return chars;
 		},
