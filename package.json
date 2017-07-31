@@ -4,7 +4,12 @@
   "description": "Angola Maldives - Dinosaur Comics Fun Times!",
   "main": ".",
   "directories": {},
-  "scripts": {},
+  "scripts": {
+    "watch": "gulp js css watch",
+    "build": "gulp js css plist manifest",
+    "server:start": "test/run.sh start",
+    "server:stop": "test/run.sh stop"
+  },
   "author": "Andrew Champion",
   "license": "MIT",
   "devDependencies": {
