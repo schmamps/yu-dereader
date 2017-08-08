@@ -6,12 +6,51 @@
     <meta name="description" content="this comic... might be the best comic?">
     <meta property="og:determiner" content="a" />
     <meta property="og:title" content="Dinosaur Comics!" />
-    <meta property="og:description" content="uh, writing is hard and you're not making it any easier so i would appreciate it if you would be kind to me and just tell everyone my story is amazing alert??"
-    />
+    <meta property="og:description" content="<?=$comic->title;?>"/>
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="http://www.qwantz.com/comics/comic2-3159.png" />
-    <title>Dinosaur Comics - June 28th, 2017 - awesome fun times!</title>
-    <link rel="stylesheet" href="debug.css">
+    <meta property="og:image"
+    content="http://www.qwantz.com/comics/comic2-<?=$comic->id;?>.png" />
+    <title>Dinosaur Comics - <?=$comic->date;?> - awesome fun times!</title>
+    <style type="text/css" id="debug">
+#header, .headertext {
+    margin: 0 auto;
+}
+
+#header ul {
+    list-style: none;
+}
+
+#header li {
+    float: left;
+}
+
+center > table tr:nth-child(1) > td:nth-child(2) img {
+    width: 735px;
+    height: 500px;
+}
+
+
+a[rel=prev], a[rel=next] {
+    display: block;
+    width: 100%;
+    height: 350px;
+    padding-top: 150px;
+    background: #fff;
+    color: #22d;
+    text-decoration: none;
+    font-size: 4rem;
+    font-weight: bolder;
+    transition: all .5s ease-out;
+}
+
+a[rel=prev]:hover, a[rel=next]:hover {
+    background: #ddf;
+    color: #222;
+}
+
+a[rel=prev]::after { content: '<'; }
+a[rel=next]::after {content: '>'; }
+    </style>
 </head>
 
 <body>
@@ -28,13 +67,10 @@
                         <li class="paddedbullet">&bull;</li>
                         <li><a>archive</a></li>
                         <li class="paddedbullet">&bull;</li>
-                        <li><a href="mailto:ryan@qwantz.com?subject=t-rex is turning his letters to professor science into fanfiction and i support this 100%">contact</a></li>
+                        <li><a href="mailto:ryan@qwantz.com?subject=<?=$comic->contact;?>">contact</a></li>
                         <li
                             class="paddedbullet">&bull;</li>
                             <li><a>sexy exciting merch</a></li>
-                            <li class="paddedbullet">&bull;</li>
-                            <li><a
-                                    style="color:#ffc6ca;">shark punching</a></li>
                             <li class="paddedbullet">&bull;</li>
                             <li><a>search</a></li>
                     </ul>
@@ -42,23 +78,37 @@
             </tr>
             <tr>
                 <td colspan=2>
-                    <div class="randomquote" style="padding-top:5px;"><span class="white"><a>Read tomorrow's comic today!  IF YOU DARE!!</a> &#8211;</span>
-                        <img
-                            width=16 height=16 title="Utahraptor!  WHAT ARE YOU UP TO??">
-                            <BR><img width=15 height=15 title="That T-Rex, always sayin' somethin'">                            <span class="white">&#8211;</span><a>Neither the past nor the future actually exists!</a></td>
+                    <div class="randomquote" style="padding-top:5px;">
+                        <span class="white">
+                            <a href="http://www.patreon.com/qwantz">
+                                Read tomorrow's comic today!  IF YOU DARE!!
+                            </a>
+                            &#8211;
+                        </span>
+                        <img width=16 height=16
+                        title="Utahraptor!  WHAT ARE YOU UP TO??">
+                        <BR>
+                        <img width=15 height=15
+                        title="That T-Rex, always sayin' somethin'">
+                        <span class="white">&#8211;</span>
+                        <a href="#">
+                            PERHAPS YOU'D LIKE&hellip; A RANDOM LINK?
+                        </a>
+                    </div>
+                </td>
             </tr>
         </table>
         </div>
-        <!-- <span class="rss-title">the man who could remember everything!!  except where he put his keys, lol relatable</span> -->
-        <div class="headertext">NEW BOOK ALERT: <a>William Shakespeare Punches A Friggin' Shark And/Or Other Stories</a>!!
-            AHHHH IT'S GONNA BE GREAT</div>
+        <!-- <span class="rss-title"><?=$comic->rss;?></span> -->
+        <div class="headertext">Header Text</div>
         <center>
             <table border=0 cellspacing=0 cellpadding=0
             style="padding-top:10px;z-index:2;position:relative;">
                 <tr>
                     <td align="left" valign="bottom" width=100>
                         <div class="nohover">
-                            <a title="Previous comic" rel="prev">
+                            <a <?=$comic->prev;?> rel="prev"
+                            title="Previous comic">
                                 <div class="arrowholder">
                                     <div id="leftarrow"></div>
                                 </div>
@@ -66,13 +116,16 @@
                         </div>
                     </td>
                     <td align="middle" valign="middle">
-                        <img class="comic"
-                        title="uh, writing is hard and you're not making it any easier so i would appreciate it if you would be kind to me and just tell everyone my story is amazing alert??"
-                        src="{{src}}" {{style}}>
+                        <img
+                            title="<?=$comic->title;?>"
+                            <?=$comic->src;?>
+                            <?=$comic->class;?>
+                            <?=$comic->style;?>
+                        >
                     </td>
                     <td align="right" valign="bottom" width=100>
                         <div class="nohover">
-                            <a title="Next comic" rel="next">
+                            <a title="Next comic" rel="next" <?=$comic->next;?>">
                                 <div class="arrowholder">
                                     <div id="rightarrow"></div>
                                 </div>
@@ -95,26 +148,11 @@
                                 <td align="center" colspan=6>RECOMMEND T-REX TO... THE INTERNET:</td>
                             </tr>
                             <tr>
-                                <td align="center" valign="top">
-                                    <iframe align="middle" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:70px; height:62px;"
-                                        allowTransparency="true"></iframe>
-                                </td>
-                                <td align="center" valign="top">
-                                    <iframe align="middle" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:50px; height:62px;"
-                                        allowTransparency="true"></iframe>
-                                </td>
-                                <td align="center" valign="top">
-                                    <iframe align="middle" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:50px; height:62px;"
-                                        allowTransparency="true"></iframe>
-                                </td>
-                                <td align="center" valign="top">
-                                    <iframe align="middle" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:55px; height:62px;"
-                                        allowTransparency="true"></iframe>
-                                </td>
-                                <td align="center" valign="top">
-                                    <iframe align="middle" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:55px; height:62px;"
-                                        allowTransparency="true"></iframe>
-                                </td>
+                                <td align="center" valign="top">share</td>
+                                <td align="center" valign="top">share</td>
+                                <td align="center" valign="top">share</td>
+                                <td align="center" valign="top">share</td>
+                                <td align="center" valign="top">alike</td>
                             </tr>
                         </table>
                     </div>
@@ -171,44 +209,7 @@
         </table>
     </div>
     <div id="container">
-        <div id="blogpost">
-            <div id="blogpostheader">What are the haps my friends</div>
-            <div class="padded">
-                <p align="centeR"></p>
-                <center>
-                    <a href="http://www.topatoco.com/qwantz">
-                        <img width="530" height="124" border="0" title="oh my goodness imagine if this was on your body, OH MY GOODNESS">
-                    </a>
-                    <noscript>&lt;span class="rss-content"&gt;
-                    &lt;img src="http://www.qwantz.com/shirtad_whiteboard.png" width="530" height="124" border=0&gt;&lt;/span&gt;
-                    </noscript>
-                    <span class="rss-content"></span>
-                    <br>
-                    <span class="grey">
-                        it is okay to buy this, it is okay to love this
-                        <noscript>all your problems are over</noscript>
-                    </span>
-                    <span class="rss-content"></span>
-                </center>
-                <p></p>
-                <p>
-                    <b>June 28th, 2017:</b>
-                    <span class="bold"></span>
-                    <span class="rss-content">I am Kickstarting a new book!  It's called <a>WILLIAM SHAKESPEARE PUNCHES A FRIGGIN' SHARK and/or other stories</a> and it's gonna be great, in my not-at-all-biased opinion!!</span>
-                </p>
-                <p></p>
-                <center>·</center>
-                <p>I'm writing a book and could use your support in making it super awesome!  It's called <a>William Shakespeare Punches A Friggin' Shark</a> and it's a choose-your-own path SHAKESPEARE ADVENTURE.  And it's being illustrated by 100% amazing people!!</p>
-                <p></p>
-                <center><!-- iframe --></center>
-                <p>
-                    <b>One year ago today:</b>
-                    <a>you may think a cop making baseball puns with a gun that fires baseballs isn't THAT dark and gritty, but wait till you realize such "a gun that fires baseballs" is A CANNON being fired at people with deadly accuracy.  okay enjoy</a>
-                </p>
-                <p align="right">– Ryan</p>
-                <!-- <span class="rss-content"></td></tr></table></center></span> -->
-            </div>
-        </div>
+<?php include($comic->post); ?>
         <div id="sidebar">
             <div id="sidebarheader">Ads Woo</div>
             <noscript><map name="admap38564" id="admap38564"><area shape="rect" coords="0,0,160,600" title="" alt="" target="_blank" /></map>
@@ -296,10 +297,9 @@
             </div>
         </div>
     </div>
-    <div id="summerfooterbg4">
-        <div id="summerfooter4">&nbsp;</div>
+    <div id="seasonfooterbg4">
+        <div id="seasonfooter4">&nbsp;</div>
     </div>
     <div id="bgclouds">&nbsp;</div>
 </body>
-
 </html>
