@@ -1,185 +1,377 @@
-(() => {
-    "use strict";
-    const compose = (...funcs) => value => funcs.reduce((val, fn) => fn(val), value), params = {
-        cache: {},
-        addPairToParams: (params, pair) => {
-            const [name, val = ""] = pair;
-            return params[name] = val, params;
+"use strict";
+
+const core = {
+    BIWRBR: "butiwouldratherbereading",
+    compose: (...funcs) => (value = null) => funcs.reduce((val, fn) => fn(val), value)
+}, dom = {
+    query: selector => document.querySelector(selector),
+    evalAll: xPath => document.evaluate(xPath, document, null, 0),
+    eval: xPath => dom.evalAll(xPath).iterateNext(),
+    selector: {
+        split: selector => `!${selector}`.split(/(?=[\.#])/),
+        reduce: (data, comp) => {
+            const [key, val] = [ comp.charAt(0), comp.substr(1) ];
+            return data[key].push(val), data;
         },
-        native: location => Array.from(new URL(location).searchParams.entries()),
-        splitSearch: search => search.substr(1).split("&"),
-        splitItem: item => item.split("="),
-        splitItems: items => items.map(params.splitItem),
-        shim: location => compose(params.splitSearch, params.splitItems)(location.search),
-        init: () => {
-            const loc = document.location, pairs = window.URL ? params.native(loc) : params.shim(loc);
-            params.cache = pairs.reduce(params.addPairToParams, {});
-        },
-        get: (name, defaultValue) => name in params.cache ? params.cache[name] : defaultValue
-    }, select = {
-        Title: elem => elem,
-        Contact: () => document.querySelector(".topnav a[href^=mailto]"),
-        RSS: () => {
-            return document.evaluate("//body//comment()[contains(., 'rss-title')]", document, null, 0).iterateNext();
-        }
-    }, process = {
-        Title: elem => {
-            const original = elem.getAttribute("title"), next = "DOUBLE CLICK FOR MORE AWESOME FUN TIMES!";
-            return elem.setAttribute("title", next), elem.dataset.title = next, original;
-        },
-        Contact: elem => {
-            const re = /^.*subject=/, subject = elem.getAttribute("href").replace(re, "");
-            try {
-                return decodeURIComponent(subject);
-            } catch (e) {
-                return subject;
-            }
-        },
-        RSS: elem => elem.data.trim()
-    }, generate = {
-        getChildren: (...all) => [].concat(document.createElement("li")).concat(all.map(name => document.createElement(name))),
-        appendTo: parent => children => ([].concat(children).map(child => parent.appendChild(child)), 
-        parent),
-        listItem: (li, ...children) => {
-            const ul = document.querySelector(".clutch ul"), appendSubs = generate.appendTo(li), appendItem = generate.appendTo(ul);
-            Promise.resolve(appendSubs(children)).then(appendItem);
-        },
-        basic: name => value => {
-            const [li, strong, div] = generate.getChildren("strong", "div");
-            strong.textContent = name, div.innerHTML = value, generate.listItem(li, strong, div);
-        },
-        anchor: name => document.querySelector("#blogpost center > a").setAttribute("name", name),
-        getPost: () => document.getElementById("blogpost"),
-        scroll: () => generate.getPost().classList.add("angola"),
-        transitionEnd: () => generate.getPost().classList.remove("angola"),
-        monkey: () => {
-            const post = generate.getPost(), pad = document.documentElement.clientHeight - 200;
-            post.addEventListener("transitionend", generate.transitionEnd), document.getElementById("container").style.minHeight = pad + "px";
-        }
-    };
-    generate.Title = generate.basic("Title"), generate.Contact = generate.basic("Contact"), 
-    generate.RSS = (value => {
-        const href = "#angola-maldives", [li, strong, a] = generate.getChildren("strong", "a");
-        strong.textContent = "RSS", a.innerHTML = value, a.setAttribute("href", href), a.addEventListener("click", generate.scroll), 
-        generate.listItem(li, strong, a), generate.anchor(href.substr(1)), generate.monkey();
-    });
-    const flip = {
-        duration: 800,
-        chars: [],
-        getRotation: decl => Number(decl.replace(/[^\d]/g, "")),
-        getNext: angle => {
-            const idx = angle % (360 * flip.chars.length) / 360, [src, title, position = "0 0"] = flip.chars[idx];
-            return {
-                src: src,
-                title: title,
-                position: position,
-                angle: angle
+        short: comps => {
+            const base = {
+                "!": [],
+                "#": [],
+                ".": []
             };
+            return comps.reduce(dom.selector.reduce, base);
         },
-        reduceParam: (search, param) => {
-            const delim = search.length ? "&" : "?", [name, val] = param;
-            return search + `${delim}${name}=${val}`;
-        },
-        formatLink: title => {
-            const query = [ [ "comic", params.get("comic", !1) ], [ "butiwouldratherbereading", title ] ].filter(param => param[1]).reduce(flip.reduceParam, "");
-            return document.location.pathname + query;
-        },
-        link: title => {
-            const plink = document.querySelector(".clutch a.permalink"), href = flip.formatLink(title);
-            plink.setAttribute("href", href);
-        },
-        swap: (img, next) => () => {
-            img.setAttribute("src", next.src), flip.link(next.title);
-        },
-        onload: (elem, next) => () => {
-            const swap = flip.swap(elem, next), timeout = flip.duration / 2;
-            elem.style.transform = `rotateY(${next.angle}deg)`, elem.style.backgroundPosition = next.position, 
-            window.setTimeout(swap, timeout);
-        },
-        preload: (next, elem) => {
-            const img = document.createElement("img");
-            img.addEventListener("load", flip.onload(elem, next)), img.setAttribute("src", next.src);
-        },
-        flop: event => {
-            event.preventDefault();
-            const elem = event.currentTarget, angle = flip.getRotation(elem.style.transform) + 360, next = flip.getNext(angle);
-            flip.preload(next, elem);
-        },
-        getBackground: elem => {
-            const decl = elem.style.backgroundImage;
-            return decl ? decl.replace(/^.+[\('"]+([^\)"']+).+$/, "$1") : "";
-        },
-        getImages: elem => {
-            const current = elem.getAttribute("src"), bg = flip.getBackground(elem);
-            return bg ? [ bg, current ] : [ current, current ];
-        },
-        findBaseIndex: (chars, base) => {
-            for (let i in chars) if (chars[i][0] === base) return i;
-            return 0;
-        },
-        reindex: (chars, inc, mod) => (indexed, _, idx) => indexed.concat([ chars[(idx + inc) % mod] ]),
-        rebase: base => chars => {
-            const inc = flip.findBaseIndex(chars, base), len = chars.length;
-            return chars.reduce(flip.reindex(chars, inc, len), []);
-        },
-        shuffle: chars => {
-            for (let currIdx = chars.length - 1; currIdx > 0; --currIdx) {
-                const randIdx = 1 + Math.floor(Math.random() * currIdx), temp = chars[currIdx];
-                chars[currIdx] = chars[randIdx], chars[randIdx] = temp;
+        attr: {
+            filter: pair => pair[1].length > 0,
+            join: pair => [ pair[0], pair[1].join(" ") ],
+            extract: short => {
+                const {"#": id, ".": classList} = short;
+                return [ [ "id", id ], [ "class", classList ] ].filter(dom.selector.attr.filter).map(dom.selector.attr.join);
             }
-            return chars;
         },
-        initChars: (current, original) => compose(flip.rebase(current), flip.shuffle)([ [ original, "" ], [ "assimilated.png", "onewheretrexgotassimilated" ], [ "clothes.png", "onewheretrexwearsmore" ], [ "feathers.png", "somethingmorehistoricallyaccurate" ], [ "frig.png", "onewheretrexswearsmore" ], [ "lastever.png", "thelastdinosaurcomicever" ], [ "penny.png", "pennyarcade", "7px 8px" ], [ "problemsleuth.png", "problemsleuth" ], [ "xkcd.png", "xkcd" ] ]),
-        initComic: (elem, original) => {
-            elem.classList.remove("comic"), elem.style.transform = "rotateY(0deg)", elem.style.transitionDuration = `${flip.duration}ms`, 
-            elem.style.backgroundImage = `url(${original})`, elem.addEventListener("dblclick", flip.flop);
+        expand: short => ({
+            name: short["!"].length ? short["!"][0] : "template",
+            attrs: dom.selector.attr.extract(short)
+        }),
+        applyAttrPair: (elem, pair) => (elem.setAttribute(pair[0], pair[1]), elem),
+        apply: expanded => expanded.attrs.reduce(dom.selector.applyAttrPair, document.createElement(expanded.name)),
+        step: (parsed, step) => step(parsed),
+        parse: selector => [ dom.selector.split, dom.selector.short, dom.selector.expand, dom.selector.apply ].reduce(dom.selector.step, selector)
+    },
+    create: (...selectors) => {
+        const elems = [].concat(selectors).map(dom.selector.parse);
+        return 1 === selectors.length ? elems[0] : elems;
+    },
+    appendTo: parent => children => ([].concat(children).map(child => parent.appendChild(child)), 
+    parent),
+    listen: elem => ({
+        on: (eventName, handler) => elem.addEventListener(eventName, handler)
+    }),
+    row: {
+        cell: content => {
+            const td = dom.create("td");
+            return td.setAttribute("colspan", 3), td.appendChild(content), td;
         },
-        init: elem => {
-            const [original, current] = flip.getImages(elem);
-            flip.chars = flip.initChars(current, original), flip.initComic(elem, original);
+        create: td => {
+            const tr = dom.create("tr.egg");
+            return tr.appendChild(td), tr;
+        },
+        append: row => {
+            const parent = dom.query("center tbody");
+            return dom.appendTo(parent)(row), row;
+        },
+        add: content => {
+            Promise.resolve(content).then(dom.row.cell).then(dom.row.create).then(dom.row.append);
         }
-    }, nest = {
-        emptyCell: () => document.createElement("td"),
-        link: () => {
-            const a = document.createElement("a");
-            return a.className = "permalink", a.textContent = "(permalink)", a.setAttribute("href", window.location.href), 
-            a;
+    }
+}, params = {
+    defaults: {
+        subject: "",
+        comic: "",
+        [core.BIWRBR]: ""
+    },
+    shim: {
+        getItems: search => search.split("&"),
+        getPairs: items => items.map(item => item.split("=")),
+        decode: pair => {
+            const [name, raw = ""] = pair;
+            try {
+                return [ name, decodeURIComponent(raw) ];
+            } catch (_) {
+                return [ name, raw ];
+            }
         },
-        clutch: () => document.createElement("ul"),
-        clutchCell: () => {
-            const td = nest.emptyCell();
-            return td.className = "clutch", td.appendChild(nest.link()), td.appendChild(nest.clutch()), 
-            td;
-        },
-        row: () => {
-            const tr = document.createElement("tr");
-            return tr.appendChild(nest.emptyCell()), tr.appendChild(nest.clutchCell()), tr.appendChild(nest.emptyCell()), 
-            tr;
-        },
-        build: () => {
-            const tbody = document.querySelector("center tbody"), row = nest.row();
-            tbody.appendChild(row);
-        },
-        stub: tagSet => {
-            const [tagName, value] = tagSet, elem = document.createElement(tagName);
-            return elem["div" === tagName ? "innerHTML" : "textContent"] = value.toString(), 
-            elem;
-        },
-        egg: elem => name => {
-            Promise.resolve(select[name](elem)).then(process[name]).then(generate[name]).catch(() => generate[name]("<em>Friiiiig.</em>"));
-        },
-        eggs: elem => {
-            const eggs = [ "Title", "Contact", "RSS" ], mapFields = nest.egg(elem);
-            eggs.map(mapFields);
-        },
-        init: elem => {
-            nest.build(), nest.eggs(elem);
+        tidy: pairs => pairs.map(params.shim.decode),
+        get: search => Promise.resolve(search).then(params.shim.getItems).then(params.shim.getPairs).then(params.shim.tidy)
+    },
+    getList: url => {
+        const urlObj = new URL(url);
+        return "searchParams" in urlObj ? Array.from(urlObj.searchParams.entries()) : params.shim.get(urlObj.search.substr(1));
+    },
+    reducePair: (obj, pair) => {
+        const [name, val = ""] = pair;
+        return obj[name] = val, obj;
+    },
+    reduce: pairs => {
+        const initial = Object.assign({}, params.defaults);
+        return pairs.reduce(params.reducePair, initial);
+    },
+    parse: url => Promise.resolve(url).then(params.getList).then(params.reduce),
+    join: {
+        filter: pairs => pairs.filter(pair => String(pair[1]).length),
+        pairs: pairs => pairs.map(pair => pair.join("=")),
+        values: vals => vals.join("&"),
+        search: (search, path = document.location.pathname) => [ path, search ].filter(str => str).join("?")
+    },
+    build: pairs => Promise.resolve(pairs).then(params.join.filter).then(params.join.pairs).then(params.join.values)
+}, comic = {
+    transitionDuration: 800,
+    flips: 0,
+    element: null,
+    onSwap: () => {},
+    getElement: node => {
+        if (node) return node;
+        throw new Error("comic not found");
+    },
+    getBackgroundImage: elem => elem.style.backgroundImage.replace(/^.+\(['"]*([^\)"']+).+$/, "$1"),
+    getOriginal: elem => [ comic.getBackgroundImage(elem), elem.src ].filter(path => path).shift(),
+    swap: (char, isHistState) => () => {
+        comic.element.src = char.src, comic.onSwap(char, isHistState);
+    },
+    flip: (char, isHistState = !1) => {
+        const swap = comic.swap(char, isHistState), delay = comic.transitionDuration / 2;
+        ++comic.flips, comic.element.style.transform = `rotateY(${360 * comic.flips}deg)`, 
+        comic.element.style.backgroundPosition = char.pos, window.setTimeout(swap, delay);
+    },
+    setProperties: elem => {
+        const path = comic.getOriginal(elem);
+        return comic.element = elem, elem.classList.remove("comic"), elem.style.transitionDuration = `${comic.transitionDuration}ms`, 
+        elem.style.backgroundImage = `url(${path})`, path;
+    },
+    init: () => Promise.resolve("//body/center/table/tbody/tr[1]/td[2]/img").then(dom.eval).then(comic.getElement).then(comic.setProperties)
+}, request = {
+    rather: (spec, alts) => alts.filter(alt => alt.rather === spec).map(alt => alt.rather).concat("").shift(),
+    refine: altChars => sources => {
+        const [input, canon] = sources, query = Object.assign({}, input, {
+            canon: canon.comic
+        });
+        return query.rather = request.rather(query[core.BIWRBR], altChars), comic.id = query.comic, 
+        query;
+    },
+    input: () => params.parse(document.location.href),
+    canon: () => Promise.resolve('meta[property="og:url"]').then(dom.query).then(elem => elem.content).then(params.parse),
+    init: altChars => {
+        const refine = request.refine(altChars);
+        return Promise.all([ request.input(), request.canon() ]).then(refine);
+    }
+}, characters = {
+    list: [],
+    findBaseIndex: (chars, rather) => {
+        let found, idx = -1, max = chars.length;
+        do {
+            found = chars[++idx].rather === rather;
+        } while (idx < max && !found);
+        return idx % max;
+    },
+    reindex: (origin, len) => (newList, char, idx) => (newList[(idx + len - origin) % len] = char, 
+    newList),
+    getIndexer: (chars, rather) => {
+        const base = characters.findBaseIndex(chars, rather);
+        return characters.reindex(base, chars.length);
+    },
+    rebase: rather => chars => {
+        const reindex = characters.getIndexer(chars, rather);
+        return chars.reduce(reindex, Array(chars.length));
+    },
+    shuffle: (all, char, idx) => {
+        const randIdx = Math.floor(Math.random() * (idx + 1));
+        return all[idx] = all[randIdx], all[randIdx] = char, all;
+    },
+    randomize: chars => {
+        const first = [ chars.shift() ], shuffled = chars.reduceRight(characters.shuffle, chars);
+        return characters.list = first.concat(shuffled).map((char, idx) => Object.assign({
+            idx: idx
+        }, char)), characters.list;
+    },
+    getNext: currentSrc => {
+        let isCurrent = !1, idx = 0, max = characters.list.length;
+        for (;!isCurrent && idx < max; ) isCurrent = currentSrc.endsWith(characters.list[idx].src), 
+        ++idx;
+        return characters.list[idx % max];
+    },
+    init: (altChars, original, rather) => {
+        const rebase = characters.rebase(rather);
+        return Promise.resolve([ original ].concat(altChars)).then(rebase).then(characters.randomize);
+    }
+}, nest = {
+    dud: () => "<em>Friiiiig.</em>",
+    egg: egg => Promise.resolve().then(egg.select).then(egg.develop).catch(nest.dud).then(egg.hatch),
+    lay: async comps => {
+        const shell = dom.create("div"), append = dom.appendTo(shell);
+        await Promise.resolve(comps).then(append).then(dom.row.add);
+    },
+    deposit: eggs => eggs.map(nest.lay),
+    init: eggs => {
+        const clutch = eggs.map(nest.egg);
+        return Promise.all(clutch).then(nest.deposit);
+    }
+}, flip = {
+    flop: () => {
+        const next = characters.getNext(comic.element.src);
+        comic.flip(next);
+    },
+    init: () => dom.listen(comic.element).on("dblclick", flip.flop)
+}, links = {
+    perma: null,
+    prev: null,
+    next: null,
+    getSearch: (comicId, rather) => Promise.resolve([ [ "comic", comicId ], [ core.BIWRBR, rather ] ]).then(params.build),
+    setHref: elem => url => (elem.href = url, url),
+    apply: (elem, location, comicId, char) => {
+        const path = location.pathname, setHref = links.setHref(elem);
+        return links.getSearch(comicId, char.rather).then(search => params.join.search(search, path)).then(setHref);
+    },
+    main: (elem, char) => {
+        const {location: location} = document;
+        return links.apply(elem, location, comic.id, char);
+    },
+    nav: (elem, query, char) => {
+        const location = new URL(elem.href);
+        return links.apply(elem, location, query.comic, char);
+    },
+    setHistory: char => url => {
+        window.history.pushState(char, document.title, url);
+    },
+    resolve: resolved => {
+        const [prev, next, char, isHistState, elem = links.perma] = resolved, mainThen = isHistState ? () => {} : links.setHistory(char);
+        return links.nav(links.prev, prev, char), links.nav(links.next, next, char), links.main(links.perma, char).then(mainThen), 
+        elem;
+    },
+    update: (char, isHistState = !1) => Promise.all([ params.parse(links.prev.href), params.parse(links.next.href), char, isHistState ]).then(links.resolve),
+    assign: elem => (links.perma = elem, elem),
+    init: () => (links.perma = dom.create("a.permalink"), links.perma.textContent = "(permalink)", 
+    links.prev = dom.eval("//body/center/table/tbody/tr[1]/td[1]/div/a"), links.next = dom.eval("//body/center/table/tbody/tr[1]/td[3]/div/a"), 
+    links.update(characters.list[0]))
+}, dropdown = {
+    element: null,
+    sortChar: (sorted, char) => (sorted[char.sort] = char, sorted),
+    appendChild: (parent, child) => (parent.append(child), parent),
+    option: (char, rather) => {
+        const opt = dom.create("option");
+        return opt.value = char.idx, opt.textContent = char.desc, opt.dataset.src = char.src, 
+        opt.selected = char.rather === rather, opt;
+    },
+    reduceChars: rather => (group, char) => {
+        const opt = dropdown.option(char, rather);
+        return dropdown.appendChild(group, opt);
+    },
+    optgroup: (chars, rather) => {
+        const group = dom.create("optgroup"), reduceChars = dropdown.reduceChars(rather);
+        return group.label = "...but I would rather be reading:", chars.reduce(reduceChars, group);
+    },
+    getChildren: (chars, rather) => {
+        const len = chars, sorted = chars.reduce(dropdown.sortChar, Array(len));
+        return [ dropdown.option(sorted[0], rather), dropdown.optgroup(sorted.slice(1), rather) ];
+    },
+    populate: rather => select => dropdown.getChildren(characters.list, rather).reduce(dropdown.appendChild, select),
+    getCharacter: val => {
+        const idx = Number(val);
+        return characters.list[idx];
+    },
+    change: event => {
+        const char = dropdown.getCharacter(event.target.value);
+        event.preventDefault(), comic.flip(char);
+    },
+    register: elem => (dom.listen(elem).on("change", dropdown.change), elem),
+    assign: elem => (dropdown.element = elem, elem),
+    update: charIdx => {
+        for (let opt of dropdown.element.options) if (Number(opt.value) === charIdx) return void (opt.selected = !0);
+    },
+    init: rather => {
+        const populate = dropdown.populate(rather);
+        return Promise.resolve("select").then(dom.create).then(populate).then(dropdown.register).then(dropdown.assign);
+    }
+}, ui = {
+    update: (char, isHistState) => {
+        links.update(char, isHistState), dropdown.update(char.idx);
+    },
+    onPop: event => {
+        event.state && comic.flip(event.state, !0);
+    },
+    register: () => {
+        comic.onSwap = ui.update, window.onpopstate = ui.onPop;
+    },
+    wrapLinks: elems => {
+        const div = dom.create("div");
+        return dom.appendTo(div)(elems);
+    },
+    resolve: resolved => {
+        const elems = resolved.slice(2);
+        return Promise.resolve(elems).then(ui.wrapLinks).then(dom.row.add);
+    },
+    init: query => Promise.all([ ui.register(), flip.init(), links.init(), dropdown.init(query.rather) ]).then(ui.resolve)
+}, generate = {
+    anchor: href => dom.query("#blogpost center > a").setAttribute("name", href.substr(1)),
+    getPost: () => document.getElementById("blogpost"),
+    scroll: () => {
+        generate.getPost().classList.add("angola");
+    },
+    transitionEnd: () => {
+        generate.getPost().classList.remove("angola");
+    },
+    monkey: () => {
+        const post = generate.getPost(), pad = document.documentElement.clientHeight - 200;
+        post.addEventListener("transitionend", generate.transitionEnd), dom.query("#container").style.minHeight = pad + "px";
+    },
+    rss: (name, value) => {
+        const href = "#angola-maldives", [head, content] = dom.create("h2", "a");
+        return head.textContent = name, content.innerHTML = value, content.setAttribute("href", href), 
+        content.addEventListener("click", generate.scroll), generate.anchor(href), generate.monkey(), 
+        [ head, content ];
+    },
+    basic: name => value => {
+        const [head, content] = dom.create("h2", "div");
+        return head.textContent = name, content.innerHTML = value, [ head, content ];
+    }
+}, config = {
+    eggs: () => Promise.resolve([ {
+        hatch: generate.basic("Title"),
+        select: () => comic.element,
+        develop: elem => {
+            const original = elem.getAttribute("title");
+            return elem.setAttribute("title", "DOUBLE CLICK FOR MORE AWESOME FUN TIMES!"), original;
         }
-    }, comic = (() => {
-        const elem = document.querySelector("center > table tr > td:nth-child(2) > img");
-        return elem || !1;
-    })();
-    !!comic && (comic => {
-        params.init(), nest.init(comic), flip.init(comic);
-    })(comic);
-})();
+    }, {
+        hatch: generate.basic("Contact"),
+        select: () => dom.query(".topnav a[href^=mailto]"),
+        develop: elem => Promise.resolve(elem.getAttribute("href")).then(params.parse).then(params => params.subject)
+    }, {
+        hatch: value => generate.rss("RSS", value),
+        select: () => {
+            return dom.eval("//body//comment()[contains(., 'rss-title')]");
+        },
+        develop: elem => elem.data.trim()
+    } ]),
+    characters: {
+        src: nominal => nominal.split(".png")[0] + ".png",
+        rather: desc => desc.replace(/[^a-z]/gi, "").toLowerCase(),
+        alt: label => ({
+            rather: config.characters.rather(label),
+            desc: label
+        }),
+        default: () => ({
+            rather: "",
+            desc: "Standard View"
+        }),
+        create: (nomSrc, label = "", pos = "0 0", sort = 0) => new Promise(resolve => {
+            const src = config.characters.src(nomSrc), method = label ? "alt" : "default";
+            resolve(Object.assign({
+                src: src,
+                pos: pos,
+                sort: sort
+            }, config.characters[method](label)));
+        }),
+        generate: alts => Promise.all(alts.map((alt, idx) => {
+            const [nomSrc, label, pos = "0 0"] = alt;
+            return config.characters.create(nomSrc, label, pos, idx + 1);
+        }))
+    },
+    alts: () => config.characters.generate([ [ "assimilated", "One Where T-Rex Got Assimilated" ], [ "clothes", "One Where T-Rex Wears More" ], [ "frig", "One Where T-Rex Swears More" ], [ "feathers", "Something More Historically Accurate" ], [ "lastever", "The Last Dinosaur Comic Ever" ], [ "penny", "Penny Arcade", "7px 8px" ], [ "problemsleuth", "Problem Sleuth" ], [ "xkcd", "XKCD" ] ])
+}, init = {
+    config: () => Promise.all([ comic.init(), config.alts(), config.eggs() ]),
+    basic: resolved => {
+        const [comicPath, altChars, eggs] = resolved;
+        return Promise.all([ altChars, config.characters.create(comicPath), request.init(altChars), nest.init(eggs) ]);
+    },
+    characters: resolved => {
+        const [altChars, original, query] = resolved;
+        return Promise.all([ query, characters.init(altChars, original, query.rather) ]);
+    },
+    interface: resolved => ui.init(resolved[0]),
+    onError: e => {
+        console.group("Angola Maldives: Exception"), console.log(e), console.groupEnd();
+    },
+    all: () => Promise.resolve(null).then(init.config).then(init.basic).then(init.characters).then(init.interface).catch(init.onError)
+};
+
+init.all();

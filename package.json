@@ -1,6 +1,6 @@
 {
   "name": "angola-maldives",
-  "version": "1.2.3",
+  "version": "2.0.0",
   "description": "Angola Maldives - Dinosaur Comics Fun Times!",
   "main": ".",
   "directories": {},
@@ -18,7 +18,10 @@
     "gulp-sass": "^3.1.0",
     "gulp-uglify": "^3.0.0",
     "gulp-util": "^3.0.8",
-    "uglify-es": "^3.0.27"
+    "uglify-es": "^3.0.28",
+    "eslint": "^4.5.0",
+    "babel-eslint": "^7.2.3",
+    "gulp-concat": "^2.6.1"
   },
   "repository": {
     "type": "git",

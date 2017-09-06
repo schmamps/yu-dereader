@@ -7,30 +7,32 @@ center > table tr > td:nth-child(2) > img {
   transition: all 0ms ease;
   width: auto; }
 
-.clutch a, .clutch a:hover {
+.egg td > div {
+  width: 750px;
+  margin: .1rem auto;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px dotted #eee; }
+
+.egg h2 {
+  width: 20%;
+  margin: .2rem 0;
+  font-size: 1rem;
+  font-weight: bold;
+  text-transform: none; }
+
+.egg h2 + * {
   display: block;
+  max-width: 80%;
+  text-align: justify; }
+
+.egg a, .egg a:hover {
   text-decoration: none;
   background: transparent;
   color: #00689d; }
 
-.clutch a:hover {
+.egg a:hover {
   text-decoration: underline; }
-
-.clutch ul {
-  margin: 0 auto;
-  max-width: 700px; }
-  .clutch ul li {
-    padding-bottom: .25em; }
-  .clutch ul div, .clutch ul a {
-    margin-left: 2em;
-    color: #000;
-    font-size: 1em;
-    font-weight: normal; }
-
-.clutch > a {
-  font-size: .75em;
-  text-align: center;
-  font-style: italic; }
 
 #blogpost {
   transition: background 1s ease-out; }
