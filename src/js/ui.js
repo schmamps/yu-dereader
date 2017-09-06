@@ -178,7 +178,10 @@ const dropdown = {
 	},
 
 	update: (charIdx) => {
-		for (let opt of dropdown.element.options) {
+		console.log('dropdown.update');
+		for (let opt of Array.from(dropdown.element.options)) {
+			console.log(opt.value, charIdx);
+			console.log(opt);
 			if (Number(opt.value) === charIdx) {
 				opt.selected = true;
 				return;
