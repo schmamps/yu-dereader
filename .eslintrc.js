@@ -2,10 +2,16 @@
 
 // Stolen and modified from https://github.com/walmartlabs/eslint-config-defaults
 module.exports = {
-  "env": {"browser": true, "es6": true},
-  "parserOptions": {
-    "ecmaVersion": 6,
+  "root": true,
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true,
   },
+  "parserOptions": {
+    "ecmaVersion": 7,
+  },
+  "parser": "babel-eslint",
   "rules": {
     // Enforces getter/setter pairs in objects
     "accessor-pairs": 0,
@@ -293,7 +299,11 @@ module.exports = {
     // require or disallow space before blocks
     "space-before-blocks": [2, "always"],
     // require or disallow space before function opening parenthesis
-    "space-before-function-paren": [2, "never"],
+    "space-before-function-paren": [2, {
+      "named": "never",
+      "asyncArrow": "always",
+      "anonymous": "never"
+    }],
     // require or disallow spaces inside parentheses
     "space-in-parens": [2, "never"],
     // require spaces around operators

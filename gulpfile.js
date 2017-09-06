@@ -6,64 +6,106 @@ const file = require('fs');
 const peditor = require('gulp-plist');
 const util = require('gulp-util');
 const sass = require('gulp-sass');
+const concat = require('gulp-concat');
 
-const DIR = {src: 'src/', build: 'build.safariextension/',};
+const config = (opts) => {
+	const {in: input = [], sub, out: output = false} = opts;
+	const src = [].concat(input).map((file) => `./src/${sub}/${file}`);
+	const dest = './build.safariextension/';
+	const desc = (Array.isArray(input)) ? `${input[0]}...` : input;
+	const out = (output) ? output : input;
+
+	return Object.assign({}, opts, {src, dest, desc, out});
+};
+
 const DATA = {package: require('./package.json'),};
 
 const reportError = function(err) {
 	util.log(err);
-	this.emit('end');
+	this.emit('end');  // eslint-disable-line no-invalid-this
 };
 
 const describe = (src, ...elements) => (
-	[DIR.src + src.toString()].concat(elements).join(' > ')
+	[src].concat(elements).join(' > ')
 );
 
 const tasks = {};
 tasks.js = {
-	in: 'angola.js',
-
-	desc: () => describe(
-		tasks.js.in,
-		'uglify',
-		DIR.build
-	),
-
-	config: {
-		mangle: false,
-		output: {beautify: true,},
-		compress: {
-			// drop_debugger: false,  // eslint-disable-line camelcase
+	config: () => config({
+		in: [
+			'core.js',
+			'dom.js',
+			'params.js',
+			'comic.js',
+			'request.js',
+			'characters.js',
+			'nest.js',
+			'ui.js',
+			'config.js',
+			'init.js',
+		],
+		out: 'angola.js',
+		sub: 'js',
+		uglify: {
+			mangle: false,
+			output: {beautify: true,},
+			compress: {
+				drop_debugger: false,  // eslint-disable-line camelcase
+			}
 		},
+	}),
+
+	desc: () => {
+		const cfg = tasks.js.config();
+
+		return describe(
+			cfg.desc,
+			'concat',
+			cfg.out,
+			'uglify',
+			cfg.dest
+		);
 	},
 
-	run: () => (gulp.
-		src(DIR.src + tasks.js.in).
-		pipe(uglify(tasks.js.config)).
-		on('error', reportError).
-		pipe(gulp.dest(DIR.build))
-	),
+	run: () => {
+		const cfg = tasks.js.config();
+		const combine = concat(cfg.out);
+		const dest = gulp.dest(cfg.dest);
+		const ugly = uglify(cfg.uglify).on('error', reportError);
+
+		return gulp.
+			src(cfg.src).
+			pipe(combine).
+			pipe(ugly).
+			pipe(dest);
+	},
 };
 
 tasks.css = {
-	in: 'maldives.sass',
+	config: () => config({
+		in: 'maldives.sass',
+		sub: 'css',
+	}),
 
-	desc: () => describe(
-		tasks.css.in,
-		'scss',
-		DIR.build
-	),
+	desc: () => {
+		const cfg = tasks.css.config();
 
-	run: () => (gulp.
-		src(DIR.src + tasks.css.in).
-		pipe(sass()).
-		pipe(gulp.dest(DIR.build))
-	),
+		return describe(cfg.desc, 'scss', cfg.dest);
+	},
+
+	run: () => {
+		const cfg = tasks.css.config();
+		const dest = gulp.dest(cfg.dest);
+
+		return gulp.src(cfg.src).pipe(sass()).pipe(dest);
+	},
 };
 
 tasks.manifest = {
-	in: 'manifest.json',
-	out: 'manifest.json',
+	config: () => config({
+		in: 'manifest.json',
+		sub: 'meta',
+	}),
 
 	err: (err) => {
 		if (!err) { return; }
@@ -79,14 +121,15 @@ tasks.manifest = {
 		return Object.assign({}, base, {name, version});
 	},
 
+	write: (data) => {
+		const cfg = tasks.manifest.config();
 
-	write: (data) => file.writeFileSync(
-		DIR.build + tasks.manifest.out,
-		JSON.stringify(data)
-	),
+		file.writeFileSync(cfg.dest + cfg.out, JSON.stringify(data));
+	},
 
 	run: () => {
-		const path = DIR.src + tasks.manifest.in;
+		const cfg = tasks.manifest.config();
+		const path = cfg.src[0];
 
 		Promise.
 			resolve(file.readFileSync(path)).
@@ -100,18 +143,21 @@ tasks.manifest = {
 };
 
 tasks.plist = {
-	in: [DIR.src + 'Info.plist'],
+	config: () => config({
+		in: 'Info.plist',
+		sub: 'meta',
+	}),
 
 	desc: () => 'update the Safari extension plist',
 
 	run: () => {
-		const CFBundleDisplayName = DATA.package.description;
-		const CFBundleShortVersionString = DATA.package.version;
+		const cfg = tasks.plist.config();
+		const update = peditor({
+			CFBundleDisplayName: DATA.package.description,
+			CFBundleShortVersionString: DATA.package.version,});
+		const dest = gulp.dest(cfg.dest);
 
-		return gulp.
-			src(tasks.plist.in).
-			pipe(peditor({CFBundleDisplayName, CFBundleShortVersionString})).
-			pipe(gulp.dest(DIR.build));
+		return gulp.src(cfg.src).pipe(update).pipe(dest);
 	}
 };
 
@@ -124,22 +170,13 @@ tasks.watch = {
 		return `check for updated files in tasks: ${list}`;
 	},
 
-	getArray: (val) => (Array.isArray(val)) ? val : [val],
+	name: (name) => {
+		const cfg = tasks[name].config();
 
-	getPath: (file) => DIR.src + file,
-
-	getFiles: (key) => (tasks.watch.
-		getArray(tasks[key].in).
-		map(tasks.watch.getPath)
-	),
-
-	init: (name) => {
-		const files = tasks.watch.getFiles(name);
-
-		gulp.watch(files, [name]);
+		gulp.watch(cfg.src, [name]);
 	},
 
-	run: () => tasks.watch.names.map(tasks.watch.init),
+	run: () => tasks.watch.names.map(tasks.watch.name),
 };
 
 const help = {
