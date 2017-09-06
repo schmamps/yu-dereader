@@ -64,6 +64,10 @@ a[rel=prev]:hover, a[rel=next]:hover {
 
 a[rel=prev]::after { content: '<'; }
 a[rel=next]::after {content: '>'; }
+
+h2 {
+    color: #fff;
+}
     </style>
 </head>
 

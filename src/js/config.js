@@ -1,4 +1,15 @@
 const generate = {
+	header: (text) => {
+		const head = dom.create('h2');
+
+		head.textContent = text;
+		// hack for Safari //
+		head.style.color = '#222';
+		head.style.textTransform = 'none';
+
+		return head;
+	},
+
 	anchor: (href) => (dom.
 		query('#blogpost center > a').
 		setAttribute('name', href.substr(1))
@@ -28,9 +39,9 @@ const generate = {
 
 	rss: (name, value) => {
 		const href = '#angola-maldives';
-		const [head, content] = dom.create('h2', 'a');
+		const head = generate.header(name);
+		const content = dom.create('a');
 
-		head.textContent = name;
 		content.innerHTML = value;
 		content.setAttribute('href', href);
 		content.addEventListener('click', generate.scroll);
@@ -41,9 +52,9 @@ const generate = {
 	},
 
 	basic: (name) => (value) => {
-		const [head, content] = dom.create('h2', 'div');
+		const head = generate.header(name);
+		const content = dom.create('div');
 
-		head.textContent = name;
 		content.innerHTML = value;
 
 		return [head, content];
