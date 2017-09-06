@@ -265,7 +265,9 @@ const core = {
     register: elem => (dom.listen(elem).on("change", dropdown.change), elem),
     assign: elem => (dropdown.element = elem, elem),
     update: charIdx => {
-        for (let opt of dropdown.element.options) if (Number(opt.value) === charIdx) return void (opt.selected = !0);
+        console.log("dropdown.update");
+        for (let opt of Array.from(dropdown.element.options)) if (console.log(opt.value, charIdx), 
+        console.log(opt), Number(opt.value) === charIdx) return void (opt.selected = !0);
     },
     init: rather => {
         const populate = dropdown.populate(rather);
@@ -291,6 +293,11 @@ const core = {
     },
     init: query => Promise.all([ ui.register(), flip.init(), links.init(), dropdown.init(query.rather) ]).then(ui.resolve)
 }, generate = {
+    header: text => {
+        const head = dom.create("h2");
+        return head.textContent = text, head.style.color = "#222", head.style.textTransform = "none", 
+        head;
+    },
     anchor: href => dom.query("#blogpost center > a").setAttribute("name", href.substr(1)),
     getPost: () => document.getElementById("blogpost"),
     scroll: () => {
@@ -304,14 +311,13 @@ const core = {
         post.addEventListener("transitionend", generate.transitionEnd), dom.query("#container").style.minHeight = pad + "px";
     },
     rss: (name, value) => {
-        const href = "#angola-maldives", [head, content] = dom.create("h2", "a");
-        return head.textContent = name, content.innerHTML = value, content.setAttribute("href", href), 
-        content.addEventListener("click", generate.scroll), generate.anchor(href), generate.monkey(), 
-        [ head, content ];
+        const href = "#angola-maldives", head = generate.header(name), content = dom.create("a");
+        return content.innerHTML = value, content.setAttribute("href", href), content.addEventListener("click", generate.scroll), 
+        generate.anchor(href), generate.monkey(), [ head, content ];
     },
     basic: name => value => {
-        const [head, content] = dom.create("h2", "div");
-        return head.textContent = name, content.innerHTML = value, [ head, content ];
+        const head = generate.header(name), content = dom.create("div");
+        return content.innerHTML = value, [ head, content ];
     }
 }, config = {
     eggs: () => Promise.resolve([ {
