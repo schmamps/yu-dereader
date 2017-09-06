@@ -6,7 +6,7 @@ class Page extends BaseHandler {
 
     function __construct($root) {
         parent::__construct();
-        $this->init_content('text/html');
+        $this->init_content('text/html; charset=utf-8');
         $this->init_data($root);
     }
 
@@ -25,7 +25,7 @@ class Page extends BaseHandler {
     protected function reduce_item($pages, $item) {
         $pages[] = array_merge(
             get_object_vars($item),
-            ['id' => $item->id]
+            ['comic' => $item->comic]
         );
 
         return $pages;
@@ -36,7 +36,7 @@ class Page extends BaseHandler {
     }
 
     protected function sort_item($a, $b) {
-        return $b['id'] - $a['id'];
+        return $b['comic'] - $a['comic'];
     }
 
     protected function sort_data($pages) {
@@ -52,13 +52,15 @@ class Page extends BaseHandler {
     }
 
     protected function get_current_index($pages) {
+        $idx = 0;
+        $max = count($pages);
         $spec = $this->get_page_spec();
 
-        foreach ($pages as $idx => $page) {
-            if ($page['id'] == $spec) { return $idx; }
+        while ($idx < $max && $pages[$idx]['comic'] != $spec) {
+            $idx++;
         }
 
-        return 0;
+        return $idx % $max;
     }
 
     protected function create_href($id) {
@@ -68,7 +70,11 @@ class Page extends BaseHandler {
     protected function get_index_href($pages, $idx) {
         $exists = array_key_exists($idx, $pages);
 
-        return ($exists) ? $this->create_href($pages[$idx]['id']) : '';
+        if ($exists) {
+            return $this->create_href($pages[$idx]['comic']);
+        }
+
+        return $this->create_attr('href', 'futurecomic.php');
     }
 
     protected function get_initial() {
@@ -83,7 +89,7 @@ class Page extends BaseHandler {
     }
 
     protected function get_original($page) {
-        $page['original'] = sprintf('/comics/comic2-%s.png', $page['id']);
+        $page['original'] = sprintf('/comics/comic2-%s.png', $page['img']);
 
         return $page;
     }
@@ -150,7 +156,7 @@ class Page extends BaseHandler {
     }
 
     function load_template() {
-        $comic = $this->get_page();
+        $page = $this->get_page();
         $path = $this->build_path('template.php');
 
         include($path);

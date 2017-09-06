@@ -6,14 +6,23 @@
     <meta name="description" content="this comic... might be the best comic?">
     <meta property="og:determiner" content="a" />
     <meta property="og:title" content="Dinosaur Comics!" />
-    <meta property="og:description" content="<?=$comic->title;?>"/>
+    <meta property="og:description" content="<?=$page->title;?>"/>
     <meta property="og:type" content="website" />
     <meta property="og:image"
-    content="http://www.qwantz.com/comics/comic2-<?=$comic->id;?>.png" />
-    <title>Dinosaur Comics - <?=$comic->date;?> - awesome fun times!</title>
-    <style type="text/css" id="debug">
-#header, .headertext {
+    content="http://www.qwantz.com/comics/comic2-<?=$page->original;?>.png" />
+    <meta property="og:url"
+        content="http://www.qwantz.com/index.php?comic=<?=$page->comic;?>" />
+    <title>Dinosaur Comics - <?=$page->date;?> - awesome fun times!</title>
+    <style type="text/css" id="debuggingCSS">
+.am-root {
+    transform: scale(.7);
+    transform-origin: top left;
+    width: 750px;
     margin: 0 auto;
+}
+
+.am-center, #blogpostheader {
+    text-align: center;
 }
 
 #header ul {
@@ -22,6 +31,11 @@
 
 #header li {
     float: left;
+    margin: 0 .2em;
+}
+
+#header li.paddedbullet {
+    display: none;
 }
 
 center > table tr:nth-child(1) > td:nth-child(2) img {
@@ -56,7 +70,7 @@ a[rel=next]::after {content: '>'; }
 <body>
     <img class="pteranodon">
     <img class="rhamphorhynchus">
-    <div id="header">
+    <div id="header" class="am-root">
         <table border=0 cellpadding=1 cellspacing=1 width="740">
             <tr>
                 <td align="middle" width="390"><a><img width=390 height=56 title="Dinosaur Comics!  I KNOW" class="logo"></a></td>
@@ -67,7 +81,7 @@ a[rel=next]::after {content: '>'; }
                         <li class="paddedbullet">&bull;</li>
                         <li><a>archive</a></li>
                         <li class="paddedbullet">&bull;</li>
-                        <li><a href="mailto:ryan@qwantz.com?subject=<?=$comic->contact;?>">contact</a></li>
+                        <li><a href="mailto:ryan@qwantz.com?subject=<?=$page->contact;?>">contact</a></li>
                         <li
                             class="paddedbullet">&bull;</li>
                             <li><a>sexy exciting merch</a></li>
@@ -99,15 +113,15 @@ a[rel=next]::after {content: '>'; }
             </tr>
         </table>
         </div>
-        <!-- <span class="rss-title"><?=$comic->rss;?></span> -->
-        <div class="headertext">Header Text</div>
-        <center>
+        <!-- <span class="rss-title"><?=$page->rss;?></span> -->
+        <div class="headertext am-center am-root">Header Text</div>
+        <center class="am-root">
             <table border=0 cellspacing=0 cellpadding=0
             style="padding-top:10px;z-index:2;position:relative;">
                 <tr>
                     <td align="left" valign="bottom" width=100>
                         <div class="nohover">
-                            <a <?=$comic->prev;?> rel="prev"
+                            <a <?=$page->prev;?> rel="prev"
                             title="Previous comic">
                                 <div class="arrowholder">
                                     <div id="leftarrow"></div>
@@ -117,15 +131,15 @@ a[rel=next]::after {content: '>'; }
                     </td>
                     <td align="middle" valign="middle">
                         <img
-                            title="<?=$comic->title;?>"
-                            <?=$comic->src;?>
-                            <?=$comic->class;?>
-                            <?=$comic->style;?>
+                            title="<?=$page->title;?>"
+                            <?=$page->src;?>
+                            <?=$page->class;?>
+                            <?=$page->style;?>
                         >
                     </td>
                     <td align="right" valign="bottom" width=100>
                         <div class="nohover">
-                            <a title="Next comic" rel="next" <?=$comic->next;?>">
+                            <a title="Next comic" rel="next" <?=$page->next;?>">
                                 <div class="arrowholder">
                                     <div id="rightarrow"></div>
                                 </div>
@@ -138,7 +152,7 @@ a[rel=next]::after {content: '>'; }
         <div class="headertext">
         </div>
     </div>
-    <div style="border:0px solid #ff0000;margin-left: auto; margin-right: auto;position:relative;width:740px;min-height:100px;padding:0px;margin-top:0px;margin-bottom:0px;">
+    <div style="border:0px solid #ff0000;margin-left: auto; margin-right: auto;position:relative;width:740px;min-height:100px;padding:0px;margin-top:0px;margin-bottom:0px;" class="am-root">
         <table cellspacing=0 cellpadding=0 border=0>
             <tr>
                 <td align="center">
@@ -201,15 +215,14 @@ a[rel=next]::after {content: '>'; }
                                 <td align="left">
                                     <a><img class="feedicon" title="The original non-RSS Dinosaur Comics feed!"> livejournal</a>
                             </tr>
-
                         </table>
                     </div>
                     </td>
             </tr>
         </table>
     </div>
-    <div id="container">
-<?php include($comic->post); ?>
+    <div id="container" class="am-root">
+<?php include($page->post); ?>
         <div id="sidebar">
             <div id="sidebarheader">Ads Woo</div>
             <noscript><map name="admap38564" id="admap38564"><area shape="rect" coords="0,0,160,600" title="" alt="" target="_blank" /></map>
