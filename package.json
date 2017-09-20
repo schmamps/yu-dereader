@@ -7,21 +7,22 @@
   "scripts": {
     "watch": "gulp js css watch",
     "build": "gulp js css plist manifest",
-    "server:start": "test/run.sh start",
-    "server:stop": "test/run.sh stop"
+    "server:start": "./test/run.sh start",
+    "server:stop": "./test/run.sh stop"
   },
   "author": "Andrew Champion",
   "license": "MIT",
   "devDependencies": {
+    "babel-eslint": "^7.2.3",
+    "eslint": "^4.5.0",
     "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1",
     "gulp-plist": "^0.1.0",
     "gulp-sass": "^3.1.0",
+    "gulp-sourcemaps": "^2.6.1",
     "gulp-uglify": "^3.0.0",
     "gulp-util": "^3.0.8",
-    "uglify-es": "^3.0.28",
-    "eslint": "^4.5.0",
-    "babel-eslint": "^7.2.3",
-    "gulp-concat": "^2.6.1"
+    "uglify-es": "^3.0.28"
   },
   "repository": {
     "type": "git",

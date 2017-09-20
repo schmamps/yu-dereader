@@ -7,6 +7,7 @@ const peditor = require('gulp-plist');
 const util = require('gulp-util');
 const sass = require('gulp-sass');
 const concat = require('gulp-concat');
+const sourcemap = require('gulp-sourcemaps');
 
 const config = (opts) => {
 	const {in: input = [], sub, out: output = false} = opts;
@@ -48,7 +49,9 @@ tasks.js = {
 		sub: 'js',
 		uglify: {
 			mangle: false,
-			output: {beautify: true,},
+			output: {
+				beautify: true,
+			},
 			compress: {
 				drop_debugger: false,  // eslint-disable-line camelcase
 			}
@@ -70,13 +73,17 @@ tasks.js = {
 	run: () => {
 		const cfg = tasks.js.config();
 		const combine = concat(cfg.out);
+		const initMap = sourcemap.init();
+		const writeMap = sourcemap.write('.');
 		const dest = gulp.dest(cfg.dest);
 		const ugly = uglify(cfg.uglify).on('error', reportError);
 
 		return gulp.
 			src(cfg.src).
+			pipe(initMap).
 			pipe(combine).
 			pipe(ugly).
+			pipe(writeMap).
 			pipe(dest);
 	},
 };
@@ -95,9 +102,17 @@ tasks.css = {
 
 	run: () => {
 		const cfg = tasks.css.config();
+		const initMap = sourcemap.init();
+		const toCSS = sass();
+		const writeMap = sourcemap.write('.');
 		const dest = gulp.dest(cfg.dest);
 
-		return gulp.src(cfg.src).pipe(sass()).pipe(dest);
+		return gulp.
+			src(cfg.src).
+			pipe(initMap).
+			pipe(toCSS).
+			pipe(writeMap).
+			pipe(dest);
 	},
 };
 
