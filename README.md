@@ -1,6 +1,8 @@
-# Angola Maldives
+# Yu Dereader
 
-Angola Maldives is a Chrome extension with a handful of purposes:
+[Yu Dereader](http://www.qwantz.com/index.php?comic=3413), 
+formerly known as [Angola Maldives](http://qwantz.com/index.php?comic=2319), 
+is a Chrome extension with a handful of purposes:
 
 1. reveal Dinosaur Comics' easter eggs
 1. providing a sample Chrome content script
