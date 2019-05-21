@@ -14,12 +14,11 @@ const core = {
             return data[key].push(val), data;
         },
         short: comps => {
-            const base = {
+            return comps.reduce(dom.selector.reduce, {
                 "!": [],
                 "#": [],
                 ".": []
-            };
-            return comps.reduce(dom.selector.reduce, base);
+            });
         },
         attr: {
             filter: pair => pair[1].length > 0,
@@ -36,7 +35,9 @@ const core = {
         applyAttrPair: (elem, pair) => (elem.setAttribute(pair[0], pair[1]), elem),
         apply: expanded => expanded.attrs.reduce(dom.selector.applyAttrPair, document.createElement(expanded.name)),
         step: (parsed, step) => step(parsed),
-        parse: selector => [ dom.selector.split, dom.selector.short, dom.selector.expand, dom.selector.apply ].reduce(dom.selector.step, selector)
+        parse: selector => {
+            return [ dom.selector.split, dom.selector.short, dom.selector.expand, dom.selector.apply ].reduce(dom.selector.step, selector);
+        }
     },
     create: (...selectors) => {
         const elems = [].concat(selectors).map(dom.selector.parse);
@@ -113,7 +114,9 @@ const core = {
         if (node) return node;
         throw new Error("comic not found");
     },
-    getBackgroundImage: elem => elem.style.backgroundImage.replace(/^.+\(['"]*([^\)"']+).+$/, "$1"),
+    getBackgroundImage: elem => {
+        return elem.style.backgroundImage.replace(/^.+\(['"]*([^\)"']+).+$/, "$1");
+    },
     getOriginal: elem => [ comic.getBackgroundImage(elem), elem.src ].filter(path => path).shift(),
     swap: (char, isHistState) => () => {
         comic.element.src = char.src, comic.onSwap(char, isHistState);
@@ -153,8 +156,9 @@ const core = {
         } while (idx < max && !found);
         return idx % max;
     },
-    reindex: (origin, len) => (newList, char, idx) => (newList[(idx + len - origin) % len] = char, 
-    newList),
+    reindex: (origin, len) => (newList, char, idx) => {
+        return newList[(idx + len - origin) % len] = char, newList;
+    },
     getIndexer: (chars, rather) => {
         const base = characters.findBaseIndex(chars, rather);
         return characters.reindex(base, chars.length);
@@ -341,10 +345,12 @@ const core = {
     characters: {
         src: nominal => nominal.split(".png")[0] + ".png",
         rather: desc => desc.replace(/[^a-z]/gi, "").toLowerCase(),
-        alt: label => ({
-            rather: config.characters.rather(label),
-            desc: label
-        }),
+        alt: label => {
+            return {
+                rather: config.characters.rather(label),
+                desc: label
+            };
+        },
         default: () => ({
             rather: "",
             desc: "Standard View"
