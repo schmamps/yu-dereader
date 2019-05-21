@@ -146,14 +146,12 @@ tasks.manifest = {
 		const cfg = tasks.manifest.config();
 		const path = cfg.src[0];
 
-		Promise.
+		return Promise.
 			resolve(file.readFileSync(path)).
 			then(JSON.parse).
 			then(tasks.manifest.update).
 			then(tasks.manifest.write).
 			catch(tasks.manifest.err);
-
-		return true;
 	},
 };
 
@@ -188,7 +186,7 @@ tasks.watch = {
 	name: (name) => {
 		const cfg = tasks[name].config();
 
-		gulp.watch(cfg.src, [name]);
+		gulp.watch(cfg.src, gulp.series(name));
 	},
 
 	run: () => tasks.watch.names.map(tasks.watch.name),
@@ -237,9 +235,11 @@ const help = {
 	menu: (tasks) => () => {
 		const entries = help.entries(tasks);
 
-		help.display(entries);
+		return Promise.resolve(help.display(entries));
 	},
 };
 
-Object.keys(tasks).map((name) => gulp.task(name, tasks[name].run));
+Object.
+	keys(tasks).
+	map((name) => gulp.task(name, tasks[name].run));
 gulp.task('default', help.menu(tasks));
