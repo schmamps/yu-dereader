@@ -1,7 +1,7 @@
 # Yu Dereader
 
-[Yu Dereader](http://www.qwantz.com/index.php?comic=3413), 
-formerly known as [Angola Maldives](http://qwantz.com/index.php?comic=2319), 
+[Yu Dereader](http://www.qwantz.com/index.php?comic=3413),
+formerly known as [Angola Maldives](http://qwantz.com/index.php?comic=2319),
 is a Chrome extension with a handful of purposes:
 
 1. reveal Dinosaur Comics' easter eggs
@@ -14,6 +14,14 @@ this extension evolved into an intentionally overbuilt system
 to work with gulp, npm/yarn,
 tinker with ES6+ features,
 and probably some other things I'm forgetting.
+
+While many things have changed, others remain the same.
+Yu Dereader will always love you, the reader, and as such,
+this extension **does not and will never**:
+
+* upload user data
+* download unnecessary or external data
+* insert irrelevant content like ads or even kitten GIFs
 
 # Usage
 Most eggs are displayed automatically.
