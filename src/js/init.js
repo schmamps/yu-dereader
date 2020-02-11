@@ -1,9 +1,11 @@
 const init = {
-	config: () => Promise.all([
-		comic.init(),
-		config.alts(),
-		config.eggs()
-	]),
+	config: () => {
+		return Promise.all([
+			comic.init(),
+			config.alts(),
+			config.eggs()
+		]);
+	},
 
 	basic: (resolved) => {
 		const [comicPath, altChars, eggs] = resolved;
@@ -25,7 +27,9 @@ const init = {
 		]);
 	},
 
-	interface: (resolved) => ui.init(resolved[0]),
+	interface: (resolved) => {
+		return ui.init(resolved[0]);
+	},
 
 	onError: (e) => {
 		console.group('Angola Maldives: Exception');
@@ -33,14 +37,15 @@ const init = {
 		console.groupEnd();
 	},
 
-	all: () => (Promise.
-		resolve(null).
-		then(init.config).
-		then(init.basic).
-		then(init.characters).
-		then(init.interface).
-		catch(init.onError)
-	),
+	all: () => {
+		return init.
+			config().
+			then(init.basic).
+			then(init.characters).
+			then(init.interface).
+			catch(init.onError)
+		;
+	}
 };
 
 init.all();

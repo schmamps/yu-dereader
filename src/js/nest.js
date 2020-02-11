@@ -1,13 +1,13 @@
 const nest = {
 	dud: () => '<em>Friiiiig.</em>',
 
-	egg: (egg) => {
+	egg: async (egg) => {
 		return Promise.
-			resolve().
-			then(egg.select).
+			resolve(egg.select()).
 			then(egg.develop).
 			catch(nest.dud).
-			then(egg.hatch);
+			then(egg.hatch)
+		;
 	},
 
 	lay: async (comps) =>  {
@@ -25,6 +25,8 @@ const nest = {
 	init: (eggs) => {
 		const clutch = eggs.map(nest.egg);
 
-		return Promise.all(clutch).then(nest.deposit);
+		return Promise.
+			all(clutch).
+			then(nest.deposit);
 	},
 };
