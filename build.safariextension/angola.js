@@ -189,7 +189,7 @@ const core = {
     }
 }, nest = {
     dud: () => "<em>Friiiiig.</em>",
-    egg: egg => Promise.resolve().then(egg.select).then(egg.develop).catch(nest.dud).then(egg.hatch),
+    egg: async egg => Promise.resolve(egg.select()).then(egg.develop).catch(nest.dud).then(egg.hatch),
     lay: async comps => {
         const shell = dom.create("div"), append = dom.appendTo(shell);
         await Promise.resolve(comps).then(append).then(dom.row.add);
@@ -383,7 +383,7 @@ const core = {
     onError: e => {
         console.group("Angola Maldives: Exception"), console.log(e), console.groupEnd();
     },
-    all: () => Promise.resolve(null).then(init.config).then(init.basic).then(init.characters).then(init.interface).catch(init.onError)
+    all: () => init.config().then(init.basic).then(init.characters).then(init.interface).catch(init.onError)
 };
 
 init.all();
