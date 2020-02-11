@@ -1,6 +1,6 @@
 #!/bin/bash
 working=(`dirname $0`)
-host="localhost:8675"
+host="localhost:4242"
 
 command_exists() {
     type "$1" &> /dev/null ;
