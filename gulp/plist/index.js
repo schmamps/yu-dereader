@@ -1,5 +1,5 @@
 const gulp = require('gulp');
-const peditor = require('gulp-plist');
+const peditor = require('gulp-plist3');
 const {config, loadJSON} = require('../util');
 
 const cfg = config({
