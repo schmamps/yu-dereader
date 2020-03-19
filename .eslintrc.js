@@ -9,9 +9,9 @@ module.exports = {
     "es6": true,
   },
   "parserOptions": {
-    "ecmaVersion": 7,
+    "ecmaVersion": 2017,
   },
-  "parser": "babel-eslint",
+//   "parser": "babel-eslint",
   "rules": {
     // Enforces getter/setter pairs in objects
     "accessor-pairs": 0,
