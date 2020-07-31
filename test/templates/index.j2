@@ -6,13 +6,13 @@
     <meta name="description" content="this comic... might be the best comic?">
     <meta property="og:determiner" content="a" />
     <meta property="og:title" content="Dinosaur Comics!" />
-    <meta property="og:description" content="<?=$page->title;?>"/>
+    <meta property="og:description" content="{{ page.title }}"/>
     <meta property="og:type" content="website" />
     <meta property="og:image"
-    content="http://www.qwantz.com/comics/comic2-<?=$page->original;?>.png" />
+    content="http://localhost:4242/comics/comic2-{{ page.original }}.png" />
     <meta property="og:url"
-        content="http://www.qwantz.com/index.php?comic=<?=$page->comic;?>" />
-    <title>Dinosaur Comics - <?=$page->date;?> - awesome fun times!</title>
+        content="http://localhost:4242/index.php?comic={{ page.comic }}" />
+    <title>Dinosaur Comics - {{ page.date }} - awesome fun times!</title>
     <style type="text/css" id="debuggingCSS">
 .am-root {
     transform: scale(.7);
@@ -66,7 +66,7 @@ a[rel=prev]::after { content: '<'; }
 a[rel=next]::after {content: '>'; }
 
 h2 {
-    color: #fff;
+    color: #222;
 }
     </style>
 </head>
@@ -85,7 +85,7 @@ h2 {
                         <li class="paddedbullet">&bull;</li>
                         <li><a>archive</a></li>
                         <li class="paddedbullet">&bull;</li>
-                        <li><a href="mailto:ryan@qwantz.com?subject=<?=$page->contact;?>">contact</a></li>
+                        <li><a href="mailto:ryan@qwantz.com?subject={{ page.contact }}">contact</a></li>
                         <li
                             class="paddedbullet">&bull;</li>
                             <li><a>sexy exciting merch</a></li>
@@ -117,7 +117,7 @@ h2 {
             </tr>
         </table>
         </div>
-        <!-- <span class="rss-title"><?=$page->rss;?></span> -->
+        <!-- <span class="rss-title">{{ page.rss }}</span> -->
         <div class="headertext am-center am-root">Header Text</div>
         <center class="am-root">
             <table border=0 cellspacing=0 cellpadding=0
@@ -125,7 +125,7 @@ h2 {
                 <tr>
                     <td align="left" valign="bottom" width=100>
                         <div class="nohover">
-                            <a <?=$page->prev;?> rel="prev"
+                            <a {{ page.prev }} rel="prev"
                             title="Previous comic">
                                 <div class="arrowholder">
                                     <div id="leftarrow"></div>
@@ -135,15 +135,15 @@ h2 {
                     </td>
                     <td align="middle" valign="middle">
                         <img
-                            title="<?=$page->title;?>"
-                            <?=$page->src;?>
-                            <?=$page->class;?>
-                            <?=$page->style;?>
+                            title="{{ page.title }}"
+                            {{ page.src }}
+                            {{ page.class }}
+                            {{ page.style }}
                         >
                     </td>
                     <td align="right" valign="bottom" width=100>
                         <div class="nohover">
-                            <a title="Next comic" rel="next" <?=$page->next;?>">
+                            <a title="Next comic" rel="next" {{ page.next }}>
                                 <div class="arrowholder">
                                     <div id="rightarrow"></div>
                                 </div>
@@ -226,7 +226,7 @@ h2 {
         </table>
     </div>
     <div id="container" class="am-root">
-<?php include($page->post); ?>
+		{% block post %}post content goes here{% endblock %}
         <div id="sidebar">
             <div id="sidebarheader">Ads Woo</div>
             <noscript><map name="admap38564" id="admap38564"><area shape="rect" coords="0,0,160,600" title="" alt="" target="_blank" /></map>
