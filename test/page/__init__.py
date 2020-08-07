@@ -1,1 +1,2 @@
-from .index import main  # noqa
+"""page module init"""
+from .serve import serve    # noqa

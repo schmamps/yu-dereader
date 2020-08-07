@@ -1,1 +1,2 @@
-from .image import gif, jpeg, png  # noqa
+"""image module init"""
+from .image import serve  # noqa
