@@ -1,10 +1,14 @@
 """JSON utility"""
 import json
-import pathlib
+from pathlib import Path
+
+from flask import current_app as app
 
 
-def get_data_dir() -> pathlib.Path:
-    return pathlib.Path(__file__).parent.parent.parent.joinpath('src', 'data')
+def get_data_dir() -> Path:
+    root = Path(str(app.root_path)).parent.joinpath('src', 'data')
+
+    return root
 
 
 def load_json(name):

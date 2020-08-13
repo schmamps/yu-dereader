@@ -96,14 +96,25 @@
 						</div>
 					</td>
 					<td>
-						<img
-							title="{{ content.title }}"
-{% if page.canon != page.src %}
-							style="background-image:url({{ page.canon }})"
+{% if page.id == page.dubs %}
+	<div id="cf">
+		<p id="dubs"><a name="dubs">dubs!</a></p>
+		<img src="{{ page.src[0] }}" class="comic bottom" title="{{ content.title }}">
+		<img src="{{ page.src[1] }}" class="comic top" title="{{ content.title }}">
+	</div>
+{% else %}
+		<p id="dubs">
+			<a name="dubs"href="/index.php?comic={{ page.dubs }}">not dubs</a>
+		</p>
+	<img
+		title="{{ content.title }}"
+	{% if page.canon != page.src[0] %}
+		style="background-image:url({{ page.canon }})"
+	{% endif %}
+		src="{{ page.src[1] }}"
+		class="comic"
+	>
 {% endif %}
-							src="{{ page.src }}"
-							class="comic"
-						>
 					</td>
 					<td>
 						<div class="nohover">

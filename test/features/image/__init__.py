@@ -1,2 +1,2 @@
 """image module init"""
-from .image import serve  # noqa
+from .image import png  # noqa

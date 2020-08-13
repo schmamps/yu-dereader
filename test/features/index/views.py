@@ -2,8 +2,8 @@
 import re
 import typing
 
-from .. import data
-from .view import View
+from ...lib import data
+from .defs import View
 
 
 def get_default(view_list: typing.List[View]) -> int:

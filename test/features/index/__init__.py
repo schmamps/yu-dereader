@@ -1,2 +1,2 @@
 """page module init"""
-from .serve import serve    # noqa
+from .index import php  # noqa

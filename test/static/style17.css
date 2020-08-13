@@ -29,9 +29,18 @@ a:visited {
   color: #0000BB;
 }
 
-img.pteranodon, img.rhamphorhynchus {
-  width: 32px;
-  height: 32px;
+img.rhamphorhynchus, img.pteranodon {
+  position: absolute;
+  z-index: -1;
+}
+img.pteranodon {
+  position: absolute;
+  right: 86%;
+  top: 40px;
+}
+img.rhamphorhynchus {
+  right: 1%;
+  top: 16px;
 }
 
 table {
@@ -93,7 +102,7 @@ a[rel=next]::after {
   flex-wrap: wrap;
 }
 #header li {
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   margin-right: 1em;
   white-space: nowrap;
   list-style-position: inside;
@@ -172,6 +181,35 @@ center table td {
 }
 #container .padded {
   margin: 35px 10px 5px 10px;
+}
+
+p#dubs {
+  position: fixed;
+  right: -2em;
+  top: 0;
+  color: red;
+  font-size: 3em;
+}
+p#dubs a {
+  color: red;
+}
+
+#cf {
+  position: relative;
+  width: 735px;
+  height: 500px;
+  margin: 0 auto;
+}
+
+#cf img {
+  position: absolute;
+  left: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+#cf img.top:hover {
+  opacity: 0;
+  transition-delay: 1s;
 }
 
 /*# sourceMappingURL=style17.css.map */

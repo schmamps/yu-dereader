@@ -3,16 +3,13 @@ import typing
 
 from flask import redirect, render_template, request
 
-from .. import urly
-from . import content, views
-
-BIWRBR = 'butiwouldratherbereading'
-DEFAULT_ID = 3626
+from ...lib import urly
+from . import content, defs, views
 
 
 def get_view_data(
     query: str
-) -> typing.Tuple[typing.List[views.View], int]:
+) -> typing.Tuple[typing.List[defs.View], int]:
     view_list = views.list_all()
     valid_queries = [v.query for v in view_list]
 
@@ -33,26 +30,39 @@ def get_page_id_spec(query) -> typing.Optional[int]:
 
 def get_comic_data(
     query: str,
-    view: views.View
+    view: defs.View
 ) -> typing.Tuple[int, urly.Url]:
     url = urly.Url('/index.php')
-    url.query[BIWRBR] = view.query
+    url.query[defs.BIWRBR] = view.query
 
     id_spec = get_page_id_spec(query)
     if id_spec is not None:
         url.query['comic'] = abs(id_spec)
 
-    return id_spec or DEFAULT_ID, url
+    return id_spec or defs.DEFAULT_ID, url
+
+
+def get_canons(
+    page_id: int
+) -> typing.List[str]:
+    formatter = '/comics/comic2-{0}{1}.png'
+
+    return [formatter.format(page_id, mod) for mod in ['-2', '']]
 
 
 def get_page_base(page_id: int, view: views.View) -> dict:
-    canon_src = '/comics/comic2-{0}.png'.format(page_id)
-
-    return {
+    canons = get_canons(page_id)
+    base = {
         'id': page_id,
-        'canon': canon_src,
-        'src': '/{0}.png'.format(view.src) if view.src else canon_src,
+        'dubs': page_id - (page_id % 100 % 11),
+        'canon': canons[1],
+        'src': canons
     }
+
+    if view.src and not base['dubs']:
+        base['src'] = ['/{0}.png'.format(view.src)]
+
+    return base
 
 
 def get_page_nav(
@@ -75,17 +85,17 @@ def serve_page(page_id: int, url: urly.Url, view: views.View):
         'index.j2',
         page=get_page_base(page_id, view),
         nav=get_page_nav(url, page_id),
-        content=content.generate(page_id, DEFAULT_ID)
+        content=content.generate(page_id, defs.DEFAULT_ID)
     )
 
 
-def serve():
+def php(name: str):
     url_spec = urly.Url.from_request(request)
     url_spec.query = dict(request.args)
 
-    view_list, view_idx = get_view_data(url_spec.query.get(BIWRBR, ''))
+    view_list, view_idx = get_view_data(url_spec.query.get(defs.BIWRBR, ''))
     page_id, url_actual = get_comic_data(
-        url_spec.query.get('comic'),
+        url_spec.query.get('comic', ''),
         view_list[view_idx]
     )
 

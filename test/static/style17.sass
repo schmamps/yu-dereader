@@ -5,6 +5,7 @@ html, body
 html
 	width: 100%
 	height: 100%
+
 body
 	transform: scale(.6)
 	transform-origin: top left
@@ -26,9 +27,19 @@ a
 		color: #0000BB
 
 img
-	&.pteranodon, &.rhamphorhynchus
-		width: 32px
-		height: 32px
+	&.rhamphorhynchus, &.pteranodon
+		position: absolute
+		z-index: -1
+
+	&.pteranodon
+		position: absolute
+		right: 86%
+		top: 40px
+
+	&.rhamphorhynchus
+		right: 1%
+		top: 16px
+
 
 table
 	border: 0
@@ -89,7 +100,7 @@ a
 		flex-wrap: wrap
 
 	li
-		font-size: .8rem
+		font-size: .7rem
 		margin-right: 1em
 		white-space: nowrap
 		list-style-position: inside
@@ -170,3 +181,27 @@ center
 	.padded
 		margin: 35px 10px 5px 10px
 
+p#dubs
+	position: fixed
+	right: -2em
+	top: 0
+	color: red
+	font-size: 3em
+
+	a
+		color: red
+
+#cf
+	position: relative
+	width: 735px
+	height: 500px
+	margin: 0 auto
+
+#cf img
+	position: absolute
+	left: 0
+	transition: opacity 1s ease-in-out
+
+#cf img.top:hover
+	opacity: 0
+	transition-delay: 1s
