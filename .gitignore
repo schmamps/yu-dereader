@@ -1,2 +1,4 @@
 node_modules
-php.ini
+.venv
+*.css.map
+**/__pycache__
