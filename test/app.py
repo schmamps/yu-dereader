@@ -6,6 +6,11 @@ from .features import image, index
 app = Flask(__name__)
 
 
+@app.route('/comics/<path:name>.png')
+def get_comic(name):
+    return image.comic(name)
+
+
 @app.route('/<path:name>.gif')
 @app.route('/<path:name>.jpg')
 @app.route('/<path:name>.png')

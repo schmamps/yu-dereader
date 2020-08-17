@@ -5,13 +5,12 @@ from pathlib import Path
 from flask import make_response
 from PIL import Image, ImageDraw, ImageFont
 
+from ...lib import content
+
+
+CWD = Path(__file__).parent
 
 SPEC = {
-    'comic2-': {
-        'fg': (0, 0, 0, 255),
-        'bg': (64, 187, 29, 255),
-        'xy': (30, 30)
-    },
     'logo5': {
         'img_size': (390, 56),
         'fg': (255, 255, 255),
@@ -50,19 +49,67 @@ SPEC = {
         'img_size': (180, 110),
         'bg': (117, 182, 117)
     }
-}
+}  # type: dict
 
 
-def png(name):
-    cfg = {
+def get_base_config(name: str) -> dict:
+    return {
         'img_size': (735, 500),
         'fg': (0, 0, 0, 255),
         'bg': (64, 187, 25, 255),
-        'xy': (30, 30),
-        'content': name,
-        'font_path': Path(__file__).parent.joinpath('./Go-Mono-Bold.ttf'),
-        'font_size': 24
+        'xy': (6, 6),
+        'content': name
     }
+
+
+def get_font(cfg: dict) -> ImageFont:
+    font_path = str(cfg.get('font_path', CWD.joinpath('./luximr.ttf')))
+    font_size = cfg.get('font_size', 24)
+
+    return ImageFont.truetype(font_path, font_size)
+
+
+def get_overlay(base: Image, color: tuple) -> Image:
+    text = Image.new(base.mode, base.size, color)
+    draw = ImageDraw.Draw(text)
+
+    return text, draw
+
+
+def comic(name: str):
+    cfg = get_base_config(name)
+
+    with open(str(CWD.joinpath('comic.png')), 'rb') as src:
+        # TODO: cleanup, streamline with `png`
+        comic = Image.open(src).convert(mode='RGBA')
+        text, draw = get_overlay(comic, (0, 0, 0, 0))
+        font = get_font({'font_size': 10})
+        POS = [
+            (10, 10), (250, 10), (380, 10),
+            (10, 250), (200, 250), (500, 250)
+        ]
+
+        for idx, panel in enumerate(content.panels(name)):
+            draw.text(
+                POS[idx],
+                panel,
+                font=font,
+                fill=cfg['fg'],
+                spacing=3)
+
+        out = Image.alpha_composite(comic, text)
+
+        byteArr = io.BytesIO()
+        out.save(byteArr, format='PNG')
+
+        response = make_response(byteArr.getvalue())
+        response.headers.set('Content-Type', 'image/png')
+
+        return response
+
+
+def png(name: str):
+    cfg = get_base_config(name)
 
     for key in SPEC.keys():
         if key in name:
@@ -71,9 +118,8 @@ def png(name):
             break
 
     base = Image.new('RGBA', cfg['img_size'], cfg['bg'])
-    text = Image.new(base.mode, base.size, (0, 0, 0, 0))
-    font = ImageFont.truetype(str(cfg['font_path']), cfg['font_size'])
-    draw = ImageDraw.Draw(text)
+    text, draw = get_overlay(base, (0, 0, 0, 0))
+    font = get_font(cfg)
     draw.text(cfg['xy'], cfg['content'], font=font, fill=cfg['fg'])
 
     out = Image.alpha_composite(base, text)

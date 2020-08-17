@@ -1,10 +1,18 @@
 """index page"""
+import math
 import typing
 
+import arrow
 from flask import redirect, render_template, request
 
-from ...lib import urly
-from . import content, defs, views
+from ...lib import content, urly
+from . import defs, views
+
+
+def get_default_id():
+    delta = arrow.now() - content.reference.date
+
+    return math.floor(delta.days / 7.0 * 3.0) + content.reference.id
 
 
 def get_view_data(
@@ -39,7 +47,7 @@ def get_comic_data(
     if id_spec is not None:
         url.query['comic'] = abs(id_spec)
 
-    return id_spec or defs.DEFAULT_ID, url
+    return id_spec or get_default_id(), url
 
 
 def get_canons(
@@ -85,7 +93,7 @@ def serve_page(page_id: int, url: urly.Url, view: views.View):
         'index.j2',
         page=get_page_base(page_id, view),
         nav=get_page_nav(url, page_id),
-        content=content.generate(page_id, defs.DEFAULT_ID)
+        content=content.index(page_id)
     )
 
 

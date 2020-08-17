@@ -132,14 +132,20 @@
 	<div id="container">
 		<div id="blogpost">
 			<div id="blogpostheader">What are the haps my friends</div>
-				<p><b>{{ content.date }}</b></p>
-{% for panel in content.panels %}
-	<div class="panel">
-	{% for para in panel %}
-		<p>{{ para|e }}</p>
-	{% endfor %}
-	</div>
+				<div class="padded">
+{% for para in content.blog %}
+	<p>
+	{% if loop.index == 1 %}
+		<b>{{ content.date }}:</b>
+		<span class="rss-content">
+	{% endif %}
+	{{ para|e }}
+	{% if loop.index == 1 %}
+		</span>
+	{% endif %}
+	</p>
 {% endfor %}
+			</div>
 		</div>
 		<div id="shirtad">
 			<div id="shirtadheader">big ups and shouts out</div>

@@ -1,2 +1,2 @@
 """image module init"""
-from .image import png  # noqa
+from .image import comic, png  # noqa

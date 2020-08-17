@@ -9,7 +9,7 @@ html {
 }
 
 body {
-  transform: scale(0.6);
+  transform: scale(0.8);
   transform-origin: top left;
   background: #dae8fe;
   color: #000;
@@ -143,20 +143,8 @@ center table td {
 #container #blogpost > div:first-child {
   background: #42c700;
 }
-#container #blogpost > p {
-  text-align: center;
-}
-#container #blogpost .panel {
-  box-sizing: border-box;
-  border: 1px solid #000;
-  width: 33.3%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  padding: 0.25em;
-}
-#container #blogpost .panel > p {
-  width: 100%;
+#container #blogpost .padded {
+  margin: 0 10px;
 }
 #container #shirtad {
   border-color: #000;
