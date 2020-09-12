@@ -7,7 +7,6 @@ center > table tr > td:nth-child(2) > img {
   background-repeat: no-repeat;
   transition: all 0ms ease;
   width: auto;
-  image-rendering: pixelated;
 }
 
 .egg td > div {
