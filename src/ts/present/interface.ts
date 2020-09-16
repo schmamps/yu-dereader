@@ -3,8 +3,9 @@ import CONSTS from '../consts';
 import * as dom from '../dom';
 
 
-const comic = <HTMLImageElement> dom.query('center tbody tr:first-child img');
+
 const transition = 800;
+let comic: HTMLImageElement;
 let viewSelector: HTMLSelectElement;
 
 
@@ -45,33 +46,13 @@ async function initSelector(vwSel: HTMLSelectElement) {
 	}
 };
 
-
-/**
- * Get img src from nominal source
-**/
-const getSrc = (nomSrc: string): string => {
-	if (nomSrc === '') {
-		const bg = comic.style.backgroundImage;
-
-		return bg.replace(/^.+\/(\/comics.+png).*$/, '$1');
-	}
-
-	return nomSrc.
-		split('.').
-		concat('png').
-		slice(0, 2).
-		join('.')
-	;
-};
-
-
 /**
  * Set view display from `viewSelector.options[index]`
 **/
 const setViewDisplay = (index: number) => {
 	const vwData = viewSelector.options[index].dataset;
 	const rotY = Number(comic.style.transform.replace(/\D/g, ''));
-	const updateView = () => { comic.src = getSrc(vwData.src); };
+	const updateView = () => { comic.src = vwData.src; };
 
 	comic.style.transform = `rotateY(${((rotY + 360) % 720)}deg)`;
 	comic.style.backgroundPosition = vwData.position;
@@ -106,11 +87,12 @@ async function initHistory() {
 	;
 }
 
-
 /**
  * Initialize comic CSS
  */
-async function initComic(canon: string) {
+async function initComic(element: HTMLImageElement, canon: string) {
+	comic = element;
+
 	const delay = transition / 2;
 	const transProp = [
 		`transform ${transition}ms`,
@@ -119,6 +101,7 @@ async function initComic(canon: string) {
 
 	comic.style.backgroundImage = `url(${canon})`
 	comic.style.transition = transProp;
+	comic.dataset.canon = canon;
 }
 
 
@@ -182,13 +165,58 @@ async function initSelect() {
 	;
 }
 
+/**
+ * Preload alternate views
+ */
+async function initPreload() {
+	const rel = 'prefetch';
+
+	for (let i = 1; i < viewSelector.options.length; i++) {
+		const href = viewSelector.options[i].dataset.src;
+
+		document.head.appendChild(dom.create('link', {rel, href}));
+	}
+}
+
+
+/**
+ * Scroll to RSS content
+**/
+const readRSS = (e: Event) => {
+	e.preventDefault();
+
+	window.scroll({
+		left: window.scrollX,
+		top: dom.query(`a[name=${CONSTS.ANCHOR}]`).getBoundingClientRect().y,
+		behavior: 'smooth',
+	});
+};
+
+
+/**
+ * Initialize RSS link & scrolling
+ */
+async function initRSS() {
+	dom.
+		query('#blogpostheader').
+		appendChild(dom.create('a', {name: CONSTS.ANCHOR}));
+
+	const anchor = dom.query('a.rss');
+	anchor.setAttribute('href', `#${CONSTS.ANCHOR}`)
+	anchor.addEventListener('click', readRSS);
+}
+
 
 /**
  * Initialize interface
  * @throws
 **/
-const initAll = (canon: string, vwSel: HTMLSelectElement) => {
-	initComic(canon);
+const initAll = (
+	comicElm: HTMLImageElement,
+	canonSrc: string,
+	vwSel: HTMLSelectElement
+) => {
+	initComic(comicElm, canonSrc);
 
 	return Promise.
 		resolve(initSelector(vwSel)).
@@ -196,6 +224,8 @@ const initAll = (canon: string, vwSel: HTMLSelectElement) => {
 		then(() => Promise.all([
 			initFlip(),
 			initSelect(),
+			initPreload(),
+			initRSS(),
 		])).
 		catch((e) => {
 			e.__ = 'initializing interface';
