@@ -18,7 +18,11 @@ def get_image(name):
     return image.png(name)
 
 
-@app.route('/')
 @app.route('/<path:name>.php')
 def get_page(name):
     return index.php(name)
+
+
+@app.route('/')
+def home():
+    return get_page('index')

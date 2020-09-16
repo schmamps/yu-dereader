@@ -8,16 +8,18 @@ from .defs import View
 
 def get_default(view_list: typing.List[View]) -> int:
     for i, v in enumerate(view_list):
-        if v.query == '':
+        if v.param == '':
             return i
 
     return 0
 
 
 def get_view(view: dict) -> View:
-    short = re.sub(r'[^a-z]+', '', view['name'].lower())
+    short = re.sub(r'[^a-z]+', '', view.get('title', '').lower())
+    param = view.get('param', short)
+    src = view.get('src', short)
 
-    return View(view.get('query', short), view.get('src', short))
+    return View(param, src)
 
 
 def list_group(views: typing.List[dict]) -> typing.List[View]:
@@ -25,8 +27,10 @@ def list_group(views: typing.List[dict]) -> typing.List[View]:
 
 
 def list_all() -> typing.List[View]:
-    views = []
-    for group in data.load('views'):
-        views += list_group(group['views'])
+    all = [
+        get_view(view)
+        for view
+        in data.load('views')['views']
+    ]
 
-    return views
+    return all

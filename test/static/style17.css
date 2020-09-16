@@ -9,7 +9,6 @@ html {
 }
 
 body {
-  transform: scale(0.8);
   transform-origin: top left;
   background: #dae8fe;
   color: #000;

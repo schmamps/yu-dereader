@@ -5,7 +5,7 @@ from pathlib import Path
 from flask import make_response
 from PIL import Image, ImageDraw, ImageFont
 
-from ...lib import content
+from ...lib import content, data
 
 
 CWD = Path(__file__).parent
@@ -48,7 +48,7 @@ SPEC = {
     'rhamphorhynchus': {
         'img_size': (180, 110),
         'bg': (117, 182, 117)
-    }
+    },
 }  # type: dict
 
 
@@ -56,7 +56,7 @@ def get_base_config(name: str) -> dict:
     return {
         'img_size': (735, 500),
         'fg': (0, 0, 0, 255),
-        'bg': (64, 187, 25, 255),
+        'bg': (64, 187, 25, 15),
         'xy': (6, 6),
         'content': name
     }
@@ -111,11 +111,9 @@ def comic(name: str):
 def png(name: str):
     cfg = get_base_config(name)
 
-    for key in SPEC.keys():
-        if key in name:
-            cfg.update(SPEC[key])
-
-            break
+    for k in [k for k in SPEC.keys() if k in name]:
+        cfg.update(SPEC[k])
+        cfg['bg'] = (cfg['bg'][0], cfg['bg'][1], cfg['bg'][2], 255)
 
     base = Image.new('RGBA', cfg['img_size'], cfg['bg'])
     text, draw = get_overlay(base, (0, 0, 0, 0))

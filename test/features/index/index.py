@@ -19,7 +19,7 @@ def get_view_data(
     query: str
 ) -> typing.Tuple[typing.List[defs.View], int]:
     view_list = views.list_all()
-    valid_queries = [v.query for v in view_list]
+    valid_queries = [v.param for v in view_list]
 
     try:
         return view_list, valid_queries.index(query)
@@ -41,7 +41,7 @@ def get_comic_data(
     view: defs.View
 ) -> typing.Tuple[int, urly.Url]:
     url = urly.Url('/index.php')
-    url.query[defs.BIWRBR] = view.query
+    url.query[defs.BIWRBR] = view.param
 
     id_spec = get_page_id_spec(query)
     if id_spec is not None:
@@ -67,8 +67,8 @@ def get_page_base(page_id: int, view: views.View) -> dict:
         'src': canons
     }
 
-    if view.src and not base['dubs']:
-        base['src'] = ['/{0}.png'.format(view.src)]
+    if view.src and page_id != base['dubs']:
+        base['src'] = ['', '/{0}.png'.format(view.src)]
 
     return base
 

@@ -6,5 +6,5 @@ BIWRBR: str = 'butiwouldratherbereading'
 
 
 class View(NamedTuple):
-    query: str = ''
+    param: str = ''
     src: str = ''
