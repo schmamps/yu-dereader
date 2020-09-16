@@ -4,11 +4,19 @@ import { ComicView, ComicViewList } from '../views/list';
 
 
 /**
+ * Get complete path to `nomSrc`
+ */
+const getPath = (nomSrc: string): string => {
+	return nomSrc.includes('.') ? nomSrc : `${nomSrc}.png`;
+}
+
+/**
  * Group views in a category
 **/
 const groupViews = (
 	label: string,
-	catViews: ComicView[]
+	catViews: ComicView[],
+	defaultSrc: string
 ): HTMLOptGroupElement => {
 	const group = <HTMLOptGroupElement> dom.create('optgroup', {label});
 
@@ -18,7 +26,7 @@ const groupViews = (
 		option.textContent = view.title;
 		option.value = view.param;
 		option.dataset.position = view.position;
-		option.dataset.src = view.src;
+		option.dataset.src = (view.src) ? getPath(view.src) : defaultSrc;
 
 		group.appendChild(option);
 	}
@@ -30,13 +38,13 @@ const groupViews = (
 /**
  * Add view selector to easter egg nest
  */
-async function listViews(views: ComicViewList) {
+async function listViews(views: ComicViewList, canon: string) {
 	const title = eggs.wrap('Views');
 	const detail = dom.create('select');
 
 	// @ts-ignore - downlevel iteration
 	for (const label of views.keys()) {
-		detail.appendChild(groupViews(label, views.get(label)));
+		detail.appendChild(groupViews(label, views.get(label), canon));
 	}
 
 	eggs.deposit(title, detail);
