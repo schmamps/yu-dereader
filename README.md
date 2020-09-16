@@ -58,4 +58,4 @@ i.e. invoking `gulp` with no arguments.
 
 ## Testing
 
-In the project directory, execute `./test/run.sh`
+In the project directory, execute `python3 test/app.py`
