@@ -23,7 +23,8 @@ this extension **does not and will never**:
 * download unnecessary or external data
 * insert irrelevant content like ads or even kitten GIFs
 
-# Usage
+## Usage
+
 Most eggs are displayed automatically.
 Double click the comic or use the dropdown
 to toggle between standard view,
@@ -33,6 +34,7 @@ and other variations.
 ## Installation
 
 ### Chrome
+
 Google wants money to put this extension in the Chrome Web Store.
 Feel free to send me some.
 Until then:
@@ -44,20 +46,8 @@ Until then:
 and select the `build.safariextension` subdirectory of this project
 
 ### Safari
-Apple wants even more money to put this extension in the Marketplace.
-Feel free to send me some.
-Until then:
 
-1. [Enable the Develop menu item](https://support.apple.com/kb/PH21491)
-(if you haven't already)
-1. Go to Develop > Show Extension Builder
-1. In the lower left corner of Extension Builder, click the `+`
-1. Choose `Add Extension`
-1. Select the `build.safariextension` subdirectory of this project
-1. In the upper right corner of Extension Builder, click `Install`
-
-Because this extension is unsigned,
-you must reinstall it every time you restart Safari.
+Current versions of Safari don't seem to be supported.
 
 ## Roll Your Own
 
