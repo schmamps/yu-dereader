@@ -15,7 +15,7 @@ const wrappers = {
 	 * Wrap RSS content
 	 */
 	RSS: (content: string) => {
-		return dom.create('a', {href: '#yu-dereader', html: content});
+		return dom.create('a', {classList: ['rss'], html: content});
 	},
 	/**
 	 * Wrap other content
