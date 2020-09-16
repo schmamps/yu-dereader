@@ -51,7 +51,9 @@ async function initSelector(vwSel: HTMLSelectElement) {
 **/
 const getSrc = (nomSrc: string): string => {
 	if (nomSrc === '') {
-		return comic.style.backgroundImage.replace(/^.+\/(.+png).*$/, '$1');
+		const bg = comic.style.backgroundImage;
+
+		return bg.replace(/^.+\/(\/comics.+png).*$/, '$1');
 	}
 
 	return nomSrc.
