@@ -46,7 +46,11 @@ const depositEgg = (
 	const egg = dom.create('tr', {class: 'egg'});
 
 	egg.appendChild(dom.create('td', {colspan: 3}));
-	for (const elm of [title, detail]) { egg.children[0].appendChild(elm); }
+	egg.children[0].appendChild(dom.create('div'));
+
+	for (const elm of [title, detail]) {
+		egg.children[0].children[0].appendChild(elm);
+	}
 
 	nest.appendChild(egg);
 };
