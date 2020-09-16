@@ -1,13 +1,9 @@
 module.exports = {
-  "globals": {
-    "core": true,
-    "dom": true,
-    "params": true,
-    "comic": true,
-    "request": true,
-    "characters": true,
-    "nest": true,
-    "ui": true,
-    "config": true,
-  }
+	"parserOptions": {
+		"ecmaVersion": 2017,
+		"sourceType": "module",
+	},
+	"rules": {
+		"semi": "error",
+	}
 };
