@@ -3,15 +3,24 @@ import * as eggs from './eggs';
 import * as present from './present';
 import * as views from './views';
 
-eggs.
-	listAll(comic.get.element()).
-	then(present.eggs).
-	catch(present.error('Eggs'))
-;
 
-views.
-	listAll().
-	then(present.views).
-	then((vwSel: HTMLSelectElement) => present.interface(comic.get.canon(), vwSel)).
-	catch(present.error('Views'))
-;
+const main = () => {
+	const element = comic.get.element();
+	const canon = comic.get.canon();
+
+	eggs.
+		listAll(element).
+		then(present.eggs).
+		catch(present.error('Eggs'));
+
+
+	views.
+		listAll().
+		then((views) => present.views(views, canon)).
+		then((vwSel: HTMLSelectElement) => {
+			present.interface(element, canon, vwSel)
+		}).
+		catch(present.error('Views'));
+};
+
+main();
