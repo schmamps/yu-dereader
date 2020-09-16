@@ -7,7 +7,7 @@ export default {
 	input: 'src/ts/index.ts',
 	output: {
 		// dir: 'build',
-		file: 'build.safariextension/yu.dereader.js',
+		file: 'build.safariextension/yu.js',
 		format: 'iife',
 	},
 	plugins: [

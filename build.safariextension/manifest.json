@@ -9,10 +9,10 @@
 		{
 			"all_frames": false,
 			"js": [
-				"angola.js"
+				"yu.js"
 			],
 			"css": [
-				"maldives.css"
+				"dereader.css"
 			],
 			"matches": [
 				"http://*.qwantz.com/*",

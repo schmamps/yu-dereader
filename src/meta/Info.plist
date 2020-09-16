@@ -20,12 +20,12 @@
 		<dict>
 			<key>End</key>
 			<array>
-				<string>angola.js</string>
+				<string>yu.js</string>
 			</array>
 		</dict>
 		<key>Stylesheets</key>
 		<array>
-			<string>maldives.css</string>
+			<string>dereader.css</string>
 		</array>
 	</dict>
 	<key>DeveloperIdentifier</key>

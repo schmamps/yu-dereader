@@ -3,7 +3,7 @@ const sass = require('gulp-dart-sass');
 const sourcemap = require('gulp-sourcemaps');
 const {config, describe,} = require('../util');
 
-const cfg = config({in: 'maldives.sass', sub: 'css',});
+const cfg = config({in: 'dereader.sass', sub: 'css',});
 
 module.exports.build = true;
 
