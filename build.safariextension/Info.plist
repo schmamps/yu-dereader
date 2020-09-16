@@ -11,11 +11,7 @@
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
     <key>CFBundleShortVersionString</key>
-<<<<<<< HEAD
     <string>2.1.0</string>
-=======
-    <string>2.0.5</string>
->>>>>>> e578ffbd17b3ee82c49d0a5cbcbd586f284db0d0
     <key>CFBundleVersion</key>
     <string>1</string>
     <key>Content</key>
