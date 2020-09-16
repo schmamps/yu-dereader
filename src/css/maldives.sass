@@ -7,23 +7,24 @@ center > table tr:nth-child(1) > td:nth-child(2)
 
 center > table tr > td:nth-child(2) > img
     background-repeat: no-repeat
-    transition: all 0ms ease
     width: auto
-    image-rendering: pixelated
 
 .egg
-    td > div
-        width: $comic-width
-        margin: .1rem auto
-        display: flex
-        justify-content: space-between
-        border-bottom: 1px dotted #eee
+    td
+        > div
+            width: $comic-width
+            margin: .1rem auto
+            display: flex
+            justify-content: space-between
+            border-bottom: 1px dotted #eee
 
     h2
+        float: left
         width: 20%
         margin: .2rem 0
         font-size: 1rem
         font-weight: bold
+        text-transform: initial
 
     h2 + *
         display: block

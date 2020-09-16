@@ -1,4 +1,4 @@
 node_modules
 .venv
-*.css.map
+**/*.css.map
 **/__pycache__

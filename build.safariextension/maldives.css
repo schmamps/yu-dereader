@@ -5,9 +5,7 @@ center > table tr:nth-child(1) > td:nth-child(2) {
 
 center > table tr > td:nth-child(2) > img {
   background-repeat: no-repeat;
-  transition: all 0ms ease;
   width: auto;
-  image-rendering: pixelated;
 }
 
 .egg td > div {
@@ -18,10 +16,12 @@ center > table tr > td:nth-child(2) > img {
   border-bottom: 1px dotted #eee;
 }
 .egg h2 {
+  float: left;
   width: 20%;
   margin: 0.2rem 0;
   font-size: 1rem;
   font-weight: bold;
+  text-transform: initial;
 }
 .egg h2 + * {
   display: block;
