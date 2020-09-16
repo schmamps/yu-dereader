@@ -1,6 +1,6 @@
 center > table tr:nth-child(1) > td:nth-child(2) {
   width: 750px;
-  height: 508px;
+  height: 530px;
 }
 
 center > table tr > td:nth-child(2) > img {
