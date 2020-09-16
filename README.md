@@ -58,4 +58,4 @@ i.e. invoking `gulp` with no arguments.
 
 ## Testing
 
-In the project directory, execute `./test/run.sh`
+Run `./test/sim.sh` for further instructions on starting a test web server.
