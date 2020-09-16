@@ -4,7 +4,7 @@ import jsonImport from '@rollup/plugin-json';
 import {terser} from 'rollup-plugin-terser';
 
 export default {
-	input: 'src/js/index.ts',
+	input: 'src/ts/index.ts',
 	output: {
 		// dir: 'build',
 		file: 'build.safariextension/yu.dereader.js',
