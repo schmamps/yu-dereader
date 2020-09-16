@@ -28,20 +28,4 @@ center > table tr > td:nth-child(2) > img {
   max-width: 80%;
   text-align: justify;
 }
-.egg a, .egg a:hover {
-  text-decoration: none;
-  background: transparent;
-  color: #00689d;
-}
-.egg a:hover {
-  text-decoration: underline;
-}
-
-#blogpost {
-  transition: background 1s ease-out;
-}
-
-#blogpost.angola {
-  background: #ffc;
-}
 /*# sourceMappingURL=dereader.css.map */
