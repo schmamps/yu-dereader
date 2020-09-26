@@ -1,6 +1,6 @@
 const gulp = require('gulp');
-const compose = require('../compose');
-const path = require('../path');
+const compose = require('./compose');
+const path = require('./path');
 
 const DEV = 'development';
 

@@ -1,7 +1,7 @@
 const colors = require('ansi-colors');
 const log = require('fancy-log');
-const describe = require('../task/meta/describe');
-const build = require('../build');
+const describe = require('./task/meta/describe');
+const build = require('./build');
 
 
 const getEntry = (pad) => (task) => {
