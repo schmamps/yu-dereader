@@ -13,7 +13,6 @@ const main = () => {
 		then(present.eggs).
 		catch(present.error('Eggs'));
 
-
 	views.
 		listAll().
 		then((views) => present.views(views, canon)).
