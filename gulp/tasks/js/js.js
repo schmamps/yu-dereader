@@ -16,16 +16,20 @@ const desc = meta.describe(abstract.desc, 'rollup', abstract.out);
 
 const run = () => {
 	const cfg = build.configure(abstract);
-	const roll = rollup.getPipe(cfg);
-	const sourcemaps = sourcemapping.set().if(cfg.dev);
+	const maps = sourcemapping.set().if(true);
 
-	return gulp.
-		src(rollup.config.input).
-		pipe(sourcemaps.init).
-		pipe(roll).
-		pipe(sourcemaps.write).
-		pipe(cfg.dest)
-	;
+	// gulp-better-rollup seems not to play nice with noop/gulp-if
+	const pipeline = [
+		maps.init,
+		rollup.getPipe(cfg),
+		maps.write,
+		cfg.dest,
+	].filter((_, i) => cfg.dev || i % 2 === 1);
+
+	return pipeline.reduce(
+		(steps, pipe) => pipe ? steps.pipe(pipe) : steps,
+		gulp.src(rollup.config.input)
+	);
 };
 
 module.exports = {
