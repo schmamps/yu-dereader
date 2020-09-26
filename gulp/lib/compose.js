@@ -1,12 +1,12 @@
-module.exports = (...args) => {
+module.exports = (...sources) => {
 	let composed = {};
 
-	for (const arg of args) {
+	for (const source of sources) {
 		try {
-			Object.assign(composed, arg);
+			composed = Object.assign(composed, source);
 		}
 		catch (e) {
-			throw new Error('composition error for value: ' + arg.toString());
+			throw new Error('composition error for value: ' + source.toString());
 		}
 	}
 
