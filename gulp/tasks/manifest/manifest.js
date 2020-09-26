@@ -1,16 +1,16 @@
 const fs = require('fs');
 const build = require('../../lib/build');
 const json = require('../../lib/json');
+const log = require('../../lib/log');
 const path = require('../../lib/path');
 const meta = require('../../lib/task/meta');
 
 const abstract = meta.abstract({in: 'manifest.json', sub: 'meta',});
 const desc = meta.describe('update the Chrome extension manifest');
 
-const err = (err) => {
-	if (!err) { return; }
 
-	console.log(`manifest task error: ${err}`);
+const err = (err) => {
+	log.error(err, 'manifest task');
 };
 
 const update = (dataSources) => {
@@ -22,7 +22,7 @@ const update = (dataSources) => {
 };
 
 const write = (data, cfg) => {
-	const fullPath = path.join(cfg.dir, abstract.in);
+	const fullPath = path.join(cfg.dir, cfg.in);
 	const contents = json.stringify(data);
 	const writeToDisk = () => fs.promises.writeFile(fullPath, contents);
 
@@ -39,13 +39,14 @@ const run = () => {
 
 	return Promise.
 		all([
-			json.load(abstract.src[0]),
+			json.load(cfg.src[0]),
 			json.load('package.json'),
 			cfg.prod
 		]).
 		then(update).
 		then(writeManifest).
-		catch(err);
+		catch(err)
+	;
 };
 
 module.exports = {
