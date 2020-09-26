@@ -1,13 +1,13 @@
-const help = require('./help');
-const util = require('./util');
+const help = require('./lib/help');
+const modules = require('./lib/task/modules');
 
 
-const addTask = (...args) => {
-	const [taskName, taskModule] = args.flat();
+const taskMods = modules.load(`${__dirname}/tasks`);
 
-	module.exports[taskName] = taskModule.run;
-};
+for (const entry of Object.entries(taskMods)) {
+	const [taskName, taskMod] = entry;
 
-const modules = util.loadModules();
-Object.entries(modules).forEach(addTask);
-module.exports.default = help.menu(modules);
+	module.exports[taskName] = taskMod.run;
+}
+
+module.exports.default = help.menu(taskMods);
