@@ -1,5 +1,6 @@
 import * as dom from '../dom';
 import * as eggs from './eggs';
+import { Canon } from '../comic/canon';
 import { ComicView, ComicViewList } from '../views/list';
 
 
@@ -38,13 +39,13 @@ const groupViews = (
 /**
  * Add view selector to easter egg nest
  */
-async function listViews(views: ComicViewList, canon: string) {
+async function listViews(views: ComicViewList, canon: Canon) {
 	const title = eggs.wrap('Views');
 	const detail = dom.create('select');
 
 	// @ts-ignore - downlevel iteration
 	for (const label of views.keys()) {
-		detail.appendChild(groupViews(label, views.get(label), canon));
+		detail.appendChild(groupViews(label, views.get(label), canon.src));
 	}
 
 	eggs.deposit(title, detail);
