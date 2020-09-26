@@ -1,6 +1,7 @@
 import { views } from '.';
 import CONSTS from '../consts';
 import * as dom from '../dom';
+import { Canon } from '../comic/canon';
 
 
 
@@ -23,6 +24,10 @@ const normalizeUrl = (update = {}): URL => {
 		if (val) {
 			url.searchParams.set(key, val);
 		}
+	}
+
+	if (url.pathname.length < 2) {
+		url.pathname = '/index.php';
 	}
 
 	return url;
@@ -72,15 +77,19 @@ const updateState = (event: PopStateEvent) => {
 /**
  * Init window history with canonical URL and state
 **/
-async function initHistory() {
+async function initHistory(comic: number) {
 	const viewOpt = viewSelector.selectedOptions[0];
-	const canonUrl = normalizeUrl({[CONSTS.RATHER]: viewOpt.value});
+	const canonUrl = normalizeUrl({
+		[CONSTS.RATHER]: viewOpt.value,
+		comic
+	});
 
 	window.history.replaceState(
 		viewOpt.index,
 		document.title,
 		canonUrl.toString()
 	);
+
 	dom.
 		listen(window).
 		on('popstate', updateState)
@@ -213,14 +222,15 @@ async function initRSS() {
 **/
 const initAll = (
 	comicElm: HTMLImageElement,
-	canonSrc: string,
+	canon: Canon,
 	vwSel: HTMLSelectElement
 ) => {
-	initComic(comicElm, canonSrc);
+	initComic(comicElm, canon.src);
 
 	return Promise.
-		resolve(initSelector(vwSel)).
-		then(initHistory).
+		resolve(vwSel).
+		then(initSelector).
+		then(() => initHistory(canon.id)).
 		then(() => Promise.all([
 			initFlip(),
 			initSelect(),
