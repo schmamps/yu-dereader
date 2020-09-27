@@ -12,14 +12,14 @@ is a Chrome extension with a handful of purposes:
 From its humble beginnings as a simple user script,
 this extension evolved into an intentionally overbuilt system
 to work with gulp, npm/yarn,
-tinker with ES6+ features,
+tinker with interesting JavaScript/TypeScript features,
 and probably some other things I'm forgetting.
 
 While many things have changed, others remain the same.
 Yu Dereader will always love you, the reader, and as such,
 this extension **does not and will never**:
 
-* upload user data
+* read, much less upload user data
 * download unnecessary or external data
 * insert irrelevant content like ads or even kitten GIFs
 
@@ -43,18 +43,33 @@ Until then:
 1. Go to Window > Extensions
 1. Click 'Load Unpacked Extension'
 1. Ignore the name,
-and select the `build.safariextension` subdirectory of this project
-
-### Safari
-
-Current versions of Safari don't seem to be supported.
+and select the `./build/prod` subdirectory of this project
 
 ## Roll Your Own
 
-You can figure out where the source code is.
-The extensions are built with [gulp](http://gulpjs.com/),
-and specific tasks are listed in the default task,
+### Source Code
+
+The source is located in... `./src`.
+
+### Build
+
+The extensions are built with [gulp](http://gulpjs.com/).
+Specific tasks are listed in the default task,
 i.e. invoking `gulp` with no arguments.
+
+By default, gulp builds are the dev version with source maps
+and placed in `./build/dev`.
+
+For leaner production builds,
+use the `build` script with yarn/npm, e.g. `yarn build`
+or take the long way with
+
+```sh
+# must start with 'prod' - any value, any case
+export NODE_ENV=PROdUCTiON
+gulp build
+unset NODE_ENV
+```
 
 ## Testing
 
