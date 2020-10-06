@@ -1,5 +1,4 @@
-import views from '../../data/views.json'
-
+import views from './../../../anqwtz/app/data/views.json';
 
 type ComicView = {
 	title: string,
