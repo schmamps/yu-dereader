@@ -5,20 +5,78 @@ const log = require('../../lib/log');
 const path = require('../../lib/path');
 const meta = require('../../lib/task/meta');
 
+const DEFAULTS = {server: {host: 'localhost', port: 4242,},};
+
 const abstract = meta.abstract({in: 'manifest.json', sub: 'meta',});
 const desc = meta.describe('update the Chrome extension manifest');
-
 
 const err = (err) => {
 	log.error(err, 'manifest task');
 };
 
+const reduceEnv = (env, kv) => {
+	const [keySpec, val] = kv;
+
+	if (!keySpec.includes('flask_run')) {
+		return env;
+	}
+
+	return Object.assign(env, {[keySpec.substr(-4)]: val});
+};
+
+const parseEnv = (content) => {
+	let env = content.
+		split(/[\r\n]+/).
+		filter((line) => line.includes('=')).
+		map((line) => line.split('=')).
+		map((pair) => pair.map((item) => item.toLowerCase().trim())).
+		reduce(reduceEnv, {})
+	;
+
+	return Object.assign({}, DEFAULTS.server, env);
+};
+
+const getTestServer = () => {
+	const envPath = path.join(path.ROOT, 'anqwtz', '.flaskenv');
+
+	try {
+		const envData = fs.readFileSync(envPath, 'utf-8');
+
+		return parseEnv(envData);
+	}
+	catch (_) {
+		console.info('Flask environment not found, using defaults');
+
+		return DEFAULTS.server;
+	}
+};
+
+const getBuildSettings = (pkg, manif, prod) => {
+	if (prod) {
+		return {
+			// eslint-disable-next-line camelcase
+			content_scripts: manif.content_scripts,
+			version: pkg.version,
+		};
+	}
+
+	const version = '0.1.0';
+	const {host, port} = getTestServer();
+	for (const proto of ['http', 'https']) {
+		manif.content_scripts[0].matches.push(`${proto}://${host}:${port}/*`);
+	}
+
+	// eslint-disable-next-line camelcase
+	return {version, content_scripts: manif.content_scripts};
+};
+
 const update = (dataSources) => {
 	const [manif, pkg, prod] = dataSources;
 	const name = pkg.description;
-	const version = (prod) ? pkg.version : '0.0.1';
+	const {version, content_scripts: cs} = getBuildSettings(pkg, manif, prod);
 
-	return Object.assign({}, manif, {name, version});
+	// eslint-disable-next-line camelcase
+	return Object.assign({}, manif, {name, version, content_scripts: cs});
 };
 
 const write = (data, cfg) => {
