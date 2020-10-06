@@ -39,17 +39,29 @@ Google wants money to put this extension in the Chrome Web Store.
 Feel free to send me some.
 Until then:
 
-1. Open Chrome
-1. Go to Window > Extensions
-1. Click 'Load Unpacked Extension'
-1. Ignore the name,
-and select the `./build/prod` subdirectory of this project
+1. open Chrome
+1. go to Window > Extensions
+1. click 'Load Unpacked Extension'
+1. select the `./build/prod` subdirectory of this project
 
 ## Roll Your Own
 
 ### Source Code
 
 The source is located in... `./src`.
+
+### Dependencies
+
+These are the minimum initialization steps:
+
+```sh
+# initialize superproject with yarn
+yarn
+
+# get anqwtz submodule
+git submodule init
+git submodule update
+```
 
 ### Build
 
@@ -71,6 +83,23 @@ gulp build
 unset NODE_ENV
 ```
 
-## Testing
+### Testing
 
-Run `./test/sim.sh` for further instructions on starting a test web server.
+*All* builds of this extension require the
+[anqwtz submodule](https://github.com/schmamps/anqwtz).
+In addition to containing data needed for creating the extension,
+it includes a web server instance emulating Dinosaur Comics,
+which the dev build of this project is configured to use.
+
+To run the server, refer to its README,
+which should already be checked out in this repo.
+Once configured, it is also available as an npm/yarn task:
+
+```sh
+yarn serve
+```
+
+## Parting Thoughts
+
+[Eventually, the universe will reach a state where it can no longer
+sustain your demands on it](https://qwantz.com/index.php?comic=2033&butiwouldratherbereading=thelastdinosaurcomicever).
