@@ -6,7 +6,7 @@ import * as dom from '../dom';
  * @param {HTMLImageElement} comicElm - source element of comic
  * @throws
  */
-const findTitle = (comicElm): string => {
+const findTitle = (comicElm: HTMLImageElement): string => {
 	const {title} = comicElm;
 
 	if (title) {
@@ -64,5 +64,5 @@ const findRSS = (): string => {
 export {
 	findContact as Contact,
 	findTitle as Title,
-	findRSS as RSS
+	findRSS as RSS,
 };
