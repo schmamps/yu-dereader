@@ -1,5 +1,5 @@
 import * as dom from '../dom';
-import { Canon } from './canon';
+import { Canon } from './types';
 
 /**
  * Get canonical path to comic
