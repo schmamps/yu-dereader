@@ -7,6 +7,9 @@ center > table tr > td:nth-child(2) > img {
   background-repeat: no-repeat;
   width: auto;
 }
+center > table tr > td:nth-child(2) > img.pixel {
+  image-rendering: pixelated;
+}
 
 .egg td > div {
   width: 750px;
@@ -14,6 +17,9 @@ center > table tr > td:nth-child(2) > img {
   display: flex;
   justify-content: space-between;
   border-bottom: 1px dotted #eee;
+}
+.egg td label span {
+  display: none;
 }
 .egg h2 {
   float: left;
