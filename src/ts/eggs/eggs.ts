@@ -1,35 +1,30 @@
-import * as find from './find';
-
-
-export type EasterEgg = {
-	title: string,
-	content: string,
-};
+import * as rendering from './rendering';
+import * as contact from './contact';
+import * as rss from './rss';
+import * as title from './title';
+import * as views from './views';
+import { EggData, EggGetter } from './types';
 
 
 /**
- * List content easter eggs
- * @throws
- */
-async function listEggs(
-	srcElm: HTMLElement
-): Promise<EasterEgg[]> {
-	const eggTitles = Object.keys(find);
-	const hatch = async function(eggTitle: string) {
-		const content = find[eggTitle](srcElm);
-
-		return {title: eggTitle, content,};
-	};
-
-	return Promise.
-		all(eggTitles.map(hatch)).
-		catch((e) => {
-			e.__ = 'listing content eggs'
-
-			throw e;
-		});
-}
+ * List module keys
+ * @returns {}
+**/
+const listKeys = ():Array<string> => ([
+	'title',
+	'contact',
+	'rss',
+	'rendering',
+	'views',
+]);
 
 export {
-	listEggs as listAll,
+	listKeys as keys,
+	title,
+	contact,
+	rss,
+	rendering,
+	views,
+	EggData as Data,
+	EggGetter as Getter,
 };
