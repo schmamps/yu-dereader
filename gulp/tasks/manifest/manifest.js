@@ -60,7 +60,10 @@ const getBuildSettings = (pkg, manif, prod) => {
 		};
 	}
 
-	const version = '0.1.0';
+	const version = ['0'].
+		concat(pkg.version.split('.')).
+		slice(0, 3).
+		join('.');
 	const {host, port} = getTestServer();
 	for (const proto of ['http', 'https']) {
 		manif.content_scripts[0].matches.push(`${proto}://${host}:${port}/*`);
