@@ -67,12 +67,12 @@ const getInput = (views: ComicViewList):HTMLSelectElement => {
 /**
  * Get canonical URL
 **/
-const canonizeURL = (update = {}): URL => {
+const normalizeURL = (update = {}, baseURL = window.location.href): URL => {
 	const ID = 'comic';
-	const url = new URL(window.location.href);
-	const { searchParams: initial } = new URL(window.location.href);
+	const url = new URL(baseURL);
+	const { searchParams: initial } = new URL(baseURL);
 
-	url.pathname = 'index.php';
+	url.pathname = (url.pathname.includes('.php')) ? url.pathname : 'index.php';
 	url.search = ''
 
 	for (const key of [ID, RATHER]) {
@@ -97,6 +97,15 @@ const setViewDisplay = (index: number) => {
 	comic.element.style.transform = `rotateY(${((rotY + 360) % 720)}deg)`;
 	comic.element.style.backgroundPosition = dataset.position;
 	window.setTimeout(updateView, TRANS_DURATION / 2);
+
+	for (const nav of <HTMLAnchorElement[]>dom.all('div.nohover a')) {
+		const url = normalizeURL(
+			{[RATHER]: viewSelector.options[index].value},
+			nav.href
+		);
+
+		nav.href = url.toString();
+	}
 };
 
 /**
@@ -113,7 +122,8 @@ const updateState = (event: PopStateEvent) => {
 **/
 async function initHistory() {
 	const viewOpt = viewSelector.selectedOptions[0];
-	const canonUrl = canonizeURL({
+
+	const canonUrl = normalizeURL({
 		[RATHER]: viewOpt.value,
 		comic: comic.canon.id,
 	});
@@ -135,7 +145,7 @@ async function initHistory() {
 **/
 const setState = (index: number) => {
 	const opt = viewSelector.options[index];
-	const url = canonizeURL({[RATHER]: opt.value});
+	const url = normalizeURL({[RATHER]: opt.value});
 
 	setViewDisplay(opt.index);
 	window.history.pushState(opt.index, document.title, url.toString());
