@@ -31,6 +31,9 @@ to toggle between standard view,
 `&butiwouldratherbereading=thelastdinosaurcomicever`,
 and other variations.
 
+Depending on your screen pixel density, you may or may not care fore the
+image scaling. Hit the `Pixelated` checkbox to toggle that setting.
+
 ## Installation
 
 ### Chrome
