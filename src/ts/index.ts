@@ -1,25 +1,16 @@
 import * as comic from './comic';
 import * as eggs from './eggs';
-import * as present from './present';
-import * as views from './views';
+import * as display from './display'
+
 
 
 const main = () => {
-	const element = comic.get.element();
-	const canon = comic.get.canon();
+	for (const key of eggs.keys()) {
+		const getEgg = <eggs.Getter>eggs[key].get;
+		const layEgg = <display.EggLayer>display[key];
 
-	eggs.
-		listAll(element).
-		then(present.eggs).
-		catch(present.error('Eggs'));
-
-	views.
-		listAll().
-		then((views) => present.views(views, canon)).
-		then((vwSel: HTMLSelectElement) => {
-			present.interface(element, canon, vwSel)
-		}).
-		catch(present.error('Views'));
+		getEgg().then((e) => layEgg(e.head, e.val));
+	}
 };
 
 main();
