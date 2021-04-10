@@ -1,11 +1,18 @@
 import * as dom from '../dom';
-import { Canon } from './types';
+
+
+interface Canon {
+	id: number,
+	src: string,
+	element: HTMLImageElement,
+};
+
 
 /**
  * Get canonical path to comic
  * @throws
 **/
-const getCanonSrc = (): string => {
+const getSrc = (): string => {
 	const elm = dom.meta('og:image');
 
 	if (!elm) {
@@ -34,7 +41,7 @@ const getCanonURL = (): URL => {
  * Get comic ID
  * @throws
 **/
-const getCanonID = (): number => {
+const getId = (): number => {
 	try {
 		const url = getCanonURL();
 
@@ -61,24 +68,24 @@ const getElement = (): HTMLImageElement => {
 		'td:nth-child(2) img:last-child'
 	].join(' > '));
 
-	if (found) { return <HTMLImageElement> found; }
+	if (found) {
+		return <HTMLImageElement>found;
+	}
 
 	throw new Error('comic not found');
 };
 
 /**
- * Get image src and ID of canon
- * @throws
+ * Get canonical properties
 **/
-const getCanon = (): Canon => {
-	return {
-		id: getCanonID(),
-		src: getCanonSrc(),
-	};
+const getCanon = ():Canon => {
+	const id = getId();
+	const src = getSrc();
+	const element = getElement();
+
+	return {id, src, element,};
 };
 
+const canon = getCanon();
 
-export {
-	getCanon as canon,
-	getElement as element,
-};
+export { canon, Canon, };
