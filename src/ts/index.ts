@@ -1,9 +1,10 @@
-import * as comic from './comic';
 import * as eggs from './eggs';
 import * as display from './display'
 
 
-
+/**
+ * main routine
+ */
 const main = () => {
 	for (const key of eggs.keys()) {
 		const getEgg = <eggs.Getter>eggs[key].get;

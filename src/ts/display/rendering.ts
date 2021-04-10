@@ -1,5 +1,5 @@
-import * as comic from '../comic';
 import * as dom from '../dom';
+import { canon } from '../canon';
 import { deposit } from './nest';
 import * as rendering from '../eggs/rendering';
 
@@ -13,10 +13,10 @@ const setRender = (pixelated: boolean):void => {
 	const CLASS_NAME = 'pixel';
 
 	if (pixelated) {
-		comic.element.classList.add(CLASS_NAME)
+		canon.element.classList.add(CLASS_NAME)
 	}
 	else {
-		comic.element.classList.remove(CLASS_NAME);
+		canon.element.classList.remove(CLASS_NAME);
 	}
 };
 

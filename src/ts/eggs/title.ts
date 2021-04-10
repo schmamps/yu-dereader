@@ -1,4 +1,4 @@
-import * as comic from '../comic';
+import { canon } from '../canon';
 import { EggData } from './types';
 import NOT_FOUND from './not_found';
 
@@ -11,7 +11,7 @@ const KEY = 'title';
  */
 const get = async function getTitleAttr(): Promise<EggData> {
 	const head = NAME;
-	const val = comic.element.title ?? NOT_FOUND;
+	const val = canon.element.title ?? NOT_FOUND;
 
 	return {head, val};
 }

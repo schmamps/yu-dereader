@@ -1,5 +1,5 @@
-import * as comic from '../comic';
 import * as dom from '../dom';
+import { canon } from '../canon';
 import { deposit } from './nest';
 import { ComicView, ComicViewList } from '../eggs/views';
 
@@ -24,7 +24,7 @@ const getOption = (view: ComicView, selected: String): HTMLOptionElement => {
 	option.value = view.param ?? '';
 	option.selected = (option.value == selected);
 	option.dataset.position = view.position ?? '0 0'
-	option.dataset.src = (view.src) ? getPath(view.src) : comic.canon.src;
+	option.dataset.src = (view.src) ? getPath(view.src) : canon.src;
 
 	return option;
 };
@@ -91,11 +91,11 @@ const normalizeURL = (update = {}, baseURL = window.location.href): URL => {
 **/
 const setViewDisplay = (index: number) => {
 	const {dataset} = viewSelector.options[index];
-	const rotY = Number(comic.element.style.transform.replace(/\D/g, ''));
-	const updateView = () => { comic.element.src = dataset.src; };
+	const rotY = Number(canon.element.style.transform.replace(/\D/g, ''));
+	const updateView = () => { canon.element.src = dataset.src; };
 
-	comic.element.style.transform = `rotateY(${((rotY + 360) % 720)}deg)`;
-	comic.element.style.backgroundPosition = dataset.position;
+	canon.element.style.transform = `rotateY(${((rotY + 360) % 720)}deg)`;
+	canon.element.style.backgroundPosition = dataset.position;
 	window.setTimeout(updateView, TRANS_DURATION / 2);
 
 	for (const nav of <HTMLAnchorElement[]>dom.all('div.nohover a')) {
@@ -125,7 +125,7 @@ async function initHistory() {
 
 	const canonUrl = normalizeURL({
 		[RATHER]: viewOpt.value,
-		comic: comic.canon.id,
+		comic: canon.id,
 	});
 
 	window.history.replaceState(
@@ -187,16 +187,16 @@ async function initComic() {
 		`background-position 0ms ease ${delay}ms`
 	].join(', ')
 
-	comic.element.style.backgroundImage = `url(${comic.canon.src})`
-	comic.element.style.transition = transProp;
-	comic.element.setAttribute(
+	canon.element.style.backgroundImage = `url(${canon.src})`
+	canon.element.style.transition = transProp;
+	canon.element.setAttribute(
 		'title',
 		'DOUBLE CLICK FOR MORE AWESOME FUN TIMES!'
 	);
 }
 
 async function initFlip() {
-	dom.listen(comic.element).on('dblclick', onFlip);
+	dom.listen(canon.element).on('dblclick', onFlip);
 }
 
 
