@@ -1,28 +1,28 @@
-import views from '../../../anqwtz/app/data/views.json';
+import overlays from '../../../anqwtz/app/data/overlays.json';
 
 
 type HasCategoryID = { catID:number, };
-type ViewDefaults = ComicView & HasCategoryID;
-type BasicView = Partial<ViewDefaults>;
-type ViewData = {
+type ViewDefaults = ComicOverlay & HasCategoryID;
+type BasicOverlay = Partial<ViewDefaults>;
+type OverlayData = {
 	categories:string[],
 	defaults:ViewDefaults,
-	views:BasicView[],
+	overlays:BasicOverlay[],
 };
-type ComicView = {
+type ComicOverlay = {
 	title:string,
 	src:string,
 	param:string,
 	position:string,
 };
-type ComicViewList = Map<string, ComicView[]>;
+type ComicViewList = Map<string, ComicOverlay[]>;
 
 /**
  * Sort views within a category
 **/
 const sortViews = (
-	a:ComicView,
-	b:ComicView
+	a:ComicOverlay,
+	b:ComicOverlay
 ): number => {
 	if (b.src === '') {
 		return 1;
@@ -54,7 +54,7 @@ const sortCategories = (viewList:ComicViewList): ComicViewList => {
 /**
  * Get short form of title
 **/
-const getShorty = (basic:BasicView, defaultTitle:string): string => {
+const getShorty = (basic:BasicOverlay, defaultTitle:string): string => {
 	const {param = false, title = defaultTitle} = basic;
 
 	if (param === '') { return param; }
@@ -67,10 +67,10 @@ const getShorty = (basic:BasicView, defaultTitle:string): string => {
  * Flesh out complete view data
 **/
 const expandView = (
-	basic:BasicView,
+	basic:BasicOverlay,
 	categories:string[],
 	defaults:ViewDefaults,
-): [ComicView, string] => {
+): [ComicOverlay, string] => {
 	const short = getShorty(basic, defaults.title)
 
 	return [
@@ -88,10 +88,10 @@ const expandView = (
 /**
  * Categorize views
 **/
-const categorizeViews = (vwData:ViewData): ComicViewList => {
+const categorizeViews = (vwData:OverlayData): ComicViewList => {
 	const mapped = new Map(vwData.categories.map((catName) => [catName, []]));
 
-	vwData.views.forEach((basic) => {
+	vwData.overlays.forEach((basic) => {
 		const [view, catName] = expandView(
 			basic,
 			vwData.categories,
@@ -109,13 +109,11 @@ const categorizeViews = (vwData:ViewData): ComicViewList => {
 **/
 const getViews = ():Promise<ComicViewList> => {
 	return Promise.
-		resolve(views).
+		resolve(overlays).
 		then(categorizeViews).
 		then(sortCategories);
 };
 
 export {
-	getViews as get,
-	ComicView,
-	ComicViewList,
+	getViews as get
 };
