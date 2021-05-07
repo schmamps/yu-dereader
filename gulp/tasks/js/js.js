@@ -22,7 +22,7 @@ const run = () => {
 	const pipeline = [
 		maps.init,
 		rollup.getPipe(cfg),
-		maps.write,
+		// maps.write,
 		cfg.dest,
 	].filter((_, i) => cfg.dev || i % 2 === 1);
 
