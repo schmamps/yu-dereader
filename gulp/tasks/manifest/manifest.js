@@ -73,13 +73,27 @@ const getBuildSettings = (pkg, manif, prod) => {
 	return {version, content_scripts: manif.content_scripts};
 };
 
+const getIcons = (manif, prod) => {
+	if (!prod) {
+		return manif.icons;
+	}
+
+	return {
+		'128': manif.web_accessible_resources[0].resources[0],
+	};
+};
+
 const update = (dataSources) => {
 	const [manif, pkg, prod] = dataSources;
 	const name = pkg.description;
 	const {version, content_scripts: cs} = getBuildSettings(pkg, manif, prod);
+	const icons = getIcons(manif, prod);
 
-	// eslint-disable-next-line camelcase
-	return Object.assign({}, manif, {name, version, content_scripts: cs});
+	return Object.assign(
+		{},
+		manif,
+		// eslint-disable-next-line camelcase
+		{name, version, content_scripts: cs, icons});
 };
 
 const write = (data, cfg) => {
