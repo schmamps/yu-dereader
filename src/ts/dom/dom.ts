@@ -25,7 +25,8 @@ const isAttrKey = (keyName:string):boolean => {
 		'className',
 		'classList',
 		'textContent',
-		'dataset'
+		'dataset',
+		'checked',
 	].includes(keyName);
 };
 
@@ -42,7 +43,7 @@ const attrify = (
 	}
 
 	if (optSpec.checked) {
-		attrs.checked = optSpec.checked;
+		attrs.checked = true;
 	}
 
 	return attrs;
