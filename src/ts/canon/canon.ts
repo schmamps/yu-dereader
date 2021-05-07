@@ -17,7 +17,7 @@ const getSrc = (): string => {
 		throw new Error('error getting canonical image');
 	}
 
-	return elm.content;
+	return elm.content.replace(/^http.+(comics.+)$/, '$1');
 };
 
 /**
