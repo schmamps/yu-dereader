@@ -1,4 +1,4 @@
-import { PIXELATED } from '../../consts';
+import { UNPIXEL } from '../../consts';
 import * as dom from '../../dom';
 import * as rendering from '../../rendering';
 
@@ -6,17 +6,16 @@ import * as rendering from '../../rendering';
  * Handle rendering change
 **/
 const onChange = (
-	renderCtl:HTMLInputElement,
 	comic:HTMLImageElement
 ) => (
 	e:InputEvent
 ) => {
-	const toggleClass = (add) => {
-		if (add) {
-			comic.classList.add(PIXELATED);
+	const toggleClass = (checked) => {
+		if (checked) {
+			comic.classList.remove(UNPIXEL);
 		}
 		else {
-			comic.classList.remove(PIXELATED);
+			comic.classList.add(UNPIXEL);
 		}
 	}
 
@@ -34,7 +33,11 @@ const hatchRendering = (
 ) => {
 	dom.
 		listen(renderCtl).
-		on('change', onChange(renderCtl, comic));
+		on('change', onChange(comic));
+
+	if (!renderCtl.checked) {
+		comic.classList.add(UNPIXEL);
+	}
 };
 
 export {
