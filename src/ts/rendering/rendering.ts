@@ -1,5 +1,3 @@
-
-
 const KEY = 'rendering'
 
 /**
@@ -8,7 +6,7 @@ const KEY = 'rendering'
 const getValue = () => {
 	const prom = new Promise<boolean>((resolve) => {
 		chrome.storage.local.get([KEY], (value:any) => {
-			resolve(!!(value[KEY] ?? false));
+			resolve(!!(value[KEY] ?? true));
 		});
 	});
 
