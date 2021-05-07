@@ -7,6 +7,7 @@ module.exports = {
 	output: {
 		file: 'build/dev/yu.js',
 		format: 'iife',
+		sourcemap: 'inline',
 	},
 	plugins: [
 		typescript({
