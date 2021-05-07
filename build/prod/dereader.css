@@ -2,7 +2,6 @@ center > table tr:nth-child(1) > td:nth-child(2) {
   width: 750px;
   height: 530px;
 }
-
 center > table tr > td:nth-child(2) > img {
   background-repeat: no-repeat;
   width: auto;
@@ -18,14 +17,14 @@ center > table tr > td:nth-child(2) > img.pixel {
   justify-content: space-between;
   border-bottom: 1px dotted #eee;
 }
-.egg td label span {
-  display: none;
+.egg td > div div {
+  display: flex;
 }
 .egg h2 {
   float: left;
   width: 20%;
   margin: 0.2rem 0;
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: bold;
   text-transform: initial;
 }
@@ -33,4 +32,39 @@ center > table tr > td:nth-child(2) > img.pixel {
   display: block;
   max-width: 80%;
   text-align: justify;
+}
+.egg a {
+  color: #000;
+  text-decoration: none;
+}
+.egg a:hover {
+  color: #00b;
+  text-decoration: underline;
+}
+.egg label span {
+  display: block;
+  text-indent: -10em;
+  overflow: hidden;
+}
+.egg label select {
+  box-sizing: border-box;
+  height: 2.5rem;
+  margin-right: 0.5rem;
+  padding: 0 0.5em;
+  background-color: rgba(137, 255, 59, 0.125);
+  border-radius: 0.333rem;
+}
+.egg label input {
+  display: none;
+}
+.egg label input + span {
+  width: 2.5rem;
+  height: 2.5rem;
+  background-size: 2.5rem 2.5rem;
+  background-repeat: no-repeat;
+  background-image: url("chrome-extension://__MSG_@@extension_id__/eye-smooth.png");
+  background-position: center center;
+}
+.egg label input:checked + span {
+  background-image: url("chrome-extension://__MSG_@@extension_id__/eye-con.png");
 }
