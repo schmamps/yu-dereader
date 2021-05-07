@@ -5,6 +5,7 @@ center > table tr:nth-child(1) > td:nth-child(2) {
 center > table tr > td:nth-child(2) > img {
   background-repeat: no-repeat;
   width: auto;
+  image-rendering: unset;
 }
 center > table tr > td:nth-child(2) > img.pixel {
   image-rendering: pixelated;
@@ -36,10 +37,12 @@ center > table tr > td:nth-child(2) > img.pixel {
 .egg a {
   color: #000;
   text-decoration: none;
+  font-weight: normal;
 }
 .egg a:hover {
   color: #00b;
   text-decoration: underline;
+  background-color: transparent;
 }
 .egg label span {
   display: block;
