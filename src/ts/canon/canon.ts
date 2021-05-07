@@ -1,6 +1,5 @@
 import * as dom from '../dom';
 
-
 interface Canon {
 	id:number,
 	src:string,
@@ -54,7 +53,6 @@ const getId = (): number => {
 
 };
 
-
 /**
  * Get canonical comic element
  * @throws
@@ -77,6 +75,5 @@ const getElement = (): HTMLImageElement => {
 const id = getId();
 const src = getSrc();
 const element = getElement();
-
 
 export { Canon, id, src, element };
