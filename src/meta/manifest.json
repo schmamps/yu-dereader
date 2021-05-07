@@ -25,7 +25,7 @@
 	},
 	"web_accessible_resources": [
 		{
-			"resources": ["eye-con.png", "eye-smooth.png", "yu.js.map"],
+			"resources": ["eye-con.png", "eye-smooth.png"],
 			"matches": ["<all_urls>"]
 		}
 	]
