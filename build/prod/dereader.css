@@ -5,10 +5,10 @@ center > table tr:nth-child(1) > td:nth-child(2) {
 center > table tr > td:nth-child(2) > img {
   background-repeat: no-repeat;
   width: auto;
-  image-rendering: unset;
-}
-center > table tr > td:nth-child(2) > img.pixel {
   image-rendering: pixelated;
+}
+center > table tr > td:nth-child(2) > img.unpixelate {
+  image-rendering: unset;
 }
 
 .egg td > div {
