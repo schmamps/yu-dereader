@@ -2,11 +2,10 @@ import * as dom from '../dom';
 
 
 interface Canon {
-	id: number,
-	src: string,
-	element: HTMLImageElement,
+	id:number,
+	src:string,
+	element:HTMLImageElement,
 };
-
 
 /**
  * Get canonical path to comic
@@ -75,17 +74,9 @@ const getElement = (): HTMLImageElement => {
 	throw new Error('comic not found');
 };
 
-/**
- * Get canonical properties
-**/
-const getCanon = ():Canon => {
-	const id = getId();
-	const src = getSrc();
-	const element = getElement();
+const id = getId();
+const src = getSrc();
+const element = getElement();
 
-	return {id, src, element,};
-};
 
-const canon = getCanon();
-
-export { canon, Canon, };
+export { Canon, id, src, element };
