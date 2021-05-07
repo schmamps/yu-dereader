@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
-		"lib": ["ES2017", "dom"],
+		"lib": ["dom", "ES2017", "ES2019.Array"],
 		"moduleResolution": "Node",
 		"removeComments": true,
 		"resolveJsonModule": true,

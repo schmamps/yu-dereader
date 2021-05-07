@@ -10,7 +10,7 @@ module.exports = {
 	},
 	plugins: [
 		typescript({
-			lib: ['DOM', 'ES2017'],
+			lib: ['DOM', 'ES2017', 'ES2019.Array'],
 			target: 'ES6'
 		}),
 		jsonImport(),
