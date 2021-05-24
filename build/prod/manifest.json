@@ -2,7 +2,7 @@
 	"manifest_version": 3,
 	"name": "Yu Dereader - Dinosaur Comics Fun Times!",
 	"short_name": "Yu Dereader",
-	"version": "2.3.0",
+	"version": "2.3.1",
 	"description": "Yu Dereader reveals Dinosaur Comics easter eggs for you, the reader",
 	"permissions": [
 		"storage"

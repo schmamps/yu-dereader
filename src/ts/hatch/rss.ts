@@ -47,7 +47,7 @@ const getBlogTop = (hash:string):number => {
 const onClick = (e:MouseEvent) => {
 	e.preventDefault();
 
-	const fudge = -6;
+	const fudge = window.scrollY -6;
 	const top = fudge + getBlogTop((<HTMLAnchorElement>e.currentTarget).hash);
 	const behavior = 'smooth';
 
