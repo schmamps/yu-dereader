@@ -2,7 +2,7 @@
 
 [Yu Dereader](http://www.qwantz.com/index.php?comic=3413),
 formerly known as [Angola Maldives](http://qwantz.com/index.php?comic=2319),
-is a Chrome extension with a handful of purposes:
+is a browser extension/Siri shortcut with a handful of purposes:
 
 1.   reveal Dinosaur Comics' easter eggs
 1.   providing a sample Chrome content script
@@ -25,7 +25,12 @@ this extension **does not and will never**:
 
 ## Usage
 
-Most eggs are displayed automatically.
+Once you have added the
+[shortcut](https://www.icloud.com/shortcuts/821433b9dc2341e099faf16945527592)
+for iOS, the eggs will be displayed after you click:
+`Share > Yu Dereader (Qwantz)`.
+
+On desktop browsers, most eggs are displayed automatically.
 Double click the comic or use the dropdown
 to toggle between standard view,
 `&butiwouldratherbereading=thelastdinosaurcomicever`,
