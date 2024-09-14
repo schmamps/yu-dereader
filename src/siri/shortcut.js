@@ -96,6 +96,10 @@ and using 'Request Desktop Website' from the [Aa] menu:
 
 		style.classList.add('egg');
 		style.textContent = `
+center > table tr > td:nth-child(2) > img {
+  image-rendering: pixelated;
+}
+
 body header {
 	background-color: #f00;
 }
