@@ -1,15 +1,24 @@
 import * as dom from '../dom';
 
+/**
+ * Wrap encoded `textContent` in a SPAN element
+ * @param textContent
+ */
+const createTextSpan = (textContent: string): HTMLSpanElement => {
+	const element = dom.create('span');
+
+	element.textContent = textContent;
+
+	return element;
+}
 
 /**
  * Convert `contentVal` to element if necessary
 **/
 const elementize = (contentVal:HTMLElement|string):HTMLElement => {
-	if (typeof(contentVal) !== 'string') {
-		return contentVal;
-	}
+	const notStr = (typeof(contentVal) !== 'string');
 
-	return dom.create('span', contentVal);
+	return (notStr) ? contentVal : createTextSpan(contentVal);
 };
 
 /**
@@ -34,5 +43,6 @@ const depositEgg = ({head, val}) => {
 }
 
 export {
-	depositEgg as deposit,
+	depositEgg as deposit
 };
+

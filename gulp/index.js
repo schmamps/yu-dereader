@@ -1,13 +1,10 @@
-const help = require('./lib/help');
-const modules = require('./lib/task/modules');
+const helpModule = require('./lib/help');
+const taskModules = require('./lib/task/modules').load(`${__dirname}/tasks`);
 
+Object.keys(taskModules).map(String).sort().forEach((tName) => {
+	// add `[module].run` as gulp task named '[module]'
+	module.exports[tName] = taskModules[tName].run;
+});
 
-const taskMods = modules.load(`${__dirname}/tasks`);
-
-for (const entry of Object.entries(taskMods)) {
-	const [taskName, taskMod] = entry;
-
-	module.exports[taskName] = taskMod.run;
-}
-
-module.exports.default = help.menu(taskMods);
+// add help menu task
+module.exports.default = helpModule.menu(taskModules);

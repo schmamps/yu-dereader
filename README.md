@@ -2,12 +2,12 @@
 
 [Yu Dereader](http://www.qwantz.com/index.php?comic=3413),
 formerly known as [Angola Maldives](http://qwantz.com/index.php?comic=2319),
-is a Chrome extension with a handful of purposes:
+is a browser extension/Siri shortcut with a handful of purposes:
 
-1. reveal Dinosaur Comics' easter eggs
-1. providing a sample Chrome content script
-1. experimentation with various concepts
-1. to have 100% original work in my GitHub profile
+1.   reveal Dinosaur Comics' easter eggs
+1.   providing a sample Chrome content script
+1.   experimentation with various concepts
+1.   to have 100% original work in my GitHub profile
 
 From its humble beginnings as a simple user script,
 this extension evolved into an intentionally overbuilt system
@@ -19,13 +19,18 @@ While many things have changed, others remain the same.
 Yu Dereader will always love you, the reader, and as such,
 this extension **does not and will never**:
 
-* read, much less upload user data
-* download unnecessary or external data
-* insert irrelevant content like ads or even kitten GIFs
+*   read, much less upload user data
+*   download unnecessary or external data
+*   insert irrelevant content like ads or even kitten GIFs
 
 ## Usage
 
-Most eggs are displayed automatically.
+Once you have added the
+[shortcut](https://www.icloud.com/shortcuts/821433b9dc2341e099faf16945527592)
+for iOS, the eggs will be displayed after you click:
+`Share > Yu Dereader (Qwantz)`.
+
+On desktop browsers, most eggs are displayed automatically.
 Double click the comic or use the dropdown
 to toggle between standard view,
 `&butiwouldratherbereading=thelastdinosaurcomicever`,
@@ -42,10 +47,10 @@ Google wants money to put this extension in the Chrome Web Store.
 Feel free to send me some.
 Until then:
 
-1. open Chrome
-1. go to Window > Extensions
-1. click 'Load Unpacked Extension'
-1. select the `./build/prod` subdirectory of this project
+1.   open Chrome
+1.   go to Window > Extensions
+1.   click 'Load Unpacked Extension'
+1.   select the `./build/prod` subdirectory of this project
 
 ## Roll Your Own
 
