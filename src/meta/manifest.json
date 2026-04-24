@@ -17,8 +17,7 @@
 				"dereader.css"
 			],
 			"matches": [
-				"http://*.qwantz.com/*",
-				"https://*.qwantz.com/*"
+				"*://*.qwantz.com/*"
 			]
 		}
 	],
@@ -35,5 +34,15 @@
 				"<all_urls>"
 			]
 		}
-	]
+	],
+	"browser_specific_settings": {
+		"gecko": {
+			"id": "yu-dereader@champs.name",
+			"data_collection_permissions": {
+				"required": [
+					"none"
+				]
+			}
+		}
+	}
 }
