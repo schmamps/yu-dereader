@@ -1,30 +1,53 @@
-import * as canon from './canon';
-import * as contact from './contact';
-import * as egg from './egg';
+import { error as err } from './error';
 import * as hatch from './hatch';
 import * as lay from './lay';
-import * as rss from './rss';
-import * as title from './title';
-import * as view from './view';
-
+import * as seed from './seed';
 
 /**
  * main routine
  */
 const main = () => {
-	const seed = {title, contact, rss, view};
+	const canon = seed.canon();
 
-	for (const name of Object.keys(seed)) {
-		const egg = {
-			seed: <egg.Seeder>seed[name].get,
-			lay: <egg.Layer>lay[name],
-			hatch: <egg.Hatcher>hatch[name],
-		};
+	Promise.
+		resolve().
+		then(seed.hidpi).
+		then(lay.hidpi).
+		then(hatch.hidpi).
+		catch(err('HiDPI', canon))
+		;
 
-		egg.seed(canon).
-			then((seeded) => egg.lay(seeded, canon)).
-			then((laid) => egg.hatch(laid, canon));
-	}
+	Promise.
+		resolve(canon).
+		then(seed.title).
+		then(lay.title).
+		then(hatch.title).
+		catch(err('Title', canon))
+		;
+
+	Promise.
+		resolve().
+		then(seed.contact).
+		then(lay.contact).
+		then(hatch.contact).
+		catch(err('Contact', canon))
+		;
+
+	Promise.
+		resolve().
+		then(seed.rss).
+		then(lay.rss).
+		then(hatch.rss).
+		catch(err('RSS', canon))
+		;
+
+	Promise.
+		resolve().
+		then(seed.overlays).
+		then((overlays) => lay.overlays(overlays, canon.src)).
+		then((control) => hatch.overlays(control, canon)).
+		catch(err('Overlays', canon))
+		;
 };
 
 main();

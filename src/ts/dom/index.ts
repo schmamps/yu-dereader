@@ -1,11 +1,14 @@
 import * as is from './is';
 
 interface DomQuery {
-	(sel:string, parent: HTMLElement | Document): null | HTMLElement
+	(sel: string, parent: HTMLElement | Document): null | HTMLElement
 };
 
 interface EventListener {
-	on: (eventName:string, eventHandler:Function) => any,
+	on: (
+		eventName: string,
+		eventHandler: CallableFunction
+	) => any,
 };
 
 interface ElementParameters {
@@ -19,7 +22,7 @@ interface ElementParameters {
 /**
  * Test `keyName` as valid attribute
 **/
-const isAttrKey = (keyName:string):boolean => {
+const isAttrKey = (keyName: string): boolean => {
 	return ![
 		'innerHTML',
 		'className',
@@ -34,8 +37,8 @@ const isAttrKey = (keyName:string):boolean => {
  * Get pared-down element attribute object
 **/
 const attrify = (
-	optSpec:Record<string, any>
-):Record<string, any> => {
+	optSpec: Record<string, any>
+): Record<string, any> => {
 	const attrs = <Record<string, any>>{};
 
 	for (const key of Object.keys(optSpec).filter(isAttrKey)) {
@@ -53,9 +56,9 @@ const attrify = (
  * Get classList from 1: `classSpec` or 2: `listSpec`
 **/
 const classify = (
-	classSpec:string,
-	listSpec:string[]
-):string[] => {
+	classSpec: string,
+	listSpec: string[]
+): string[] => {
 	const cList = classSpec ? classSpec.split(' ') : (listSpec ?? []);
 
 	return cList.
@@ -68,20 +71,20 @@ const classify = (
  * Parse rest arguments for `create()`
 **/
 const parseCreateArgs = (
-	args:any[]
-):ElementParameters => {
+	args: any[]
+): ElementParameters => {
 	const flat = args.flat(Infinity);
 	const children = flat.filter(is.child);
 	const prop = flat.
 		filter(is.propList).
 		reduce((all, one) => Object.assign(all, one), {})
 	const html = flat.filter(is.string).join(' ') ||
-			(prop.innerHTML ?? prop.textContent ?? '')
+		(prop.innerHTML ?? prop.textContent ?? '')
 
 	const dataset = prop.dataset ?? {}
 	const classList = classify(prop.class ?? '', prop.classList ?? []);
 
-	return {attrs: attrify(prop), html, classList, dataset, children};
+	return { attrs: attrify(prop), html, classList, dataset, children };
 };
 
 /**
@@ -94,11 +97,11 @@ const parseCreateArgs = (
  * 	HTMLElement: child of created element
 **/
 const create = (
-	tagName:string,
-	...args:any[]
-): HTMLElement => {
+	tagName: string,
+	...args: any[]
+): Element => {
 	const elm = document.createElement(tagName);
-	const {html, classList, children, dataset, attrs} = parseCreateArgs(args);
+	const { html, classList, children, dataset, attrs } = parseCreateArgs(args);
 
 	elm.innerHTML = html;
 	classList.forEach((className) => elm.classList.add(className));
@@ -106,41 +109,44 @@ const create = (
 	Object.entries(dataset).forEach(([key, val]) => elm.dataset[key] = val);
 	Object.entries(attrs).forEach(([key, val]) => elm.setAttribute(key, val));
 
-	return elm;
+	return <Element>elm;
 };
 
 /**
  * List elements matching `xPath`
 **/
-const evalAll = (xPath:string): XPathResult => {
+const evalAll = (xPath: string): XPathResult => {
 	return document.evaluate(xPath, document, null, 0);
 };
 
 /**
  * Get first element matching `xPath`
 **/
-const evalOne = (xPath:string): Node => {
+const evalOne = (xPath: string): Node | null => {
 	const all = evalAll(xPath);
 
-	return all.iterateNext();
+	return all.iterateNext() ?? null;
 };
 
 /**
  *  Chain addEventListener to `context`
 **/
 const listen = (context: HTMLElement | Window): EventListener => {
-	const on = (eventName, handler) => {
-		context.addEventListener(eventName, handler);
+	const on = (eventName: string, handler: CallableFunction) => {
+		context.addEventListener(
+			eventName,
+			<EventListenerOrEventListenerObject><unknown>handler
+		);
 	};
 
-	return {on};
+	return { on };
 };
 
 /**
  * Wrap `context.querySelector()`
 **/
 const query = (
-	sel:string,
+	sel: string,
 	context: HTMLElement | Document = document
 ): HTMLElement | null => {
 	return context.querySelector(sel);
@@ -150,7 +156,7 @@ const query = (
  * Wrap `context.querySelectorAll()`
  */
 const all = (
-	sel:string,
+	sel: string,
 	context: HTMLElement | Document = document
 ): HTMLElement[] => {
 	return Array.from(context.querySelectorAll(sel));
@@ -160,15 +166,15 @@ const all = (
 /**
  * Wrap `dom.query` for meta
 **/
-const meta = (property:string): HTMLMetaElement => {
-	return <HTMLMetaElement> query(`meta[property="${property}"]`);
+const meta = (property: string): HTMLMetaElement => {
+	return <HTMLMetaElement>query(`meta[property="${property}"]`);
 };
 
 
 /**
  * Get values of `sel:SelectElement` options
 **/
-const values = (sel:HTMLSelectElement):string[] => {
+const values = (sel: HTMLSelectElement): string[] => {
 	return Array.
 		from(sel.options).
 		map((opt) => opt.value ?? '');
@@ -178,25 +184,43 @@ const values = (sel:HTMLSelectElement):string[] => {
  * Wrap `children` in a `tagName` element
 **/
 const wrap = (
-	tagName:string,
-	...children
-):HTMLElement => {
+	tagName: string,
+	...children: [Element]
+): Element => {
 	const parent = create(tagName);
 
 	for (const child of children.flat(Infinity)) {
-		parent.appendChild(<HTMLElement>child);
+		parent.appendChild(child);
 	}
 
 	return parent;
 };
 
+const depositEgg = (head: string, content: Element) => {
+	const parent = query('center table tbody');
+	if (!parent) return;
+
+	const row = create('tr', { class: 'egg' });
+	const td = create('td', { colspan: '3' });
+	const div = create('div', { textContent: head });
+	const h2 = create('h2');
+
+	div.appendChild(h2);
+	div.appendChild(content);
+	td.appendChild(div);
+	row.appendChild(td);
+	parent.appendChild(row);
+}
+
 export {
-	create,
-	evalOne as eval,
-	listen,
-	meta,
-	query,
-	all,
-	values,
-	wrap,
+	all, /********************/
+	create, /*****************/
+	depositEgg as deposit, /**/
+	evalOne as eval, /********/
+	listen, /*****************/
+	meta, /*******************/
+	query, /******************/
+	values, /*****************/
+	wrap /********************/
 };
+
