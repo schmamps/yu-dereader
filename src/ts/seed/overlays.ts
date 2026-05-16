@@ -103,8 +103,10 @@ const categorizeViews = (vwData: OverlayData): OverlayCollection => {
  * List all overlay views
 **/
 const listViews = (): Promise<OverlayCollection> => {
+	const overlays = OVERLAYS as OverlayData;
+
 	return Promise.
-		resolve(OVERLAYS).
+		resolve(overlays).
 		then(categorizeViews).
 		then(sortCategories);
 };

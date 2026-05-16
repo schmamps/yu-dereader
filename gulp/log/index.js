@@ -1,5 +1,5 @@
-const ansiColors = require('ansi-colors');
-const fancyLog = require('fancy-log');
+import * as ansiColors from 'ansi-colors';
+import * as fancyLog from 'fancy-log';
 
 
 const logError = (msg, subject = false) => {
@@ -11,6 +11,4 @@ const logError = (msg, subject = false) => {
 	fancyLog.error(...args);
 };
 
-module.exports = {
-	error: logError,
-};
+export { logError as error };

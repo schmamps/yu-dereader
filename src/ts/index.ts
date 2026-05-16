@@ -1,4 +1,3 @@
-import { error as err } from './error';
 import * as hatch from './hatch';
 import * as lay from './lay';
 import * as seed from './seed';
@@ -8,46 +7,48 @@ import * as seed from './seed';
  */
 const main = () => {
 	const canon = seed.canon();
+	const err = (category: string) => {
+		return (e: Error) => {
+			console.group('Yu Dereader Error');
+			console.log(`error in category '${category}'`);
+			console.dir(e);
+			console.dir(canon);
+			console.groupEnd();
+		}
+	}
 
-	Promise.
-		resolve().
-		then(seed.hidpi).
+	console.dir(canon);
+
+	seed.
+		hidpi().
 		then(lay.hidpi).
 		then(hatch.hidpi).
-		catch(err('HiDPI', canon))
+		catch(err('HiDPI'))
 		;
 
-	Promise.
-		resolve(canon).
-		then(seed.title).
+	seed.
+		title(canon).
 		then(lay.title).
 		then(hatch.title).
-		catch(err('Title', canon))
-		;
+		catch(err('Title'));
 
-	Promise.
-		resolve().
-		then(seed.contact).
+	seed.
+		contact().
 		then(lay.contact).
 		then(hatch.contact).
-		catch(err('Contact', canon))
-		;
+		catch(err('Contact'));
 
-	Promise.
-		resolve().
-		then(seed.rss).
+	seed.
+		rss().
 		then(lay.rss).
 		then(hatch.rss).
-		catch(err('RSS', canon))
-		;
+		catch(err('RSS'));
 
-	Promise.
-		resolve().
-		then(seed.overlays).
+	seed.
+		overlays().
 		then((overlays) => lay.overlays(overlays, canon.src)).
 		then((control) => hatch.overlays(control, canon)).
-		catch(err('Overlays', canon))
-		;
+		catch(err('Overlays'));
 };
 
 main();

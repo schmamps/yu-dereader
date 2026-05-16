@@ -1,4 +1,4 @@
-const fs = require('fs');
+import * as fs from 'fs';
 
 
 const load = (path) => {
@@ -12,7 +12,4 @@ const stringify = (data) => {
 	return JSON.stringify(data, {}, '\t')
 };
 
-module.exports = {
-	load,
-	stringify,
-};
+export { load, stringify };

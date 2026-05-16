@@ -19,7 +19,7 @@ const getSrc = (): string => {
  * Get canonical URL
  * @throws
 **/
-const getCanonURL = async (): Promise<URL> => {
+const getCanonURL = (): URL => {
 	const elm = dom.meta('og:url');
 
 	if (!elm) {
@@ -34,9 +34,9 @@ const getCanonURL = async (): Promise<URL> => {
  * Get comic ID
  * @throws
 **/
-const getId = async (): Promise<number> => {
+const getId = (): number => {
 	try {
-		const url = await getCanonURL();
+		const url = getCanonURL();
 
 		return Number(url.searchParams.get('comic'));
 	}
@@ -49,7 +49,7 @@ const getId = async (): Promise<number> => {
  * Get canonical comic element
  * @throws
  */
-const getElement = async (): Promise<HTMLImageElement> => {
+const getElement = (): HTMLImageElement => {
 	const found = dom.query([
 		'body',
 		'center tbody',
@@ -67,19 +67,16 @@ const getElement = async (): Promise<HTMLImageElement> => {
 /**
  * Get canonical comic information
  * @returns Canon object
+ * @throws
  */
 const getCanon = (): Canon => {
-	Promise.all([
+	const [id, src, element] = [
 		getId(),
 		getSrc(),
-		getElement(),
-	]).then(([id, src, element]) => {
-		const canon: Canon = { id, src, element };
+		getElement()
+	];
 
-		return canon;
-	});
-
-	return {} as Canon;
+	return { id, src, element } as Canon;
 }
 
 export { getCanon as get };

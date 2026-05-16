@@ -1,5 +1,5 @@
 import { ID, RATHER } from '../consts';
-
+import { QueryParams } from './types';
 
 /**
  * Get URL object from current `window.location.href`
@@ -14,7 +14,7 @@ const getCurrentURL = (): URL => {
  * Update `params` in URL, current or `from` specified URL
 **/
 const updateURL = (
-	params: object,
+	params: QueryParams,
 	from?: string
 ): any => {
 	const base = from ? new URL(from) : getCurrentURL();
@@ -24,7 +24,7 @@ const updateURL = (
 	url.pathname = base.pathname.endsWith(PHP) ? base.pathname : `index${PHP}`;
 
 	for (const key of [ID, RATHER]) {
-		const val = params[key] ?? base.searchParams.get(key);
+		const val = params[key] || base.searchParams.get(key);
 
 		if (val) { url.searchParams.set(key, val); }
 	}

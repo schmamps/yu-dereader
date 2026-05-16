@@ -1,6 +1,7 @@
 import { RATHER, TRANS_DURATION } from '../consts';
 import * as dom from '../dom';
 import { Canon } from '../types/seeding';
+import { QueryParams } from './types';
 import * as urls from './urls';
 
 
@@ -42,7 +43,7 @@ const pushState = (
 	comic: HTMLImageElement,
 	target: HTMLSelectElement
 ) => {
-	const update = { [RATHER]: target.selectedOptions[0].value };
+	const update = { [RATHER]: target.selectedOptions[0].value } as QueryParams;
 	const { src = '', position = '' } = target.selectedOptions[0].dataset;
 
 	for (const arrow of ['left', 'right']) {
@@ -166,7 +167,8 @@ const hatchOverlays = (control: HTMLSelectElement, canon: Canon) => {
 	const overlay = getEffectiveOverlay(
 		dom.values(control),
 		urls.current().searchParams.get(RATHER) ?? '');
-	const permalink = urls.update({ comic: canon.id, [RATHER]: overlay });
+	const comic = canon.id.toString();
+	const permalink = urls.update({ comic, [RATHER]: overlay });
 
 	getOption(control, overlay);
 	initComic(listImages(control), canon.element, canon.src);

@@ -2,11 +2,9 @@
 	"manifest_version": 3,
 	"name": "Yu Dereader - Dinosaur Comics Fun Times!",
 	"short_name": "Yu Dereader",
-	"version": "2.3.3",
+	"version": "3.0.0",
 	"description": "Yu Dereader reveals Dinosaur Comics easter eggs for you, the reader",
-	"permissions": [
-		"storage"
-	],
+	"permissions": [],
 	"content_scripts": [
 		{
 			"all_frames": false,
@@ -24,17 +22,6 @@
 	"icons": {
 		"128": "eye-con.png"
 	},
-	"web_accessible_resources": [
-		{
-			"resources": [
-				"eye-con.png",
-				"eye-smooth.png"
-			],
-			"matches": [
-				"<all_urls>"
-			]
-		}
-	],
 	"browser_specific_settings": {
 		"gecko": {
 			"id": "yu-dereader@champs.name",

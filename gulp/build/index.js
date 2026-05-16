@@ -1,8 +1,22 @@
-const gulp = require('gulp');
-const compose = require('./compose');
-const path = require('./path');
+import * as gulp from 'gulp'
+import * as path from '../path/index.js'
 
 const DEV = 'development';
+
+const compose = (...sources) => {
+	let composed = {};
+
+	for (const source of sources) {
+		try {
+			composed = Object.assign(composed, source);
+		}
+		catch (e) {
+			throw new Error('composition error for value: ' + source.toString());
+		}
+	}
+
+	return composed;
+};
 
 /**
  * @typedef {Object} Configuration
@@ -31,9 +45,7 @@ const configure = (init = {}, override = {}) => {
 	const dir = path.join('.', 'build', dev ? 'dev' : 'prod');
 	const dest = gulp.dest(dir);
 
-	return compose(init, {dev, prod, dir, dest}, override);
+	return compose(init, { dev, prod, dir, dest }, override);
 };
 
-module.exports = {
-	configure,
-};
+export { configure };
