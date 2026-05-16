@@ -4,9 +4,9 @@ const EXPLICIT = ['css', 'js', 'manifest'].
 import * as css from './css.js';
 import * as js from './js.js';
 import * as manifest from './manifest.js';
-import * as watch from './watch.js';
-import * as build from './build.js';
-import * as help from './help.js';
+import * as watchTaskMod from './watch.js';
+import * as buildTaskMod from './build.js';
+import * as helpTaskMod from './help.js';
 
 
 const loadAllExplicitTasks = () => {
@@ -14,11 +14,11 @@ const loadAllExplicitTasks = () => {
 };
 
 const loadAllMetaTasks = (explicit) => {
-	return {
-		help: help.init(explicit),
-		watch: watch.init(explicit),
-		build: build.init(explicit),
-	};
+	const watch = watchTaskMod.init(explicit);
+	const build = buildTaskMod.init(explicit);
+	const help = helpTaskMod.init(Object.assign({}, explicit, { watch, build, }));
+
+	return { watch, build, help };
 };
 
 const listRunners = (explicit, meta) => {
