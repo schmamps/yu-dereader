@@ -1,3 +1,5 @@
+import * as meta from './metadata/index.js';
+
 const init = (explicit) => {
 	return {
 		run: () => {
@@ -5,7 +7,7 @@ const init = (explicit) => {
 				Object.keys(explicit).map((taskName) => explicit[taskName].run())
 			);
 		},
-		desc: async () => { return 'build'; },
+		desc: meta.describe('run all tasks'),
 		abstract: {}
 	};
 }
