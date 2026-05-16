@@ -1,3 +1,3 @@
-import * as manifest from './manifest';
+// import * as manifest from './manifest';
 
-export default manifest;
+// export default manifest;
