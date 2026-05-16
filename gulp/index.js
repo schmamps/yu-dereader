@@ -1,6 +1,3 @@
-const EXPLICIT = ['css', 'js', 'manifest'].
-	slice(0, 1);
-
 import * as css from './css.js';
 import * as js from './js.js';
 import * as manifest from './manifest.js';
@@ -35,6 +32,5 @@ const listRunners = (explicit, meta) => {
 export {
 	loadAllExplicitTasks as loadExplicit,
 	loadAllMetaTasks as loadMeta,
-	listRunners,
-	EXPLICIT,
+	listRunners
 };
