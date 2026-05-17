@@ -12,10 +12,12 @@ const init = (explicit) => {
 		),
 		run: async () => {
 			WATCH.forEach((taskName) => {
-				const abstract = explicit[taskName].abstract;
-				const run = explicit[taskName].run;
+				const { src, } = explicit[taskName].abstract;
+				const watch = {
+					[taskName]: async () => explicit[taskName].run,
+				}
 
-				gulp.watch(abstract.src, () => run());
+				gulp.watch(src, watch[taskName]);
 			});
 		},
 	};
