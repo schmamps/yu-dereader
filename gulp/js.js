@@ -16,8 +16,6 @@ const abstract = meta.abstract({
 const desc = meta.describe(abstract.desc, 'transpile', abstract.out);
 
 const run = () => {
-	console.log('js: start');
-
 	const cfg = build.configure(abstract);
 
 	const result = rollup.
@@ -35,8 +33,6 @@ const run = () => {
 			format: 'iife',
 			sourcemap: cfg.dev,
 		}));
-
-	console.log('js: end');
 
 	return result;
 };

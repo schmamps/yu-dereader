@@ -9,8 +9,6 @@ const abstract = meta.abstract({ in: 'dereader.sass', sub: 'css', });
 const desc = meta.describe(abstract.desc, 'scss', abstract.dest);
 
 const run = async () => {
-	console.log('css: start');
-
 	const cfg = build.configure(abstract);
 	const sass = gulpSass(dartSass);
 	const result = gulp.
@@ -18,8 +16,6 @@ const run = async () => {
 		pipe(sass()).
 		pipe(cfg.dest, { sourcemaps: '.' })
 		;
-
-	console.log('css: end');
 
 	return result;
 };

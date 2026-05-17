@@ -99,8 +99,6 @@ const write = (data, cfg) => {
 };
 
 const run = () => {
-	console.log('manifest: start');
-
 	const cfg = build.configure(abstract);
 	const writeManifest = (manifest) => write(manifest, cfg);
 	const result = Promise.
@@ -113,8 +111,6 @@ const run = () => {
 		then(writeManifest).
 		catch(err)
 		;
-
-	console.log('manifest: end');
 
 	return result;
 };
