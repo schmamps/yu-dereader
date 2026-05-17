@@ -44,30 +44,3 @@ center > table tr > td:nth-child(2) > img.unpixelate {
   text-decoration: underline;
   background-color: transparent;
 }
-.egg label span {
-  display: block;
-  text-indent: -10em;
-  overflow: hidden;
-}
-.egg label select {
-  box-sizing: border-box;
-  height: 2.5rem;
-  margin-right: 0.5rem;
-  padding: 0 0.5em;
-  background-color: rgba(137, 255, 59, 0.125);
-  border-radius: 0.333rem;
-}
-.egg label input {
-  display: none;
-}
-.egg label input + span {
-  width: 2.5rem;
-  height: 2.5rem;
-  background-size: 2.5rem 2.5rem;
-  background-repeat: no-repeat;
-  background-image: url("chrome-extension://__MSG_@@extension_id__/eye-smooth.png");
-  background-position: center center;
-}
-.egg label input:checked + span {
-  background-image: url("chrome-extension://__MSG_@@extension_id__/eye-con.png");
-}

@@ -50,31 +50,3 @@ center
 			color: #00b
 			text-decoration: underline
 			background-color: transparent
-
-	label
-		span
-			display: block
-			text-indent: -10em
-			overflow: hidden
-
-		select
-			box-sizing: border-box
-			height: $eye-size
-			margin-right: .5rem
-			padding: 0 .5em
-			background-color: rgba(137, 255, 59, .125)
-			border-radius: .333rem
-
-		input
-			display: none
-
-			+ span
-				width: $eye-size
-				height: $eye-size
-				background-size: $eye-size $eye-size
-				background-repeat: no-repeat
-				background-image: url('chrome-extension://__MSG_@@extension_id__/eye-smooth.png')
-				background-position: center center
-
-			&:checked + span
-				background-image: url('chrome-extension://__MSG_@@extension_id__/eye-con.png')
