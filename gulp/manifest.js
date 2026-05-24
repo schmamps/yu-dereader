@@ -2,13 +2,13 @@ import * as fs from 'fs'
 import * as build from './build/index.js';
 import * as json from './json/index.js';
 import * as log from './log/index.js';
-import * as path from './path/index.js';
 import * as meta from './metadata/index.js';
+import * as path from './path/index.js';
 
 const DEFAULTS = { server: { host: 'localhost', port: 4242, }, };
 
 const abstract = meta.abstract({ in: 'manifest.json', sub: 'meta', });
-const desc = meta.describe('update the Chrome extension manifest');
+const description = meta.describe('update the Chrome extension manifest');
 
 const err = (err) => {
 	log.error(err, 'manifest task');
@@ -98,10 +98,11 @@ const write = (data, cfg) => {
 		;
 };
 
-const run = () => {
+const run = async () => {
 	const cfg = build.configure(abstract);
 	const writeManifest = (manifest) => write(manifest, cfg);
-	const result = Promise.
+
+	return await Promise.
 		all([
 			json.load(cfg.src[0]),
 			json.load('package.json'),
@@ -111,12 +112,8 @@ const run = () => {
 		then(writeManifest).
 		catch(err)
 		;
-
-	return result;
 };
 
-export {
-	abstract,
-	desc,
-	run,
-};
+const task = Object.assign(run, { abstract, description, });
+
+export { task };

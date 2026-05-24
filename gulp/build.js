@@ -1,15 +1,17 @@
 import * as meta from './metadata/index.js';
 
 const init = (explicit) => {
-	return {
-		run: () => {
-			return Promise.all(
-				Object.keys(explicit).map((taskName) => explicit[taskName].run())
-			);
-		},
-		desc: meta.describe('run all tasks'),
-		abstract: {}
+	const abstract = {};
+	const description = meta.describe('run all tasks');
+	const run = async () => {
+		return await Promise.all([
+			Object.keys(explicit).map((taskName) => explicit[taskName]()),
+		]);
 	};
+
+	const task = Object.assign(run, { abstract, description, });
+
+	return task;
 }
 
 export {

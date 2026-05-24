@@ -1,7 +1,7 @@
 import * as c from 'ansi-colors';
 import * as log from 'fancy-log';
-import * as meta from './metadata/index.js';
 import * as build from './build/index.js';
+import * as meta from './metadata/index.js';
 
 
 const getEntry = (pad) => (task) => {
@@ -12,12 +12,12 @@ const listEntries = async (tasks) => {
 	const keys = Object.keys(tasks);
 	const pad = keys.reduce((max, key) => Math.max(max, key.length), 0);
 	const describe = (name) => {
-		const desc = tasks[name].desc();
+		const desc = tasks[name].description;
 
 		return { name, desc };
 	}
 
-	return keys.map((name) => ({ name, desc: tasks[name].desc() })).
+	return keys.map((name) => ({ name, desc: tasks[name].description })).
 		map(getEntry(pad));
 };
 
@@ -46,14 +46,15 @@ const displayEntries = (entries) => {
 };
 
 const init = (modules) => {
-	const config = {};
-	const desc = meta.describe('display help menu');
+	const abstract = {};
+	const description = meta.describe('display help menu');
 	const run = async () => {
 		return await listEntries(modules).then(displayEntries);
 	};
 
+	const task = Object.assign(run, { abstract, description, });
 
-	return { config, run, desc, };
+	return task;
 };
 
 export {

@@ -1,8 +1,7 @@
+import * as gulp from 'gulp';
+import * as path from 'path';
 import * as build from './build/index.js';
 import * as meta from './metadata/index.js';
-import * as path from 'path';
-
-import * as gulp from 'gulp';
 import * as rollup from 'rollup';
 import rollupTypescript from '@rollup/plugin-typescript';
 import rollupJson from '@rollup/plugin-json';
@@ -13,12 +12,12 @@ const abstract = meta.abstract({
 	out: 'yu.js',
 });
 
-const desc = meta.describe(abstract.desc, 'transpile', abstract.out);
+const description = meta.describe(abstract.desc, 'transpile', abstract.out);
 
-const run = () => {
+const run = async () => {
 	const cfg = build.configure(abstract);
 
-	const result = rollup.
+	return await rollup.
 		rollup({
 			input: path.resolve('src/ts', 'index.ts'),
 			plugins: [
@@ -37,8 +36,6 @@ const run = () => {
 	return result;
 };
 
-export {
-	abstract,
-	desc,
-	run,
-};
+const task = Object.assign(run, { abstract, description });
+
+export { task };
