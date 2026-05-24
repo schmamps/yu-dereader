@@ -1,36 +1,20 @@
-import * as css from './css.js';
-import * as js from './js.js';
-import * as manifest from './manifest.js';
-import * as watchTaskMod from './watch.js';
-import * as buildTaskMod from './build.js';
-import * as helpTaskMod from './help.js';
+import { task as css } from './css.js';
+import { task as js } from './js.js';
+import { task as manifest } from './manifest.js';
+import { init as watchInit } from './watch.js';
+import { init as buildInit } from './build.js';
+import { init as helpInit } from './help.js';
 
 
-const loadAllExplicitTasks = () => {
-	return { css, js, manifest, };
-};
+const listAllTasks = () => {
+	const explicit = { css, js, manifest, };
+	const watch = watchInit(explicit);
+	const build = buildInit(explicit);
+	const help = helpInit(Object.assign({}, explicit, { watch, build, }));
 
-const loadAllMetaTasks = (explicit) => {
-	const watch = watchTaskMod.init(explicit);
-	const build = buildTaskMod.init(explicit);
-	const help = helpTaskMod.init(Object.assign({}, explicit, { watch, build, }));
-
-	return { watch, build, help };
-};
-
-const listRunners = (explicit, meta) => {
-	const taskNames = Object.keys(explicit).concat(Object.keys(meta));
-	const compose = (runners, taskName) => {
-		runners[taskName] = (explicit[taskName] || meta[taskName]).run;
-
-		return runners;
-	};
-
-	return taskNames.reduce(compose, { default: meta.help.run, });
-};
+	return Object.assign({}, explicit, { watch, build, help, });
+}
 
 export {
-	loadAllExplicitTasks as loadExplicit,
-	loadAllMetaTasks as loadMeta,
-	listRunners
+	listAllTasks as listAll,
 };

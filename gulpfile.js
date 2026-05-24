@@ -1,10 +1,13 @@
-import * as tasker from './gulp/index.js';
+import * as tasks from './gulp/index.js';
 
-const explicitTasks = tasker.loadExplicit();
-const metaTasks = tasker.loadMeta(explicitTasks);
-const allTasks = tasker.listRunners(explicitTasks, metaTasks);
-const { css, js, manifest, help, watch, build } = allTasks;
-
+const {
+	css,
+	js,
+	manifest,
+	help,
+	watch,
+	build
+} = tasks.listAll();
 
 export {
 	css,
@@ -15,5 +18,3 @@ export {
 	watch,
 	build,
 };
-
-// export default allTasks;
