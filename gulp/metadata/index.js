@@ -9,9 +9,7 @@ const abstract = (opts) => {
 };
 
 const describe = (src, ...elements) => {
-	const desc = () => [src].concat(elements).join(' > ');
-
-	return desc;
+	return [src].concat(elements).join(' > ');
 };
 
 
