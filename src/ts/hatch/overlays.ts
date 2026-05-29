@@ -175,6 +175,8 @@ const hatchOverlays = (control: HTMLSelectElement, canon: Canon) => {
 
 	window.history.replaceState(overlay, document.title, permalink);
 
+	dom.deposit('I\'d rather be reading:', control);
+
 	dom.listen(control).on('change', setState(canon.element));
 	dom.listen(window).on('popstate', popState(control, canon.element));
 	dom.listen(canon.element).on('dblclick', pickState(control, canon.element));
