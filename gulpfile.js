@@ -4,15 +4,17 @@ const {
 	css,
 	js,
 	manifest,
+	bundle,
 	help,
 	watch,
-	build
+	build,
 } = tasks.listAll();
 
 export {
 	css,
 	js,
 	manifest,
+	bundle,
 	help,
 	help as default,
 	watch,
