@@ -69,7 +69,6 @@ const getBuildSettings = (pkg, manif, prod) => {
 		manif.content_scripts[0].matches.push(`${proto}://${host}:${port}/*`);
 	}
 
-	// eslint-disable-next-line camelcase
 	return { version, content_scripts: manif.content_scripts };
 };
 
