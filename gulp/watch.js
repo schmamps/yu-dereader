@@ -3,7 +3,10 @@ import * as meta from './metadata/index.js';
 
 
 const init = (explicit) => {
-	const WATCH = Object.keys(explicit).filter((key) => key != 'manifest');
+	const IGNORE = ['manifest', 'bundler'];
+	const WATCH = Object.
+		keys(explicit).
+		filter((key) => !IGNORE.includes(key));
 	const abstract = {};
 	const description = meta.describe(
 		`watch for updated files in tasks [${WATCH.join(', ')}]`
