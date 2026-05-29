@@ -434,11 +434,6 @@
   resolved "https://registry.yarnpkg.com/@rollup/rollup-win32-x64-msvc/-/rollup-win32-x64-msvc-4.60.4.tgz#da4f1676d87e2bdf744291b504b0ab79550c3e61"
   integrity sha512-QVTUovf40zgTqlFVrKA1uXMVvU2QWEFWfAH8Wdc48IxLvrJMQVMBRjuQyUpzZCDkakImib9eVazbWlC6ksWtJw==
 
-"@sec-ant/readable-stream@^0.4.1":
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/@sec-ant/readable-stream/-/readable-stream-0.4.1.tgz#60de891bb126abfdc5410fdc6166aca065f10a0c"
-  integrity sha512-831qok9r2t8AlxLko40y2ebgSDhenenCatLVeW/uBtnHPyhHOvG0C7TvfgecV+wHzIm5KUICgzmVpWS+IMEAeg==
-
 "@types/chrome@^0.0.122":
   version "0.0.122"
   resolved "https://registry.yarnpkg.com/@types/chrome/-/chrome-0.0.122.tgz#65265d3854f511c2c1e779148e97982ee00b460f"
@@ -456,11 +451,6 @@
   version "1.0.9"
   resolved "https://registry.yarnpkg.com/@types/estree/-/estree-1.0.9.tgz#cf3f0e876d7bee15a93ab925b82bf570a3904a24"
   integrity sha512-GhdPgy1el4/ImP05X05Uw4cw2/M93BCUmnEvWZNStlCzEKME4Fkk+YpoA5OiHNQmoS7Cafb8Xa3Pya8m1Qrzeg==
-
-"@types/expect@^1.20.4":
-  version "1.20.4"
-  resolved "https://registry.yarnpkg.com/@types/expect/-/expect-1.20.4.tgz#8288e51737bf7e3ab5d7c77bfa695883745264e5"
-  integrity sha512-Q5Vn3yjTDyCMV50TB6VRIbQNxSE4OmZR86VSbGaNpfUolm0iePBB4KdEEHmxoY5sT2+2DIvXW0rvMDP2nHZ4Mg==
 
 "@types/filesystem@*":
   version "0.0.36"
@@ -495,14 +485,6 @@
   integrity sha512-xfrlY7UD5rMJk3ZVJP8BNzS28J36YJg+xp+LPXV1TdWxr8uMH5A860QNxYDGQe/ylDSgjxE52Q9VnO7p75tJxg==
   dependencies:
     undici-types ">=7.24.0 <7.24.7"
-
-"@types/vinyl@^2.0.12":
-  version "2.0.12"
-  resolved "https://registry.yarnpkg.com/@types/vinyl/-/vinyl-2.0.12.tgz#17642ca9a8ae10f3db018e9f885da4188db4c6e6"
-  integrity sha512-Sr2fYMBUVGYq8kj3UthXFAu5UN6ZW+rYr4NACjZQJvHvj+c8lYv0CahmZ2P/r7iUkN44gGUBwqxZkrKXYPb7cw==
-  dependencies:
-    "@types/expect" "^1.20.4"
-    "@types/node" "*"
 
 JSONStream@^1.0.3:
   version "1.3.5"
@@ -1003,11 +985,6 @@ browserify@^17.0.1:
     util "~0.12.0"
     vm-browserify "^1.0.0"
     xtend "^4.0.0"
-
-buffer-crc32@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/buffer-crc32/-/buffer-crc32-1.0.0.tgz#a10993b9055081d55304bd9feb4a072de179f405"
-  integrity sha512-Db1SbgBS/fg/392AblrMJk97KggmvYhr4pB5ZIMTWtaivCPMWLkmb7m21cJvpvgK+J3nsU2CmmixNBZx4vFj/w==
 
 buffer-crc32@~0.2.3:
   version "0.2.13"
@@ -1610,11 +1587,6 @@ each-props@^3.0.0:
     is-plain-object "^5.0.0"
     object.defaults "^1.1.0"
 
-easy-transform-stream@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/easy-transform-stream/-/easy-transform-stream-1.0.1.tgz#faffdd1839a03d14d76e694bd2e6315551a6a215"
-  integrity sha512-ktkaa6XR7COAR3oj02CF3IOgz2m1hCaY3SfzvKT4Svt2MhHw9XCt+ncJNWfe2TGz31iqzNGZ8spdKQflj+Rlog==
-
 ecdsa-sig-formatter@1.0.11:
   version "1.0.11"
   resolved "https://registry.yarnpkg.com/ecdsa-sig-formatter/-/ecdsa-sig-formatter-1.0.11.tgz#ae0f0fa2d85045ef14a817daa3ce9acd0489e5bf"
@@ -2120,14 +2092,6 @@ get-proto@^1.0.1:
     dunder-proto "^1.0.1"
     es-object-atoms "^1.0.0"
 
-get-stream@^9.0.1:
-  version "9.0.1"
-  resolved "https://registry.yarnpkg.com/get-stream/-/get-stream-9.0.1.tgz#95157d21df8eb90d1647102b63039b1df60ebd27"
-  integrity sha512-kVCxPF3vQM/N0B1PmoqVUqgHP+EeVjmZSQn+1oCRPxd2P21P2F19lIgbR3HBosbB1PUhOAoctJnfEn2GbN2eZA==
-  dependencies:
-    "@sec-ant/readable-stream" "^0.4.1"
-    is-stream "^4.0.1"
-
 glob-parent@^6.0.2:
   version "6.0.2"
   resolved "https://registry.yarnpkg.com/glob-parent/-/glob-parent-6.0.2.tgz#6d237d99083950c79290f24c7642a3de9a28f9e3"
@@ -2258,15 +2222,6 @@ gulp-cli@^3.1.0:
     v8flags "^4.0.0"
     yargs "^16.2.0"
 
-gulp-plugin-extras@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/gulp-plugin-extras/-/gulp-plugin-extras-1.1.0.tgz#47bb1022bed0ea0216ac6c6a61a35c4fe014318e"
-  integrity sha512-T0AXOEVoKYzLIBlwEZ7LtAx2w4ExIozIoxVeYEVLFbdxI7i0sWvFDq0F8mm47djixDF3vAqDPoyGwh3Sg/PWtQ==
-  dependencies:
-    "@types/vinyl" "^2.0.12"
-    chalk "^5.3.0"
-    easy-transform-stream "^1.0.1"
-
 gulp-sass@^6.0.1:
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/gulp-sass/-/gulp-sass-6.0.1.tgz#28d292b5e9ca143d763e14fce87d6723b6d1b749"
@@ -2278,16 +2233,6 @@ gulp-sass@^6.0.1:
     replace-ext "^2.0.0"
     strip-ansi "^6.0.1"
     vinyl-sourcemaps-apply "^0.2.1"
-
-gulp-zip@^6.1.0:
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/gulp-zip/-/gulp-zip-6.1.0.tgz#53342be6dc629eb3ea8b25e1806ee717eb44a3d2"
-  integrity sha512-couiqfO4CSM4q3oKnihLhYq5mVmwyXfgLP/0eeM7oVlN+psn45vfvJHcCL3AkPgTi4NojnUFV2IozYqZClIujQ==
-  dependencies:
-    get-stream "^9.0.1"
-    gulp-plugin-extras "^1.1.0"
-    vinyl "^3.0.0"
-    yazl "^3.3.1"
 
 gulp@^5.0.0:
   version "5.0.1"
@@ -2688,11 +2633,6 @@ is-relative@^1.0.0:
   integrity sha512-Kw/ReK0iqwKeu0MITLFuj0jbPAmEiOsIwyIXvvbfa6QfmN9pkD1M+8pdk7Rl/dTKbH34/XBFMbgD4iMJhLQbGA==
   dependencies:
     is-unc-path "^1.0.0"
-
-is-stream@^4.0.1:
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/is-stream/-/is-stream-4.0.1.tgz#375cf891e16d2e4baec250b85926cffc14720d9b"
-  integrity sha512-Dnz92NInDqYckGEUJv689RbRiTSEHCQ7wOVeALbkOz999YpqT46yMRIGtSNl2iCL1waAZSx40+h59NV/EwzV/A==
 
 is-typed-array@^1.1.14, is-typed-array@^1.1.3:
   version "1.1.15"
@@ -4657,13 +4597,6 @@ yauzl@3.3.0:
   dependencies:
     buffer-crc32 "~0.2.3"
     pend "~1.2.0"
-
-yazl@^3.3.1:
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/yazl/-/yazl-3.3.1.tgz#a69abad02d80739d3b1a7ffcca8434422477432c"
-  integrity sha512-BbETDVWG+VcMUle37k5Fqp//7SDOK2/1+T7X8TD96M3D9G8jK5VLUdQVdVjGi8im7FGkazX7kk5hkU8X4L5Bng==
-  dependencies:
-    buffer-crc32 "^1.0.0"
 
 yocto-queue@^0.1.0:
   version "0.1.0"
