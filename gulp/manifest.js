@@ -54,7 +54,6 @@ const getTestServer = () => {
 const getBuildSettings = (pkg, manif, prod) => {
 	if (prod) {
 		return {
-			// eslint-disable-next-line camelcase
 			content_scripts: manif.content_scripts,
 			version: pkg.version,
 		};
@@ -81,7 +80,6 @@ const update = (dataSources) => {
 	return Object.assign(
 		{},
 		manif,
-		// eslint-disable-next-line camelcase
 		{ name, version, content_scripts: cs });
 };
 
