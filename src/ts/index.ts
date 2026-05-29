@@ -17,38 +17,34 @@ const main = () => {
 		}
 	}
 
-	console.dir(canon);
-
-	seed.
-		hidpi().
-		then(lay.hidpi).
-		then(hatch.hidpi).
-		catch(err('HiDPI'))
-		;
-
-	seed.
-		title(canon).
-		then(lay.title).
-		then(hatch.title).
-		catch(err('Title'));
-
-	seed.
-		contact().
-		then(lay.contact).
-		then(hatch.contact).
-		catch(err('Contact'));
-
-	seed.
-		rss().
-		then(lay.rss).
-		then(hatch.rss).
-		catch(err('RSS'));
-
-	seed.
-		overlays().
-		then((overlays) => lay.overlays(overlays, canon.src)).
-		then((control) => hatch.overlays(control, canon)).
-		catch(err('Overlays'));
+	Promise.all([
+		seed.
+			hidpi().
+			then(lay.hidpi).
+			then(hatch.hidpi).
+			catch(err('HiDPI')),
+		seed.
+			title(canon).
+			then(lay.title).
+			then(hatch.title).
+			catch(err('Title')),
+		seed.
+			contact().
+			then(lay.contact).
+			then(hatch.contact).
+			catch(err('Contact')),
+		seed.
+			rss().
+			then(lay.rss).
+			then(hatch.rss).
+			catch(err('RSS'))
+	]).then(() => {
+		seed.
+			overlays().
+			then((overlays) => lay.overlays(overlays, canon.src)).
+			then((control) => hatch.overlays(control, canon)).
+			catch(err('Overlays'));
+	});
 };
 
 main();
