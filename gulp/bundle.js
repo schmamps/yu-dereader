@@ -1,6 +1,6 @@
 import * as gulp from 'gulp';
 import * as path from 'path';
-import zip from 'gulp-zip';
+import webext from 'web-ext';
 import * as build from './build/index.js';
 import * as meta from './metadata/index.js';
 
@@ -16,11 +16,11 @@ const run = async () => {
 	const cfg = build.configure(abstract);
 	const paths = cfg.in.map((pattern) => path.resolve(cfg.dir, pattern));
 
-	return await gulp.
-		src(paths).
-		pipe(zip(cfg.out)).
-		pipe(cfg.dest)
-		;
+	return await webext.cmd.build({
+		sourceDir: cfg.dir,
+		artifactsDir: path.resolve(cfg.dir, '..'),
+		overwriteDest: true,
+	});
 };
 
 const task = Object.assign(run, { abstract, description });
