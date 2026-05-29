@@ -204,6 +204,7 @@ This is (probably${prob}) fine!`);
         getOption(control, overlay);
         initComic(listImages(control), canon.element, canon.src);
         window.history.replaceState(overlay, document.title, permalink);
+        depositEgg('I\'d rather be reading:', control);
         listen(control).on('change', setState(canon.element));
         listen(window).on('popstate', popState(control, canon.element));
         listen(canon.element).on('dblclick', pickState(control, canon.element));
@@ -606,27 +607,29 @@ tr > td:nth-child(2) > img {
                 console.groupEnd();
             };
         };
-        console.dir(canon);
-        getHiDPI().
-            then(generateStyle).
-            then(hatchHiDPI).
-            catch(err('HiDPI'));
-        getTitleAttr(canon).
-            then(displayTitle).
-            then(hatchTitle).
-            catch(err('Title'));
-        getContactSubject().
-            then(displayContact).
-            then(hatchContact).
-            catch(err('Contact'));
-        getRssTitle().
-            then(displayRss).
-            then(hatchRSS).
-            catch(err('RSS'));
-        getOverlays().
-            then((overlays) => displayControl(overlays, canon.src)).
-            then((control) => hatchOverlays(control, canon)).
-            catch(err('Overlays'));
+        Promise.all([
+            getHiDPI().
+                then(generateStyle).
+                then(hatchHiDPI).
+                catch(err('HiDPI')),
+            getTitleAttr(canon).
+                then(displayTitle).
+                then(hatchTitle).
+                catch(err('Title')),
+            getContactSubject().
+                then(displayContact).
+                then(hatchContact).
+                catch(err('Contact')),
+            getRssTitle().
+                then(displayRss).
+                then(hatchRSS).
+                catch(err('RSS'))
+        ]).then(() => {
+            getOverlays().
+                then((overlays) => displayControl(overlays, canon.src)).
+                then((control) => hatchOverlays(control, canon)).
+                catch(err('Overlays'));
+        });
     };
     main();
 
