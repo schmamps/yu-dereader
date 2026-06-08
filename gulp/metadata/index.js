@@ -12,7 +12,6 @@ const describe = (src, ...elements) => {
 	return [src].concat(elements).join(' > ');
 };
 
-
 export {
 	abstract,
 	describe,
