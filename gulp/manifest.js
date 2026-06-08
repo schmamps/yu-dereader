@@ -1,9 +1,9 @@
 import * as fs from 'fs'
+import * as path from './path/index.js';
 import * as build from './build/index.js';
 import * as json from './json/index.js';
 import * as log from './log/index.js';
 import * as meta from './metadata/index.js';
-import * as path from './path/index.js';
 
 const DEFAULTS = { server: { host: 'localhost', port: 4242, }, };
 
@@ -51,26 +51,44 @@ const getTestServer = () => {
 	}
 };
 
+const getDevSettings = (pkg, manif) => {
+	const version = '0.' + pkg.version.replace(/\./g, '');
+	const { content_scripts } = manif;
+	const { host, port } = getTestServer();
+
+	for (const proto of ['http', 'https']) {
+		content_scripts[0].matches.push(`${proto}://${host}:${port}/*`);
+	}
+
+	return { version, content_scripts };
+}
+
+const getProdSettings = (pkg, manif) => {
+	const version = pkg.version;
+	const { content_scripts } = manif;
+
+	return { version, content_scripts };
+}
+
 const getBuildSettings = (pkg, manif, prod) => {
 	if (prod) {
-		return {
-			content_scripts: manif.content_scripts,
-			version: pkg.version,
-		};
+		return getProdSettings(pkg, manif);
 	}
 
-	const version = ['0'].
-		concat(pkg.version.split('.')).
-		slice(-3).
-		join('.');
-	const { host, port } = getTestServer();
-	for (const proto of ['http', 'https']) {
-		manif.content_scripts[0].matches.push(`${proto}://${host}:${port}/*`);
-	}
-
-	return { version, content_scripts: manif.content_scripts };
+	return getDevSettings(pkg, manif);
 };
 
+const loadSrc = async (cfg) => {
+	return json.load(cfg.src[0]);
+}
+
+const loadPkg = async () => {
+	return json.load('package.json');
+}
+
+const isProd = async (cfg) => {
+	return cfg.prod;
+}
 
 const update = (dataSources) => {
 	const [manif, pkg, prod] = dataSources;
@@ -100,11 +118,7 @@ const run = async () => {
 	const writeManifest = (manifest) => write(manifest, cfg);
 
 	return await Promise.
-		all([
-			json.load(cfg.src[0]),
-			json.load('package.json'),
-			cfg.prod
-		]).
+		all([loadSrc(cfg), loadPkg(), isProd(cfg)]).
 		then(update).
 		then(writeManifest).
 		catch(err)
