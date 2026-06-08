@@ -1,13 +1,19 @@
 import * as gulp from 'gulp';
-import * as path from 'path';
+import * as path from './path/index.js';
 import webext from 'web-ext';
 import * as build from './build/index.js';
 import * as meta from './metadata/index.js';
+import * as json from './json/index.js';
+
+const getFilename = async (dir) => {
+	const { version } = await json.load(path.resolve(dir, 'manifest.json'));
+
+	return `yu-dereader-${version}.xpi`;
+}
 
 const abstract = meta.abstract({
 	in: ['*.css', '*.js', '*.json', '*.png'],
 	sub: '../build',
-	out: 'yu-dereader.xpi',
 });
 
 const description = meta.describe(abstract.desc, 'bundle', abstract.out);
@@ -20,6 +26,7 @@ const run = async () => {
 		sourceDir: cfg.dir,
 		artifactsDir: path.resolve(cfg.dir, '..'),
 		overwriteDest: true,
+		filename: await getFilename(cfg.dir),
 	});
 };
 
