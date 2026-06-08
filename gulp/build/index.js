@@ -1,5 +1,5 @@
 import * as gulp from 'gulp'
-import * as path from '../path/index.js'
+import * as path from '../path/index.js';
 
 const DEV = 'development';
 
