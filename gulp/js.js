@@ -1,5 +1,5 @@
 import * as gulp from 'gulp';
-import * as path from 'path';
+import * as path from './path/index.js';
 import * as build from './build/index.js';
 import * as meta from './metadata/index.js';
 import * as rollup from 'rollup';
