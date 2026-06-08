@@ -7,7 +7,7 @@
 	"scripts": {
 		"watch": "gulp js css watch",
 		"build": "export NODE_ENV=prod && gulp build && unset NODE_ENV",
-		"clean": "rm -f build/**/*.css build/**/*.js build/**/*.json build/**/*.xpi build/**/*.map",
+		"clean": "rm -f build/**/*.css build/**/*.js build/**/*.json build/*.xpi build/**/*.map",
 		"serve": "cd ./anqwtz && poetry run flask run",
 		"lint": "cd ./build/prod && web-ext lint",
 		"bundle": "cd ./build/ && rm *.zip && web-ext build -s prod -a ."
